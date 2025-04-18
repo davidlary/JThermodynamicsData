@@ -2906,8 +2906,10 @@ function plot_thermodynamic_properties(result::Dict, property::String)
                 if haskey(method["properties"][property], "value")
                     # Single temperature result
                     step_value = method["properties"][property]["value"]
-                    # Replicate for all temperatures
-                    push!(step_values, step_value for _ in 1:length(temps))
+                    # Replicate for all temperatures - use array instead of generator
+                    for _ in 1:length(temps)
+                        push!(step_values, step_value)
+                    end
                 else
                     # Get property value for each temperature point
                     for temp_idx in 1:length(temps)
@@ -3348,9 +3350,23 @@ function calculate_delta_g_reaction(reactants::Dict{String, Float64}, products::
         formula = species
         
         # Calculate properties for this species
-        result, _ = progressively_refine_thermodynamic_data(species, formula, temperature, data_sources)
-        g_value = result["properties"]["G"]["value"]
-        g_uncertainty = result["properties"]["G"]["uncertainty"]
+        local g_value = 0.0
+        local g_uncertainty = 0.0
+        
+        # Special case for electron (e-) to avoid UndefVarError
+        if species == "e-" || formula == "e-"
+            # Use the same calculation as in calculate_theoretical_properties
+            local h_value = -745.4 * R * temperature / 1000  # kJ/mol
+            local s_value = -1.2 * R  # J/mol/K
+            g_value = h_value - temperature * s_value / 1000  # kJ/mol
+            g_uncertainty = abs(g_value) * 0.01  # 1% uncertainty
+        else
+            # Normal case for all other species
+            result = calculate_hierarchical_properties(species, formula, [temperature], data_sources)
+            final_result = result[end]["results"][1]
+            g_value = final_result["properties"]["G"]["value"]
+            g_uncertainty = final_result["properties"]["G"]["uncertainty"]
+        end
         
         # Add contribution to total
         g_reactants += coef * g_value
@@ -3367,9 +3383,23 @@ function calculate_delta_g_reaction(reactants::Dict{String, Float64}, products::
         formula = species
         
         # Calculate properties for this species
-        result, _ = progressively_refine_thermodynamic_data(species, formula, temperature, data_sources)
-        g_value = result["properties"]["G"]["value"]
-        g_uncertainty = result["properties"]["G"]["uncertainty"]
+        local g_value = 0.0
+        local g_uncertainty = 0.0
+        
+        # Special case for electron (e-) to avoid UndefVarError
+        if species == "e-" || formula == "e-"
+            # Use the same calculation as in calculate_theoretical_properties
+            local h_value = -745.4 * R * temperature / 1000  # kJ/mol
+            local s_value = -1.2 * R  # J/mol/K
+            g_value = h_value - temperature * s_value / 1000  # kJ/mol
+            g_uncertainty = abs(g_value) * 0.01  # 1% uncertainty
+        else
+            # Normal case for all other species
+            result = calculate_hierarchical_properties(species, formula, [temperature], data_sources)
+            final_result = result[end]["results"][1]
+            g_value = final_result["properties"]["G"]["value"]
+            g_uncertainty = final_result["properties"]["G"]["uncertainty"]
+        end
         
         # Add contribution to total
         g_products += coef * g_value
@@ -3482,8 +3512,8 @@ function calculate_reaction_equilibrium(equation::String, temperature::Float64, 
                 # Special case for electron (e-) to avoid UndefVarError
                 if species == "e-" || formula == "e-"
                     # Use the same calculation as in calculate_theoretical_properties
-                    h_value = -745.4 * R * temperature / 1000  # kJ/mol
-                    s_value = -1.2 * R  # J/mol/K
+                    local h_value = -745.4 * R * temperature / 1000  # kJ/mol
+                    local s_value = -1.2 * R  # J/mol/K
                     g_std = h_value - temperature * s_value / 1000  # kJ/mol
                 else
                     # Normal case for all other species
