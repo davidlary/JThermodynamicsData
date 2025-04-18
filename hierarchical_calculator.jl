@@ -1494,38 +1494,88 @@ end
 Refine thermodynamic data by combining previous result with new data.
 """
 function refine_thermodynamic_data(previous_result::Dict, new_result::Dict, weight_factor::Float64)
-    # Create a copy of the previous result
-    refined_result = deepcopy(previous_result)
+    # Create a copy of the new result - we use the exact values from the highest priority source
+    refined_result = deepcopy(new_result)
     
-    # Update source information
-    refined_result["data_source"] = new_result["data_source"]
+    # Keep track of all previous values for uncertainty calculation
+    all_values = Dict()
+    all_weights = Dict()
     
-    # Calculate weights - higher weight for new data from more reliable source
-    previous_weight = 1.0 - weight_factor  # Lower weight for previous data
-    new_weight = weight_factor  # Higher weight for new data
-    
-    # Update each property
+    # Initialize tracking of all values for each property
     for prop in ["Cp", "H", "S", "G"]
-        if haskey(new_result["properties"], prop) && haskey(previous_result["properties"], prop)
-            # Get current and new values
-            current_val = previous_result["properties"][prop]["value"]
-            current_unc = previous_result["properties"][prop]["uncertainty"]
+        all_values[prop] = []
+        all_weights[prop] = []
+        
+        # Add previous value if it exists
+        if haskey(previous_result["properties"], prop)
+            prev_val = previous_result["properties"][prop]["value"]
+            push!(all_values[prop], prev_val)
             
+            # Weight based on reliability - lower for previous data
+            prev_weight = 1.0 - weight_factor
+            push!(all_weights[prop], prev_weight)
+        end
+        
+        # Add new value if it exists
+        if haskey(new_result["properties"], prop)
             new_val = new_result["properties"][prop]["value"]
-            new_unc = new_result["properties"][prop]["uncertainty"]
+            push!(all_values[prop], new_val)
             
-            # Combine values and uncertainties using weighted averaging
-            combined_val, combined_unc = combine_weighted_values(
-                current_val, current_unc, new_val, new_unc, previous_weight, new_weight
-            )
+            # Higher weight for new data from more reliable source
+            push!(all_weights[prop], weight_factor)
             
-            # Update refined result
-            refined_result["properties"][prop]["value"] = combined_val
-            refined_result["properties"][prop]["uncertainty"] = combined_unc
+            # Calculate uncertainty based on spread of values
+            if length(all_values[prop]) > 1
+                # Calculate weighted standard deviation for uncertainty
+                uncertainty = calculate_weighted_uncertainty(
+                    all_values[prop],
+                    all_weights[prop],
+                    new_val  # Center around the highest priority value
+                )
+                
+                # Update uncertainty in the result
+                refined_result["properties"][prop]["uncertainty"] = max(
+                    uncertainty,
+                    new_result["properties"][prop]["uncertainty"]  # Never go below source's own uncertainty
+                )
+            end
         end
     end
     
+    # Add metadata about all values used for this refinement
+    if !haskey(refined_result, "refinement_data")
+        refined_result["refinement_data"] = Dict()
+    end
+    
+    refined_result["refinement_data"]["all_values"] = all_values
+    refined_result["refinement_data"]["all_weights"] = all_weights
+    
     return refined_result
+end
+
+"""
+    calculate_weighted_uncertainty(values::Vector{Float64}, weights::Vector{Float64}, center::Float64)
+
+Calculate weighted uncertainty as the weighted standard deviation around a center value.
+"""
+function calculate_weighted_uncertainty(values::Vector{Float64}, weights::Vector{Float64}, center::Float64)
+    if length(values) == 0 || length(weights) == 0
+        return 0.0
+    end
+    
+    if length(values) == 1
+        return abs(values[1] * 0.05)  # Default 5% uncertainty for single values
+    end
+    
+    # Normalize weights
+    sum_weights = sum(weights)
+    norm_weights = weights ./ sum_weights
+    
+    # Calculate weighted variance around the center value
+    weighted_variance = sum(norm_weights .* ((values .- center).^2))
+    
+    # Return weighted standard deviation
+    return sqrt(weighted_variance)
 end
 
 """
