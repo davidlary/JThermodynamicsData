@@ -542,7 +542,7 @@ function calculate_statistical_thermodynamics(molecular_data::MolecularData, tem
     
     h_elec = 0.0  # Electronic contribution at ground state
     
-    h = h_trans + h_rot + h_vib + h_elec
+    enthalpy = h_trans + h_rot + h_vib + h_elec  # Use enthalpy instead of h to avoid conflict with Planck constant
     
     # Entropy (S)
     s_trans = R * (log(q_trans) + 1 + 1.5)  # Translational contribution to entropy
@@ -585,7 +585,7 @@ function calculate_statistical_thermodynamics(molecular_data::MolecularData, tem
     cp = cp_trans + cp_rot + cp_vib + cp_elec
     
     # Gibbs free energy (G)
-    g = h - temperature * s / 1000  # Convert S to kJ/mol/K
+    g = enthalpy - temperature * s / 1000  # Convert S to kJ/mol/K
     
     # Estimate uncertainties based on the quality of molecular data
     has_good_vib = !isempty(molecular_data.vibrational_frequencies)
@@ -595,7 +595,7 @@ function calculate_statistical_thermodynamics(molecular_data::MolecularData, tem
     base_uncertainty = has_good_vib && has_good_rot ? 0.1 : 0.25
     
     cp_uncertainty = max(cp * base_uncertainty, 3.0)  # At least 3 J/mol/K
-    h_uncertainty = max(abs(h) * base_uncertainty, 10.0)  # At least 10 kJ/mol
+    h_uncertainty = max(abs(enthalpy) * base_uncertainty, 10.0)  # At least 10 kJ/mol
     s_uncertainty = max(s * base_uncertainty, 5.0)  # At least 5 J/mol/K
     g_uncertainty = max(abs(g) * base_uncertainty, 10.0)  # At least 10 kJ/mol
     
@@ -603,7 +603,7 @@ function calculate_statistical_thermodynamics(molecular_data::MolecularData, tem
         "temperature" => temperature,
         "Cp" => cp,
         "Cp_uncertainty" => cp_uncertainty,
-        "H" => h, 
+        "H" => enthalpy, 
         "H_uncertainty" => h_uncertainty,
         "S" => s,
         "S_uncertainty" => s_uncertainty,
@@ -893,7 +893,7 @@ function calculate_quantum_statistical_thermodynamics(molecular_data::MolecularD
     h_elec = 0.0
     
     # Total enthalpy
-    h = h_trans + h_rot + h_vib + h_elec
+    enthalpy = h_trans + h_rot + h_vib + h_elec
     
     # Entropy calculations with quantum corrections
     
@@ -954,7 +954,7 @@ function calculate_quantum_statistical_thermodynamics(molecular_data::MolecularD
     cp = cp_trans + cp_rot + cp_vib + cp_elec
     
     # Gibbs free energy
-    g = h - temperature * s / 1000  # Convert S to kJ/mol/K
+    g = enthalpy - temperature * s / 1000  # Convert S to kJ/mol/K
     
     # Estimate uncertainties based on the quality of molecular data
     has_good_vib = !isempty(molecular_data.vibrational_frequencies)
@@ -964,7 +964,7 @@ function calculate_quantum_statistical_thermodynamics(molecular_data::MolecularD
     base_uncertainty = has_good_vib && has_good_rot ? 0.08 : 0.18
     
     cp_uncertainty = max(cp * base_uncertainty, 2.5)
-    h_uncertainty = max(abs(h) * base_uncertainty, 8.0)
+    h_uncertainty = max(abs(enthalpy) * base_uncertainty, 8.0)
     s_uncertainty = max(s * base_uncertainty, 4.0)
     g_uncertainty = max(abs(g) * base_uncertainty, 8.0)
     
@@ -972,7 +972,7 @@ function calculate_quantum_statistical_thermodynamics(molecular_data::MolecularD
         "temperature" => temperature,
         "Cp" => cp,
         "Cp_uncertainty" => cp_uncertainty,
-        "H" => h, 
+        "H" => enthalpy, 
         "H_uncertainty" => h_uncertainty,
         "S" => s,
         "S_uncertainty" => s_uncertainty,
