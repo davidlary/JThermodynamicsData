@@ -2526,15 +2526,29 @@ function plot_all_properties(result::Dict)
     p_g = plot_thermodynamic_properties(result, "G")
     
     # Create combined plot with a title displaying data sources
-    # Get the first few sources to show in the plot title
+    # Include information about the highest priority source
     sources_str = ""
     if haskey(result, "sources_used") && length(result["sources_used"]) > 0
+        # First get all sources
         sources = [src["source_name"] for src in result["sources_used"]]
+        
+        # Find the highest priority source
+        highest_source = "THEORETICAL"
+        if haskey(result["hierarchical_steps"][end], "highest_priority_source")
+            highest_source = result["hierarchical_steps"][end]["highest_priority_source"]
+        end
+        
+        # Create display string with first few sources
         displayed_sources = sources[1:min(3, length(sources))]
         if length(sources) > 3
             displayed_sources = [displayed_sources..., "..."]
         end
         sources_str = " (Sources: " * join(displayed_sources, ", ") * ")"
+        
+        # Add highest priority source information
+        if highest_source != "THEORETICAL"
+            sources_str *= " [Final values from: $highest_source]"
+        end
     end
     
     species_name = result["species_name"]
@@ -2808,7 +2822,9 @@ function calculate_hierarchical_properties(species_name::String, formula::String
         push!(hierarchical_steps, Dict(
             "source_name" => "FINAL REFINED",
             "priority" => 9,
-            "results" => deepcopy(theoretical_results)
+            "results" => deepcopy(theoretical_results),
+            "highest_priority_source" => "THEORETICAL",
+            "highest_priority" => 0
         ))
         
         return hierarchical_steps
@@ -2821,6 +2837,21 @@ function calculate_hierarchical_properties(species_name::String, formula::String
     experimental_sources_found = false
     experimental_results = nothing
     
+    # Track the highest priority source for each temperature point
+    highest_priority_source = Dict(
+        "priority" => 0,
+        "name" => "THEORETICAL",
+        "results" => deepcopy(theoretical_results)
+    )
+    
+    # Track all sources for uncertainty calculation
+    all_sources_results = Dict()
+    all_sources_results["THEORETICAL"] = Dict(
+        "priority" => 0,
+        "reliability" => 2.5,
+        "results" => deepcopy(theoretical_results)
+    )
+    
     # STEP 2: Traverse the data sources hierarchy
     for priority in 1:8
         # Find sources at this priority level
@@ -2829,49 +2860,87 @@ function calculate_hierarchical_properties(species_name::String, formula::String
                 # Check if this source has data for our species
                 if haskey(source_data["polynomials"], species_name)
                     polynomial = source_data["polynomials"][species_name]
+                    reliability = polynomial.reliability_score
                     
                     # Calculate properties at each temperature using this source
                     source_results = []
-                    refined_results = []
                     
-                    for (i, temp) in enumerate(temperatures)
-                        # Get source result
+                    for temp in temperatures
+                        # Get source result for this temperature
                         source_result = calculate_nasa_properties(polynomial, temp)
                         push!(source_results, source_result)
-                        
-                        # Calculate weight for refinement
-                        base_weight = 0.5 + 0.05 * priority  # 0.55 to 0.9 based on priority
-                        reliability_factor = polynomial.reliability_score / 5.0  # 0 to 1 scale
-                        weight_factor = base_weight * (0.8 + 0.2 * reliability_factor)  # Adjust by reliability
-                        
-                        # Handle first experimental source
-                        if !experimental_sources_found
-                            # This is the first experimental source, use it directly
-                            refined_result = deepcopy(source_result)
-                            experimental_sources_found = true
-                        else
-                            # Refine the result based on previous experimental results
-                            refined_result = refine_thermodynamic_data(current_results[i], source_result, weight_factor)
-                        end
-                        
-                        push!(refined_results, refined_result)
                     end
                     
-                    # Store this source's results
+                    # Store this source's results for uncertainty calculation
+                    all_sources_results[source_name] = Dict(
+                        "priority" => priority,
+                        "reliability" => reliability,
+                        "results" => source_results
+                    )
+                    
+                    # Store this source's results for plotting
                     push!(hierarchical_steps, Dict(
                         "source_name" => source_name,
                         "priority" => priority,
-                        "reliability_score" => polynomial.reliability_score,
+                        "reliability_score" => reliability,
                         "results" => source_results
                     ))
                     
-                    # Update current state with refined results
-                    current_results = refined_results
-                    
-                    # If this is the first experimental source found, save it
-                    if experimental_results === nothing
-                        experimental_results = deepcopy(current_results)
+                    # Check if this is now the highest priority source
+                    if priority > highest_priority_source["priority"]
+                        # Update the highest priority source
+                        highest_priority_source["priority"] = priority
+                        highest_priority_source["name"] = source_name
+                        highest_priority_source["results"] = source_results
+                        experimental_sources_found = true
                     end
+                end
+            end
+        end
+    end
+    
+    # Always use the highest priority source's values directly
+    current_results = highest_priority_source["results"]
+    
+    # Calculate uncertainty using values from all sources
+    if length(all_sources_results) > 1
+        # We have multiple sources, calculate uncertainty from spread
+        for i in 1:length(temperatures)
+            for prop in ["Cp", "H", "S", "G"]
+                # Collect all values and weights for this property at this temperature
+                values = []
+                weights = []
+                
+                for (source_name, source_data) in all_sources_results
+                    if length(source_data["results"]) >= i && 
+                       haskey(source_data["results"][i]["properties"], prop)
+                        
+                        # Get value for this property from this source
+                        value = source_data["results"][i]["properties"][prop]["value"]
+                        push!(values, value)
+                        
+                        # Calculate weight based on priority and reliability
+                        priority = source_data["priority"]
+                        reliability = source_data["reliability"]
+                        weight = (0.5 + 0.05 * priority) * (0.8 + 0.2 * reliability / 5.0)
+                        push!(weights, weight)
+                    end
+                end
+                
+                # Calculate uncertainty based on the spread of values
+                if length(values) > 1
+                    # Get the value from the highest priority source
+                    center = current_results[i]["properties"][prop]["value"]
+                    
+                    # Calculate weighted standard deviation around highest priority value
+                    uncertainty = calculate_weighted_uncertainty(values, weights, center)
+                    
+                    # Update uncertainty in the current result
+                    # Never go below the source's own uncertainty
+                    current_results[i]["properties"][prop]["uncertainty"] = max(
+                        uncertainty,
+                        current_results[i]["properties"][prop]["uncertainty"]
+                    )
                 end
             end
         end
@@ -2890,7 +2959,9 @@ function calculate_hierarchical_properties(species_name::String, formula::String
     push!(hierarchical_steps, Dict(
         "source_name" => "FINAL REFINED",
         "priority" => 9,
-        "results" => current_results
+        "results" => current_results,
+        "highest_priority_source" => highest_priority_source["name"],
+        "highest_priority" => highest_priority_source["priority"]
     ))
     
     return hierarchical_steps
