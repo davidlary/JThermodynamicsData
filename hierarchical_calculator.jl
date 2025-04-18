@@ -2379,45 +2379,10 @@ function load_polynomial_data()
     additional_species_polys = Dict{String, ThermodynamicPolynomial}()
     
     # Define coefficients for ionic species and uncommon species
-    # These are derived from theoretical calculations
-    additional_species_data = Dict(
-        "H+" => (
-            [[2.5, 0.0, 0.0, 0.0, 0.0, 153267.6, -1.14391],
-             [2.5, 0.0, 0.0, 0.0, 0.0, 153267.6, -1.14391]]
-        ),
-        "O-" => (
-            [[2.904, -0.001693, 1.673e-06, -8.157e-10, 1.493e-13, 11333.5, 4.920],
-             [2.543, 0.000246, -1.249e-07, 2.704e-11, -1.963e-15, 11505.7, 5.932]]
-        ),
-        "N+" => (
-            [[2.707, -0.001774, 3.452e-06, -2.737e-09, 7.770e-13, 225641.2, 4.100],
-             [2.482, 0.000108, -1.148e-07, 3.119e-11, -2.433e-15, 225711.1, 5.120]]
-        ),
-        "e-" => (
-            [[2.5, 0.0, 0.0, 0.0, 0.0, -745.4, -1.2],
-             [2.5, 0.0, 0.0, 0.0, 0.0, -745.4, -1.2]]
-        ),
-        "CO-" => (
-            [[3.58, -0.00061, 1.017e-06, 9.07e-10, -9.044e-13, -16344.1, 3.51],
-             [2.72, 0.00206, -9.988e-07, 2.301e-10, -2.036e-14, -16151.9, 7.82]]
-        ),
-        "O2-" => (
-            [[3.78, -0.00300, 9.847e-06, -9.68e-09, 3.24e-12, -12063.9, 3.66],
-             [3.66, 0.00066, -1.41e-07, 2.058e-11, -1.3e-15, -12716.0, 3.42]]
-        ),
-        "N2O+" => (
-            [[4.82, 0.00263, -9.58e-07, 1.6e-10, -9.78e-15, 142073.4, -2.2],
-             [4.82, 0.00263, -9.58e-07, 1.6e-10, -9.78e-15, 142073.4, -2.2]]
-        ),
-        "He+" => (
-            [[2.5, 0.0, 0.0, 0.0, 0.0, 284953.4, 1.62],
-             [2.5, 0.0, 0.0, 0.0, 0.0, 284953.4, 1.62]]
-        ),
-        "Xe+" => (
-            [[2.5, 0.0, 0.0, 0.0, 0.0, 107873.4, 6.2],
-             [2.5, 0.0, 0.0, 0.0, 0.0, 107873.4, 6.2]]
-        )
-    )
+    # IMPORTANT: We are removing all hardcoded values - this is a temporary structure
+    # that will be replaced with a proper data retrieval mechanism in the updated code
+    # See the comprehensive update implementation below
+    additional_species_data = Dict()
     
     # Create polynomial entries for additional theoretical species
     for species_name in species_list
