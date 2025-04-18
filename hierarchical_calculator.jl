@@ -667,7 +667,7 @@ end
 
 Calculate theoretical properties using multiple advanced methods and combine with robust uncertainty estimation.
 """
-function calculate_theoretical_properties(species_name::String, formula::String, temperature::Float64)
+function calculate_theoretical_properties(species_name::String, formula::String, temperature::Float64, config::Dict)
     # Special case for electron (e-) - predefined values
     if species_name == "e-" || formula == "e-"
         # Known values for electron
@@ -720,32 +720,60 @@ function calculate_theoretical_properties(species_name::String, formula::String,
     # Generate molecular properties estimation
     molecular_data = estimate_molecular_properties(formula)
     
+    # Get configuration for which theoretical methods to use
+    theory_config = get(get(config, "theory", Dict()), "use_methods", Dict())
+    
+    # Default values if not specified in config
+    use_stat_thermo = get(theory_config, "statistical_thermodynamics", true)
+    use_group_contribution = get(theory_config, "group_contribution", true)
+    use_quantum_statistical = get(theory_config, "quantum_statistical", true)
+    use_benson_group = get(theory_config, "benson_group", false)
+    
+    # Results array and method names
+    theoretical_results = []
+    method_names = []
+    method_weights = []
+    
     # Calculate using statistical thermodynamics
-    stat_thermo_result = calculate_statistical_thermodynamics(molecular_data, temperature)
+    if use_stat_thermo
+        stat_thermo_result = calculate_statistical_thermodynamics(molecular_data, temperature)
+        push!(theoretical_results, stat_thermo_result)
+        push!(method_names, "Statistical Thermodynamics")
+        push!(method_weights, 1.0)
+    end
     
     # Calculate using group contribution method
-    group_contrib_result = estimate_group_contribution(formula, temperature)
+    if use_group_contribution
+        group_contrib_result = estimate_group_contribution(formula, temperature)
+        push!(theoretical_results, group_contrib_result)
+        push!(method_names, "Group Contribution")
+        push!(method_weights, 1.0)
+    end
     
     # Calculate using quantum-corrected statistical thermodynamics (more accurate)
-    quantum_stat_thermo_result = calculate_quantum_statistical_thermodynamics(molecular_data, temperature)
+    if use_quantum_statistical
+        quantum_stat_thermo_result = calculate_quantum_statistical_thermodynamics(molecular_data, temperature)
+        push!(theoretical_results, quantum_stat_thermo_result)
+        push!(method_names, "Quantum-Statistical")
+        push!(method_weights, 1.5)
+    end
     
     # Calculate using bonds and group additivity method
-    benson_group_result = calculate_benson_group_additivity(formula, temperature)
+    if use_benson_group
+        benson_group_result = calculate_benson_group_additivity(formula, temperature)
+        push!(theoretical_results, benson_group_result)
+        push!(method_names, "Benson Group")
+        push!(method_weights, 1.2)
+    end
     
-    # Store results in an array for later combination, giving more weight to more accurate methods
-    theoretical_results = [
-        stat_thermo_result, 
-        group_contrib_result, 
-        quantum_stat_thermo_result,
-        benson_group_result
-    ]
-    
-    # Define names for plotting
-    method_names = ["Statistical Thermodynamics", "Group Contribution", "Quantum-Statistical", "Benson Group"]
-    
-    # Weights for different methods based on their reliability
-    # Higher weight for quantum-corrected methods
-    method_weights = [1.0, 1.0, 1.5, 1.2]
+    # If no methods were enabled, default to statistical thermodynamics
+    if isempty(theoretical_results)
+        @warn "No theoretical methods enabled for $species_name. Using statistical thermodynamics as fallback."
+        stat_thermo_result = calculate_statistical_thermodynamics(molecular_data, temperature)
+        push!(theoretical_results, stat_thermo_result)
+        push!(method_names, "Statistical Thermodynamics")
+        push!(method_weights, 1.0)
+    end
     
     # For each property, calculate weighted mean and uncertainty across methods
     properties = ["Cp", "H", "S", "G"]
@@ -1563,7 +1591,7 @@ end
 Calculate thermodynamic properties over a temperature range.
 """
 function calculate_properties_range(species_name::String, formula::String, temp_range::Vector{<:Real}, 
-                                  step::Real, data_sources::Dict)
+                                  step::Real, data_sources::Dict, config::Dict=Dict())
     temp_min = Float64(temp_range[1])
     temp_max = Float64(temp_range[2])
     step_val = Float64(step)
@@ -1572,7 +1600,7 @@ function calculate_properties_range(species_name::String, formula::String, temp_
     temperatures = temp_min:step_val:temp_max
     
     # Call the hierarchical properties calculator to get step-by-step results
-    hierarchical_steps = calculate_hierarchical_properties(species_name, formula, collect(temperatures), data_sources)
+    hierarchical_steps = calculate_hierarchical_properties(species_name, formula, collect(temperatures), data_sources, config)
     
     # Extract the final results (last item in the hierarchical steps)
     results = hierarchical_steps[end]["results"]
@@ -2724,14 +2752,14 @@ end
 Calculate thermodynamic properties for each step in the hierarchical refinement process.
 """
 function calculate_hierarchical_properties(species_name::String, formula::String, temperatures::Vector{Float64}, 
-                                         data_sources::Dict)
+                                         data_sources::Dict, config::Dict)
     # Initialize storage for results at each step
     hierarchical_steps = []
     
     # STEP 1: Calculate theoretical properties
     theoretical_results = []
     for temp in temperatures
-        result = calculate_theoretical_properties(species_name, formula, temp)
+        result = calculate_theoretical_properties(species_name, formula, temp, config)
         push!(theoretical_results, result)
     end
     
@@ -2810,6 +2838,10 @@ function calculate_hierarchical_properties(species_name::String, formula::String
     # If experimental sources were found, mark theoretical results as not used in final estimate
     if experimental_sources_found
         hierarchical_steps[1]["not_in_final"] = true
+        
+        # Check if we should include theoretical methods in plotting when experimental data exists
+        theory_config = get(get(config, "theory", Dict()), "plot_theoretical_with_experimental", false)
+        hierarchical_steps[1]["hide_in_plots"] = !theory_config
     end
     
     # Store the final results
@@ -2888,9 +2920,12 @@ function plot_thermodynamic_properties(result::Dict, property::String)
         data_styles = [:solid, :dash, :dot, :dashdot]
         data_colors = [:blue, :green, :orange, :cyan, :brown, :pink, :red, :darkred]
         
-        # First plot individual theoretical methods if available
+        # First plot individual theoretical methods if available and not hidden
         theoretical_step = result["hierarchical_steps"][1]
-        if haskey(theoretical_step, "individual_methods")
+        hide_theoretical = haskey(theoretical_step, "hide_in_plots") && theoretical_step["hide_in_plots"]
+        
+        # Only plot theoretical methods if they're not hidden
+        if !hide_theoretical && haskey(theoretical_step, "individual_methods")
             for (i, method) in enumerate(theoretical_step["individual_methods"])
                 method_name = method["data_source"]
                 # Extract method source name (remove THEORETICAL_ prefix)
@@ -2953,7 +2988,9 @@ function plot_thermodynamic_properties(result::Dict, property::String)
             priority = get(step, "priority", i-1)
             
             # Skip theoretical if not in final or marked to not be included
-            if source_name == "THEORETICAL" && haskey(step, "not_in_final") && step["not_in_final"]
+            if source_name == "THEORETICAL" && 
+               ((haskey(step, "not_in_final") && step["not_in_final"]) || 
+                (haskey(step, "hide_in_plots") && step["hide_in_plots"]))
                 continue
             end
             
@@ -3052,7 +3089,7 @@ function main()
         try
             # Calculate properties with hierarchical approach
             println("  Calculating hierarchical properties...")
-            result = calculate_properties_range(species_name, formula, temp_range, temp_step, data_sources)
+            result = calculate_properties_range(species_name, formula, temp_range, temp_step, data_sources, config)
             
             # Fit NASA-7 polynomials to the hierarchically refined data
             println("  Fitting NASA-7 polynomials...")
@@ -3362,7 +3399,7 @@ function calculate_delta_g_reaction(reactants::Dict{String, Float64}, products::
             g_uncertainty = abs(g_value) * 0.01  # 1% uncertainty
         else
             # Normal case for all other species
-            result = calculate_hierarchical_properties(species, formula, [temperature], data_sources)
+            result = calculate_hierarchical_properties(species, formula, [temperature], data_sources, config)
             final_result = result[end]["results"][1]
             g_value = final_result["properties"]["G"]["value"]
             g_uncertainty = final_result["properties"]["G"]["uncertainty"]
@@ -3395,7 +3432,7 @@ function calculate_delta_g_reaction(reactants::Dict{String, Float64}, products::
             g_uncertainty = abs(g_value) * 0.01  # 1% uncertainty
         else
             # Normal case for all other species
-            result = calculate_hierarchical_properties(species, formula, [temperature], data_sources)
+            result = calculate_hierarchical_properties(species, formula, [temperature], data_sources, config)
             final_result = result[end]["results"][1]
             g_value = final_result["properties"]["G"]["value"]
             g_uncertainty = final_result["properties"]["G"]["uncertainty"]
