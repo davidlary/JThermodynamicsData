@@ -681,7 +681,7 @@ function calculate_theoretical_properties(species_name::String, formula::String,
         # Low uncertainty for electron - well-characterized
         uncertainty = 0.01  # 1%
         
-        return Dict(
+        electron_result = Dict(
             "species_name" => species_name,
             "formula" => formula,
             "temperature" => temperature,
@@ -709,6 +709,11 @@ function calculate_theoretical_properties(species_name::String, formula::String,
                 )
             )
         )
+        
+        # Add empty individual methods for plotting consistency
+        electron_result["individual_methods"] = [electron_result]
+        
+        return electron_result
     end
     
     # Normal case for all other species
@@ -735,18 +740,45 @@ function calculate_theoretical_properties(species_name::String, formula::String,
         benson_group_result
     ]
     
+    # Define names for plotting
+    method_names = ["Statistical Thermodynamics", "Group Contribution", "Quantum-Statistical", "Benson Group"]
+    
     # Weights for different methods based on their reliability
     # Higher weight for quantum-corrected methods
     method_weights = [1.0, 1.0, 1.5, 1.2]
     
     # For each property, calculate weighted mean and uncertainty across methods
     properties = ["Cp", "H", "S", "G"]
+    
+    # Create individual method results for plotting
+    individual_methods = []
+    for i in 1:length(theoretical_results)
+        method_result = Dict(
+            "species_name" => species_name,
+            "formula" => formula,
+            "temperature" => temperature,
+            "data_source" => "THEORETICAL_" * method_names[i],
+            "properties" => Dict()
+        )
+        
+        for prop in properties
+            method_result["properties"][prop] = Dict(
+                "value" => theoretical_results[i][prop],
+                "uncertainty" => theoretical_results[i]["$(prop)_uncertainty"],
+                "units" => prop in ["H", "G"] ? "kJ/mol" : "J/mol/K"
+            )
+        end
+        
+        push!(individual_methods, method_result)
+    end
+    
     combined_result = Dict(
         "species_name" => species_name,
         "formula" => formula,
         "temperature" => temperature,
         "data_source" => "THEORETICAL_ENSEMBLE",
-        "properties" => Dict()
+        "properties" => Dict(),
+        "individual_methods" => individual_methods
     )
     
     for prop in properties
@@ -2707,11 +2739,17 @@ function calculate_hierarchical_properties(species_name::String, formula::String
     push!(hierarchical_steps, Dict(
         "source_name" => "THEORETICAL",
         "priority" => 0,
-        "results" => theoretical_results
+        "results" => theoretical_results,
+        # Store individual method results for plotting
+        "individual_methods" => [dict["individual_methods"] for dict in theoretical_results][1]
     ))
     
     # Make a copy of theoretical results as the current state
     current_results = deepcopy(theoretical_results)
+    
+    # Track if any experimental data sources are found
+    experimental_sources_found = false
+    experimental_results = nothing
     
     # STEP 2: Traverse the data sources hierarchy
     for priority in 1:8
@@ -2736,8 +2774,16 @@ function calculate_hierarchical_properties(species_name::String, formula::String
                         reliability_factor = polynomial.reliability_score / 5.0  # 0 to 1 scale
                         weight_factor = base_weight * (0.8 + 0.2 * reliability_factor)  # Adjust by reliability
                         
-                        # Refine the result
-                        refined_result = refine_thermodynamic_data(current_results[i], source_result, weight_factor)
+                        # Handle first experimental source
+                        if !experimental_sources_found
+                            # This is the first experimental source, use it directly
+                            refined_result = deepcopy(source_result)
+                            experimental_sources_found = true
+                        else
+                            # Refine the result based on previous experimental results
+                            refined_result = refine_thermodynamic_data(current_results[i], source_result, weight_factor)
+                        end
+                        
                         push!(refined_results, refined_result)
                     end
                     
@@ -2751,9 +2797,19 @@ function calculate_hierarchical_properties(species_name::String, formula::String
                     
                     # Update current state with refined results
                     current_results = refined_results
+                    
+                    # If this is the first experimental source found, save it
+                    if experimental_results === nothing
+                        experimental_results = deepcopy(current_results)
+                    end
                 end
             end
         end
+    end
+    
+    # If experimental sources were found, mark theoretical results as not used in final estimate
+    if experimental_sources_found
+        hierarchical_steps[1]["not_in_final"] = true
     end
     
     # Store the final results
@@ -2824,30 +2880,95 @@ function plot_thermodynamic_properties(result::Dict, property::String)
     
     # If we have stored hierarchical calculation data, plot each source
     if haskey(result, "hierarchical_steps") && !isempty(result["hierarchical_steps"])
-        # Plot each source as a separate line
         # Use different line styles and colors for clarity
-        line_styles = [:dash, :dot, :dashdot, :solid]
-        colors = [:blue, :green, :purple, :orange, :cyan, :brown, :pink, :magenta]
+        theory_styles = [:dash, :dot, :dashdot, :dashdotdot]
+        theory_colors = [:purple, :magenta, :teal, :navy]
         
-        # Plot intermediate steps first
+        # Data source styles and colors
+        data_styles = [:solid, :dash, :dot, :dashdot]
+        data_colors = [:blue, :green, :orange, :cyan, :brown, :pink, :red, :darkred]
+        
+        # First plot individual theoretical methods if available
+        theoretical_step = result["hierarchical_steps"][1]
+        if haskey(theoretical_step, "individual_methods")
+            for (i, method) in enumerate(theoretical_step["individual_methods"])
+                method_name = method["data_source"]
+                # Extract method source name (remove THEORETICAL_ prefix)
+                if startswith(method_name, "THEORETICAL_")
+                    method_name = method_name[13:end]
+                end
+                
+                # Calculate this property for each temperature
+                step_temps = temps
+                step_values = []
+                
+                # Handle different formats of theoretical results
+                if haskey(method["properties"][property], "value")
+                    # Single temperature result
+                    step_value = method["properties"][property]["value"]
+                    # Replicate for all temperatures
+                    push!(step_values, step_value for _ in 1:length(temps))
+                else
+                    # Get property value for each temperature point
+                    for temp_idx in 1:length(temps)
+                        # Get property for this theoretical method at this temperature
+                        if temp_idx <= length(theoretical_step["results"])
+                            result_at_temp = theoretical_step["results"][temp_idx]
+                            
+                            # Access the individual method result
+                            if haskey(result_at_temp, "individual_methods") && 
+                               i <= length(result_at_temp["individual_methods"])
+                                # Get the method result
+                                method_at_temp = result_at_temp["individual_methods"][i]
+                                push!(step_values, method_at_temp["properties"][property]["value"])
+                            end
+                        end
+                    end
+                end
+                
+                # Only plot if we have values
+                if !isempty(step_values) && !all(isnothing, step_values)
+                    ls_idx = i % length(theory_styles) + 1
+                    color_idx = i % length(theory_colors) + 1
+                    
+                    plot!(
+                        p,
+                        step_temps,
+                        step_values,
+                        label="$method_name",
+                        ls=theory_styles[ls_idx],
+                        color=theory_colors[color_idx],
+                        lw=1.5,
+                        alpha=0.6
+                    )
+                end
+            end
+        end
+            
+        # Plot data sources, skip theoretical if not used in final
         for (i, step) in enumerate(result["hierarchical_steps"][1:end-1])
             source_name = step["source_name"]
             priority = get(step, "priority", i-1)
+            
+            # Skip theoretical if not in final or marked to not be included
+            if source_name == "THEORETICAL" && haskey(step, "not_in_final") && step["not_in_final"]
+                continue
+            end
             
             # Extract values for this property
             step_temps = temps
             step_values = [extract_value(r) for r in step["results"]]
             
-            ls_idx = (i-1) % length(line_styles) + 1
-            color_idx = (i-1) % length(colors) + 1
+            ls_idx = (i-1) % length(data_styles) + 1
+            color_idx = (i-1) % length(data_colors) + 1
             
             plot!(
                 p,
                 step_temps,
                 step_values,
                 label="$source_name ($(priority))",
-                ls=line_styles[ls_idx],
-                color=colors[color_idx],
+                ls=data_styles[ls_idx],
+                color=data_colors[color_idx],
                 lw=1.5,
                 alpha=0.7
             )
