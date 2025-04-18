@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>NIST-JANAF Thermochemical Tables</title>
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/autocomplete.css" rel="stylesheet" type="text/css" media="all">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript">
+    function openPage() {
+      var selectBox = document.getElementById("selectBox");
+      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+      if (selectedValue.length > 0) {
+        open('tables/'+selectedValue+'-index.html');
+      }
+    }
+  </script>
+
+<!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+<script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
+
+</head>
+
+<body style="background-image: url('gr/nist_background.gif');">
+
+  <div id="content" style="border-style:solid; border-width:1px; padding:4px">
+
+    <div id="title2">
+      NIST-JANAF Thermochemical Tables
+    </div>
+
+    <div id="title3" style="font-size:10pt">
+      NIST Standard Reference Database 13<br>
+      Last Update to Data Content: 1998<br>
+      DOI: 10.18434/T42S31
+    </div>
+
+    <div style="text-align:center; font-weight:bold; padding: 10px 0px 10px 0px;">
+      Search
+    </div>
+    <br>
+
+    <div class="col-left">
+    <form autocomplete="off">
+      <div class="autocomplete" style="width:90%; margin:5%;">
+        <input id="myInput" type="text" name="myCountry" placeholder="Enter a chemical formula or name">
+      </div>
+      <div style="text-align: center;">
+        <input type="submit">
+      </div>
+    </form>
+    <p></p>
+    </div>
+
+    <div class="col-right">
+      <div style="text-align:center;">
+        or use the periodic table interface
+      </div>
+      <br>
+
+      <div style="text-align:center;">
+        <a href="periodic_table.html">
+          <img src="gr/periodic_table.png" border=1 class="rfig">
+        </a>
+      </div>
+    </div>
+
+    <div class="clear"></div>
+    <p></p>
+
+    <div class="col-left">
+    Data links:
+    <ul>
+      <li>
+        <a href="janaf4pdf.html">JANAF Fourth Edition PDF files</a>
+      </li>
+      <li>
+        <a href="formula.html">Formula index</a>
+      </li>
+      <li>
+        <a href="name.html">Name index</a>
+      </li>
+      <li>
+        <a href="janbanr.html">Credits</a>
+      </li>
+      <li>
+        <a href="background.html">Background</a>
+      </li>
+      <li>
+        <a href="help.html">Help</a>
+      </li>
+    </ul>
+    </div>
+
+    <div class="col-right">
+    Other links:
+    <ul>
+      <li>
+        <a href="news.html">News</a>
+      </li>
+      <li>
+        <a href="https://atct.anl.gov">Active Thermochemical Tables (ANL)</a>
+      </li>
+      <li>
+        <a href="http://www.nist.gov/public_affairs/privacy.cfm">Privacy/Security/Accessibility</a>
+      </li>
+      <li>
+        <a href="https://www.nist.gov/disclaimer">NIST disclaimer</a>
+      </li>
+    </ul>
+    </div>
+
+    <div class="clear"></div>
+
+    <div id="footer">
+      <div id="footerleft"></div>
+      <div id="footercenter">
+        <a href="http://www.nist.gov/">
+          <img src="gr/nistlogo.png" alt="NIST Logo" style="height:72px">
+        </a>
+      </div>
+      <div id="footerright">&copy;2013</div>
+    </div>
+
+    </div>
+
+<script type="text/javascript" src="js/purify.min.js"></script>
+<script type="text/javascript" src="js/autocomplete.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "HNO+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 38345.626668479934,
+            "value": 27144.452646129885
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 35.475233085175475,
+            "value": 259.2596221731115
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 38381.10190156512,
+            "value": 26885.193023956774
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 10.56419826199024,
+            "value": 37.77333624439617
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:11.375",
+        "version": "1.0.0"
+    },
+    "species_name": "HNO+"
+}

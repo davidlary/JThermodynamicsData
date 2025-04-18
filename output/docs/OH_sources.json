@@ -1,0 +1,49 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "OH",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        },
+        {
+            "priority": 1,
+            "weight_factor": 0.5170000000000001,
+            "source_name": "GRI-MECH",
+            "reliability_score": 3.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 14815.928640146887,
+            "value": 8501.545108999011
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 23.98474163143777,
+            "value": 238.62503137740316
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 14815.164667978628,
+            "value": 8262.920077621608
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 1.6599211213647824,
+            "value": 30.292333151141165
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:39.299",
+        "version": "1.0.0"
+    },
+    "species_name": "OH"
+}

@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "CHO",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 37524.649863211176,
+            "value": 26563.934379927476
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 35.44327380182291,
+            "value": 258.6169978027525
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 37560.093137013,
+            "value": 26305.317382124726
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 11.373733026697586,
+            "value": 38.14619686722514
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:48.531",
+        "version": "1.0.0"
+    },
+    "species_name": "CHO"
+}

@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "C+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 16144.472041582789,
+            "value": 15202.980030785302
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 68.83853513361151,
+            "value": 164.77885605466372
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 16205.867593060453,
+            "value": 15038.201174730639
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 16.538003367919845,
+            "value": 32.255402748028665
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T14:08:04.628",
+        "version": "1.0.0"
+    },
+    "species_name": "C+"
+}

@@ -1,0 +1,30 @@
+name = "JThermodynamicsData"
+version = "0.1.0"
+authors = ["David Lary <david.lary@example.com>"]
+
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DuckDB = "d2f5444f-75bc-4fdf-ac35-56f514c445e1"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
+MonteCarloMeasurements = "0987c9cc-fe09-11e8-30f0-b96dd679fdca"
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
+UnitfulMoles = "999f2bd7-36bf-5ba7-9bc1-c9473aa75374"
+LightXML = "9c8b4983-aa76-5018-a973-4c85ecc9e179"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+
+[compat]
+julia = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

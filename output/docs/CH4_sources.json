@@ -1,0 +1,55 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "CH4",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        },
+        {
+            "priority": 1,
+            "weight_factor": 0.5170000000000001,
+            "source_name": "GRI-MECH",
+            "reliability_score": 3.5
+        },
+        {
+            "priority": 7,
+            "weight_factor": 0.8398000000000002,
+            "source_name": "Burcat",
+            "reliability_score": 4.7
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 14372.24954288784,
+            "value": 4950.584126794542
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 6.508337900290312,
+            "value": 249.8453349395495
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 14369.453739335211,
+            "value": 4700.738791854992
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 4.738204255001833,
+            "value": 72.27106559538257
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:45.867",
+        "version": "1.0.0"
+    },
+    "species_name": "CH4"
+}

@@ -1,0 +1,13 @@
+temperature_range:
+  - 100
+  - 10000
+output:
+  log_level: "info"
+  save_to_database: true
+  generate_plots: true
+  plot_format: "png"
+  use_log_temperature: true
+  plot_directory: "plots"
+temperature_step: 10
+species:
+  - "N2"

@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "CO2-",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 34979.10291090143,
+            "value": 24763.960868120503
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 29.052677201397138,
+            "value": 267.3007101363099
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 35008.155588102825,
+            "value": 24496.66015798419
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 11.652579247751962,
+            "value": 39.59283436351152
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:07.155",
+        "version": "1.0.0"
+    },
+    "species_name": "CO2-"
+}

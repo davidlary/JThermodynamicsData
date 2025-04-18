@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "CH2",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 43668.99922384903,
+            "value": 30908.64547881373
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 46.68273247066088,
+            "value": 243.39986431602858
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 43715.68195631969,
+            "value": 30665.245614497704
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 9.479265441627117,
+            "value": 34.62571517754692
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:46.397",
+        "version": "1.0.0"
+    },
+    "species_name": "CH2"
+}

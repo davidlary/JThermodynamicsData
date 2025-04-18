@@ -1,0 +1,49 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "NO",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        },
+        {
+            "priority": 1,
+            "weight_factor": 0.5170000000000001,
+            "source_name": "GRI-MECH",
+            "reliability_score": 3.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 11789.445682363006,
+            "value": 6812.21116819033
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 16.585006662487555,
+            "value": 258.40978692347915
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 11791.755373992031,
+            "value": 6553.801381266851
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 1.9369742356210782,
+            "value": 33.27604875972223
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:37.038",
+        "version": "1.0.0"
+    },
+    "species_name": "NO"
+}

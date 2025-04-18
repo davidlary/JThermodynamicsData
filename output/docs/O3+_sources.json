@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "O3+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 33868.19093326457,
+            "value": 23978.427475432123
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 28.966233301722344,
+            "value": 268.229415108968
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 33897.15716656629,
+            "value": 23710.198060323157
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 11.93277446320157,
+            "value": 40.05123627191374
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:58.183",
+        "version": "1.0.0"
+    },
+    "species_name": "O3+"
+}

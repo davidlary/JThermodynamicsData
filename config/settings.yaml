@@ -1,0 +1,136 @@
+# JThermodynamicsData Configuration
+
+# General Settings
+general:
+  temperature_range: [100.0, 10000.0]  # Default temperature range in K
+  cache_directory: "data/cache"        # Local cache directory
+  database_path: "data/thermodynamics.duckdb"
+  log_level: "info"                   # Logging level (debug, info, warn, error)
+  enable_fallback_calculation: true    # Enable theoretical fallback calculations
+  uncertainty_propagation: true        # Enable uncertainty quantification
+  version_tracking: true               # Track data source versions
+
+# Data Sources (in hierarchical order - lowest to highest priority)
+data_sources:
+  - name: "GRI-MECH"
+    url: "https://github.com/berkeleylab/gri-mech/raw/main/version30/files30/thermo30.dat"
+    format: "chemkin"
+    enabled: true
+    refresh_interval_days: 90
+    priority: 1
+    reliability_score: 3.5
+
+  - name: "CHEMKIN"
+    path: "data/external/chemkin/therm.dat"
+    format: "chemkin"
+    enabled: true
+    refresh_interval_days: 180
+    priority: 2
+    reliability_score: 3.0
+
+  - name: "NASA-CEA"
+    url: "https://ntrs.nasa.gov/api/citations/20020085330/downloads/20020085330.pdf"
+    path: "data/external/nasa-cea"
+    format: "nasa7-9"
+    enabled: true
+    refresh_interval_days: 180
+    priority: 3
+    reliability_score: 4.0
+
+  - name: "JANAF"
+    url: "https://janaf.nist.gov/tables/O-029.html"
+    path: "data/external/janaf"
+    format: "tabular"
+    enabled: true
+    refresh_interval_days: 90
+    priority: 4
+    reliability_score: 4.2
+
+  - name: "ThermoML"
+    url: "https://trc.nist.gov/ThermoML/10.1021/jp953488o.xml"
+    format: "thermoml"
+    enabled: true
+    refresh_interval_days: 30
+    priority: 5
+    reliability_score: 4.3
+
+  - name: "ThermoData-Engine"
+    path: "data/external/tde"
+    format: "tde"
+    enabled: true
+    refresh_interval_days: 60
+    priority: 6
+    reliability_score: 4.5
+
+  - name: "Burcat"
+    url: "http://garfield.chem.elte.hu/Burcat/BURCAT.THR"
+    format: "burcat"
+    enabled: true
+    refresh_interval_days: 30
+    priority: 7
+    reliability_score: 4.7
+
+  - name: "ATcT"
+    url: "https://atct.anl.gov/Thermochemical%20Data/version%201.122h/ATcT_examples.txt"
+    format: "atct"
+    enabled: true
+    refresh_interval_days: 30
+    priority: 8
+    reliability_score: 5.0
+
+# Theoretical Calculation Settings
+theoretical_calculation:
+  methods:
+    - name: "group_contribution"
+      enabled: true
+      priority: 1
+    - name: "statistical_thermodynamics"
+      enabled: true
+      priority: 2
+    - name: "machine_learning"
+      enabled: true
+      model_path: "models/ml_thermo_predictor.jld2"
+      priority: 3
+    - name: "quantum_chemistry"
+      enabled: false  # Disabled by default due to computational cost
+      program: "Psi4"
+      theory_level: "B3LYP/6-31G*"
+      priority: 4
+
+# Database Settings
+database:
+  schema_version: 1
+  vacuum_on_close: true
+  cache_size_mb: 1024
+  max_connections: 8
+  query_timeout_seconds: 30
+
+# Performance Settings
+performance:
+  parallel_processing: true
+  max_threads: 0  # 0 means use all available CPU cores
+  cache_frequent_species: true
+  precompute_common_properties: true
+  batch_size: 1000
+
+# API Settings
+api:
+  enable_rest_api: false
+  port: 8080
+  allowed_origins: ["*"]
+  rate_limit: 100  # requests per minute
+
+# Uncertainty Quantification
+uncertainty:
+  default_method: "measurements"  # measurements, monte_carlo, interval
+  monte_carlo_samples: 1000
+  confidence_level: 0.95
+  propagation_method: "linear"  # linear, nonlinear
+
+# Plotting and Visualization
+visualization:
+  default_backend: "gr"
+  default_theme: "default"
+  show_uncertainty: true
+  uncertainty_style: "ribbon"  # ribbon, errorbar, band
+  default_dpi: 300

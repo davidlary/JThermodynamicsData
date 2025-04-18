@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "CH+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 24775.92695216403,
+            "value": 17539.225958057737
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 29.586193471851857,
+            "value": 254.74322373295192
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 24805.513145635883,
+            "value": 17284.482734324785
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 3.122473256766285,
+            "value": 29.461939548790752
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:07.674",
+        "version": "1.0.0"
+    },
+    "species_name": "CH+"
+}

@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "HO2-",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 37770.170139330876,
+            "value": 26737.543432090508
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 34.58133802792698,
+            "value": 260.5144192083094
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 37804.751477358805,
+            "value": 26477.029012882198
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 10.874100646493355,
+            "value": 38.17928565554871
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:03.960",
+        "version": "1.0.0"
+    },
+    "species_name": "HO2-"
+}

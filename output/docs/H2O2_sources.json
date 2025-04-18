@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "H2O2",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 64996.82479223462,
+            "value": 45999.695566183014
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 25.459627068644863,
+            "value": 269.9320963239167
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 65018.512924841314,
+            "value": 45729.7634698591
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 21.911125929355034,
+            "value": 46.07388231649479
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:45.248",
+        "version": "1.0.0"
+    },
+    "species_name": "H2O2"
+}

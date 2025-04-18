@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "SO2",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 34792.45856903066,
+            "value": 24631.983388313587
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 26.950453882847736,
+            "value": 272.54194592148065
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 34819.40902291351,
+            "value": 24359.441442392108
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 10.743443183249308,
+            "value": 40.07639991359726
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:12.439",
+        "version": "1.0.0"
+    },
+    "species_name": "SO2"
+}

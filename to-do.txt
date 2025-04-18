@@ -1,0 +1,116 @@
+Please do not hard code data, ALL the data should be read from the original data sources, cacheing these data sources locally whenever possible, and if they are old checking the availability for more recent versions of the databases so we strive to always use the most complete and latest observational data.
+
+For each species also save the CAS number to the JSON and Markdown. 
+Saving a spreadsheet of values for each temperature for each variable in a csv.
+As well as saving the NASA7.txt file, save a NASA9.txt file.
+Save to the json and Markdown for each species both the best estimate of each parameter as both a NASA 7 and a NASA 9 polynomial, likewise the best estimate of each parameter uncertainty as both a NASA 7 and a NASA 9 polynomial.
+
+Please update the Markdown README file including a table of the Hierarchical Thermodynamic Data Sources. Describe and cite the theoretical approaches used in a Hierarchical table starting with the least accurate going to the most accurate.
+
+
+
+
+I need you to update the hierarchical_calculator.jl with the following requirements:
+
+# Data Source Requirements
+- Implement dynamic data retrieval from original sources (no hard-coded values)
+- Build a local caching system for all external data sources
+- Implement version-checking to automatically use the most recent data
+- Create a hierarchical fallback system that tries multiple sources in order of reliability
+- Include data validation routines to ensure consistency across sources
+
+# Output File Requirements 
+- For each chemical species, generate:
+  1. JSON and Markdown files containing complete data including CAS numbers and full property listings
+  2. NASA-7 coefficient polynomial representations for each species and parameter in both .txt and json format, likewise for the Uncertainty quantification 
+  3. NASA-9 coefficient polynomial representations for each species and parameter in both .txt and json format, likewise for the Uncertainty quantification 
+  4. CSV spreadsheets with temperature-dependent values for each thermodynamic parameter at each temperature over our range
+
+# Documentation Requirements
+- Create a README.md that updates the comprehensive table of Hierarchical Thermodynamic Data Sources (ordered from least to most accurate). This hierarchy starts with the theoretical approaches, start with the least accurate theoretical approach. Provide citations for all theoretical approaches used. Implementation details and API documentation. Usage examples showing how to access and manipulate thermodynamic data
+
+# Specific Implementation Details
+- Use Julia's HTTP capabilities to fetch remote data
+- Implement error handling for when sources are unavailable
+- Use proper unit handling with appropriate Julia packages
+- Ensure all data is properly attributed with source information
+- Implement proper scientific notation for small/large values
+- Follow Julia package development best practices
+
+Please show me the complete implementation including all necessary modules, functions, and documentation. Focus on making the code maintainable, extensible, and resilient to failures in data retrieval.
+
+
+
+I need you to update the hierarchical_calculator.jl file for comprehensive thermodynamic data processing system with the following specifications:
+
+## Core Tasks
+Make sure the current Julia implementation is updated to:
+1. Retrieve and cahe thermodynamic data from original sources dynamically
+2. Processes this data into standardized formats
+3. Generates multiple output file types for each chemical species
+4. Maintains a hierarchy of data sources by reliability
+5. Updates documentation to reflect this hierarchy
+
+## Technical Requirements
+
+### Data Acquisition System
+- Make sure that we have source-agnostic data fetchers for each major thermodynamic database
+- Create a caching mechanism that stores downloaded data with timestamps
+- Add version detection to automatically check for and use newer data
+- Develop a fallback system that cascades through data sources in order of reliability
+- Include data validation that cross-references values between sources
+
+### Output Generation
+For each species processed, generate:
+- JSON files with complete thermodynamic data including CAS registry numbers
+- Markdown documentation with formatted property tables
+- NASA-7 coefficient polynomials (in both .txt and .json formats)
+- NASA-9 coefficient polynomials (in both .txt and .json formats)
+- Parameter uncertainty quantification in both NASA formats
+- CSV spreadsheets containing temperature-dependent values across the full temperature range
+
+### Documentation Updates
+- Enhance the README.md with:
+  * Updated table of Hierarchical Thermodynamic Data Sources ordered from least to most accurate
+  * Start with theoretical approaches (least accurate first)
+  * Include formal citations for all theoretical approaches used
+  * Add implementation details and API documentation
+  * Create usage examples for accessing and manipulating the data
+
+### Implementation Specifics
+- Use HTTP.jl for robust remote data retrieval
+- Implement comprehensive error handling for connection failures
+- Use Unitful.jl for proper physical unit management
+- Include full source attribution for all data
+- Use appropriate scientific notation for numerical values
+- Follow Julia package development best practices
+
+Please show me the complete implementation with all necessary functions, type definitions, and documentation. The code should be maintainable, extensible, and capable of handling failures gracefully at each stage of data retrieval and processing.
+
+
+
+
+
+Please update hierarchical_calculator.jl to process the thermodynamic data with the following specifications:
+
+1. Data sourcing:
+   - Insure we retrieve ALL data from original sources (no hard-coding of any values whatsoever)
+   - Insure we implement local caching of downloaded data sources
+   - Insure we check for newer versions of data sources when cached files exist
+   - Insure for every species we ALWAYS use the most complete and recent observational data available in the order specified in our hierarchy specified in README_HIERARCHICAL.md starting with the theoretical calculations (from least to most accurate theoretical calculations)   
+
+2. Species data requirements:
+   - Insure we Include CAS registry numbers for each species in all outputs
+   - Insure we Generate both NASA-7 and NASA-9 polynomial representations
+   - Insure we Store both best estimates AND uncertainty values for each parameter
+   - Insure we Format data in both polynomial formats
+   - Insure we Store data and uncertainty polynomials for both the thermodynamic variables and their uncertainty as a function of temperature as JSON and Markdown documentation
+   - Insure we Store CSV spreadsheets for each species with coulmns for temperature over the entire temperature range and columns for the values of both each thermodynamic variable and its associated temperature-dependent uncertainty, make sure all units are specified
+
+4. Documentation:
+   - Insure we Update the README.md file with a table of Hierarchical Thermodynamic Data Sources
+   - Insure we Arrange sources from least accurate to most accurate
+   - Insure we Include citations for all theoretical approaches and databases
+   - Insure we Document the hierarchy of data reliability
+
+The code should prioritize using original sources, implement proper error handling, and maintain a consistent approach to data processing across different databases and formats.

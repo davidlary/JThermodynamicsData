@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "HCN",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 38496.316745330405,
+            "value": 27251.006621328375
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 38.36545739139767,
+            "value": 255.8392743591162
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 38534.68220272181,
+            "value": 26995.16734696926
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 10.699803642810627,
+            "value": 37.456228546365026
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:49.549",
+        "version": "1.0.0"
+    },
+    "species_name": "HCN"
+}

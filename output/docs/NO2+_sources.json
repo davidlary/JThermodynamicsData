@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "NO2+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 32725.244302418352,
+            "value": 23170.242162226445
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 27.028554774117374,
+            "value": 269.1755351791409
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 32752.272857192467,
+            "value": 22901.0666270473
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 12.96034316157402,
+            "value": 40.650629399731095
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:54.431",
+        "version": "1.0.0"
+    },
+    "species_name": "NO2+"
+}

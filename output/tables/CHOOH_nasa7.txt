@@ -1,0 +1,9 @@
+
+NASA-7 Polynomial Coefficients for CHOOH (CHOOH):
+Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
+
+! NASA-7 polynomial in standard format
+CHOOH           CHOOH            100.00  10000.00   5040.00
+  2.42722273e-06 4.37758696e-03-8.80629992e-07 7.79298634e-11-2.55417650e-15    2
+  4.16590606e+07 6.87135586e+01 3.06107354e-05 1.30552554e-02-7.72659183e-06    3
+  1.88812750e-09-1.61037868e-13 1.54578275e+07 3.25742911e+01                   4

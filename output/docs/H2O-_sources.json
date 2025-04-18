@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "H2O-",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 43671.612058674495,
+            "value": 30910.493032036935
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 44.05288577555326,
+            "value": 247.76210860409648
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 43715.66494445005,
+            "value": 30662.73092343284
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 8.945888245666772,
+            "value": 34.999359102295976
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:02.907",
+        "version": "1.0.0"
+    },
+    "species_name": "H2O-"
+}

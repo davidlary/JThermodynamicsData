@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "O2+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 19745.90734238938,
+            "value": 13982.46498248477
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 26.441786336187388,
+            "value": 274.53742369141986
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 19760.21856185268,
+            "value": 13707.92755879335
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 3.482020889128132,
+            "value": 32.60865204878554
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:04:57.116",
+        "version": "1.0.0"
+    },
+    "species_name": "O2+"
+}

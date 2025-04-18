@@ -1,0 +1,17 @@
+# Active Thermochemical Tables (ATcT) sample data
+Species: N2
+Formula: N2
+CAS: 7727-37-9
+
+ΔfH°(298.15 K): 0.0 ± 0.0 kJ/mol
+S°(298.15 K): 191.609 ± 0.1 J/mol/K
+Cp(298.15 K): 29.124 ± 0.04 J/mol/K
+
+# Temperature-dependent data
+T(K)    Cp(J/mol/K)    H-H(298)(kJ/mol)    S(J/mol/K)
+100.00  29.104         -5.724              159.815
+200.00  29.107         -2.832              179.989
+298.15  29.124          0.000              191.609
+300.00  29.125          0.054              191.789
+400.00  29.249          2.976              199.978
+500.00  29.580          5.922              206.534

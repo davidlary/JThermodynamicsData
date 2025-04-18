@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "CO2+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 38371.09138400896,
+            "value": 27162.458919161447
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 30.70655621802644,
+            "value": 266.13124106838916
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 38401.79794022699,
+            "value": 26896.327678093057
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 10.237807758222344,
+            "value": 38.592439849435735
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:06.084",
+        "version": "1.0.0"
+    },
+    "species_name": "CO2+"
+}

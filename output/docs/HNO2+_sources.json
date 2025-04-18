@@ -1,0 +1,43 @@
+{
+    "temperature_range": [
+        100,
+        10000
+    ],
+    "formula": "HNO2+",
+    "sources_used": [
+        {
+            "priority": 0,
+            "weight_factor": 1.0,
+            "source_name": "THEORETICAL",
+            "reliability_score": 2.5
+        }
+    ],
+    "representative_values": {
+        "H": {
+            "units": "kJ/mol",
+            "uncertainty": 60995.72337830665,
+            "value": 43170.48962417946
+        },
+        "S": {
+            "units": "J/mol/K",
+            "uncertainty": 26.43146204990365,
+            "value": 276.40947784091236
+        },
+        "G": {
+            "units": "kJ/mol",
+            "uncertainty": 61012.828089594506,
+            "value": 42894.08014633855
+        },
+        "temperature": 1000.0,
+        "Cp": {
+            "units": "J/mol/K",
+            "uncertainty": 23.178713158023612,
+            "value": 47.94112580805284
+        }
+    },
+    "metadata": {
+        "generated": "2025-04-18T13:05:10.304",
+        "version": "1.0.0"
+    },
+    "species_name": "HNO2+"
+}
