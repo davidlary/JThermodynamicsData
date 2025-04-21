@@ -47,17 +47,61 @@ JThermodynamicsData provides a unified interface to thermodynamic data for chemi
    cd JThermodynamicsData
    ```
 
-2. Activate the project and install dependencies:
-   ```julia
-   julia> ]
-   pkg> activate .
-   pkg> instantiate
+2. Set up the environment and install all required packages:
+   ```bash
+   julia scripts/setup_packages.jl
    ```
 
-3. Initialize the database:
-   ```julia
-   include("scripts/initialize_database.jl")
+3. Delete existing cache and database to avoid errors:
+   ```bash
+   rm -rf ~/.julia/compiled/v1.*/JThermodynamicsData
+   rm -f ~/Dropbox/Environments/Code/JThermodynamicsData/data/thermodynamics.duckdb
    ```
+
+4. Generate species data from scientific sources (for ionic species):
+   ```bash
+   julia scripts/generate_species_data.jl
+   ```
+
+5. Initialize the storage system (either database or JSON):
+   
+   **Option 1: Database Storage** (traditional approach)
+   ```bash
+   julia scripts/initialize_database.jl
+   ```
+   
+   If you encounter database errors, you can use the reinitialization script:
+   ```bash
+   julia scripts/reinitialize_database.jl
+   ```
+   
+   **Option 2: JSON Storage** (recommended)
+   ```bash
+   julia scripts/initialize_json_storage.jl
+   ```
+   
+   To import real data from all sources into the JSON storage system:
+   ```bash
+   julia scripts/import_data_from_sources.jl
+   ```
+
+6. Run the main calculations:
+   ```bash
+   julia run_thermodynamics.jl
+   ```
+
+**TROUBLESHOOTING**:
+
+If you encounter method overwrite or precompilation errors:
+```bash
+rm -rf ~/.julia/compiled/v1.*/JThermodynamicsData
+```
+
+If you encounter database errors:
+```bash
+rm -f ~/Dropbox/Environments/Code/JThermodynamicsData/data/thermodynamics.duckdb
+julia scripts/reinitialize_database.jl
+```
 
 ## Hierarchical Thermodynamic Data Sources
 
@@ -77,17 +121,18 @@ JThermodynamicsData implements a comprehensive hierarchical approach to thermody
 | 4        | Experimental (Level 4)  | JANAF                   | 4.5              | NIST-JANAF Thermochemical Tables                     | Chase (1998) [DOI: 10.18434/T42S31]                                       |
 | 5        | Experimental (Level 5)  | ThermoML                | 4.5              | IUPAC standard for thermodynamic data                | Frenkel et al. (2011) [DOI: 10.1063/1.3525836]                            |
 | 6        | Experimental (Level 6)  | ThermoData Engine (TDE) | 4.8              | NIST TDE with critically evaluated data              | Diky et al. (2012) [DOI: 10.1021/je300128w]                               |
-| 7        | Experimental (Level 7)  | Burcat Database         | 4.9              | Burcat & Ruscic thermochemical database              | Burcat & Ruscic (2005) [DOI: 10.2172/925269]                              |
-| 8        | Experimental (Level 8)  | Active Thermo Tables (ATcT) | 5.0         | Active Thermochemical Tables with network approach   | Ruscic et al. (2005) [DOI: 10.1063/1.1804602]                             |
+| 7        | Experimental (Level 7)  | NIST Chemistry WebBook  | 4.95             | NIST Standard Reference Data                         | Linstrom & Mallard (2023) [DOI: 10.18434/T4D303]                          |
+| 8        | Experimental (Level 8)  | Burcat Database         | 4.9              | Burcat & Ruscic thermochemical database              | Burcat & Ruscic (2005) [DOI: 10.2172/925269]                              |
+| 9        | Experimental (Level 9)  | Active Thermo Tables (ATcT) | 5.0         | Active Thermochemical Tables with network approach   | Ruscic et al. (2005) [DOI: 10.1063/1.1804602]                             |
 
 ### Data Source Hierarchy and Reliability
 
 The hierarchical approach ensures that:
 
-1. **Progressive Refinement**: Data is progressively refined from theoretical approaches to increasingly accurate experimental sources.
-2. **Theory vs. Experiment**: All theoretical approaches are displayed in visualization, but for species with experimental data, only experimental values contribute to the final calculation.
-3. **Uncertainty Propagation**: Uncertainty is properly propagated through the hierarchical refinement process.
-4. **Documentation**: All data sources used for each species are thoroughly documented.
+1. **Most Accurate Source**: The final refined result is exactly the value from the most accurate source available (highest priority).
+2. **Uncertainty Calculation**: The uncertainty is calculated from the spread of values from all available sources, giving appropriate weight to more reliable sources.
+3. **Theory vs. Experiment**: All theoretical approaches are displayed in visualization, but for species with experimental data, only experimental values contribute to the final calculation.
+4. **Documentation**: All data sources used for each species are thoroughly documented, including which source was selected as the most accurate.
 
 #### Theoretical Methods (In Order of Increasing Accuracy)
 
@@ -246,6 +291,42 @@ result = calculate_properties("N2", 298.15)
 println("Heat capacity of N2: $(result["properties"]["Cp"]["value"]) J/mol/K")
 ```
 
+## Storage Systems
+
+JThermodynamicsData offers two storage options for thermodynamic data:
+
+### Database Storage (Traditional)
+
+The database approach uses DuckDB to store thermodynamic data with the following tables:
+- `species` - Information about chemical species
+- `data_sources` - Prioritized thermodynamic data sources
+- `thermodynamic_data` - Polynomials and properties for each species from each source
+
+The database approach provides efficient querying but requires more setup.
+
+### JSON Storage (Recommended)
+
+The JSON storage system provides a simple, robust alternative to the database:
+
+- **One JSON file per species** in the `data/species/` directory
+- Each file contains data from all available sources for that species
+- Hierarchical source selection based on priority
+- Automatic fallback to theoretical calculations when needed
+- Simple, human-readable format for easy debugging
+
+**Benefits of JSON Storage:**
+- No database errors or connection issues
+- Easily view and edit data files
+- Direct access to all available sources for each species
+- Visual representation in plots showing all sources
+- More robust to errors in data processing
+
+To use JSON storage, run:
+```bash
+julia scripts/initialize_json_storage.jl
+julia scripts/import_data_from_sources.jl  # Import real data from all sources
+```
+
 ## Data Processing Workflow
 
 The data processing workflow follows these steps:
@@ -254,6 +335,7 @@ The data processing workflow follows these steps:
    - Retrieve data from original sources
    - Implement local caching with version checking
    - Check for newer versions when cached files exist
+   - Store data in JSON per-species files
 
 2. **Theoretical Calculations**
    - Apply theoretical methods in order of increasing accuracy
@@ -261,15 +343,23 @@ The data processing workflow follows these steps:
    - Display all methods in visualizations
 
 3. **Experimental Data Processing**
-   - Process all available experimental data sources in order of priority
-   - Refine results progressively with higher-quality sources
-   - Propagate uncertainties through the refinement process
+   - Collect values from all available experimental data sources in order of priority
+   - Select the value from the highest priority source as the final result
+   - Record the source used for the final value
+   - Calculate uncertainty based on the spread of values from all sources
 
-4. **Output Generation**
-   - Generate NASA-7 and NASA-9 polynomial fits
-   - Create uncertainty polynomials
-   - Produce documentation in multiple formats
-   - Generate CSV data tables with uncertainties
+4. **Uncertainty Quantification**
+   - For properties with multiple source values, calculate weighted standard deviation
+   - For properties with only one source, use the source's reported uncertainty
+   - For calculated properties, propagate uncertainties appropriately
+   - Ensure all final values include quantified uncertainty
+
+5. **Output Generation**
+   - Generate NASA-7 and NASA-9 polynomial fits from the final values
+   - Create uncertainty polynomials based on the calculated uncertainties
+   - Produce documentation in multiple formats with source attribution
+   - Generate CSV data tables with values and uncertainties
+   - Display plots with all available sources shown
 
 ## Debugging
 
