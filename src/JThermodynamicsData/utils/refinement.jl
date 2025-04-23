@@ -259,7 +259,9 @@ end
                                         temperature::Float64, config::Dict)
 
 Progressively refine thermodynamic data by traversing the hierarchical data sources.
-This version ensures thorough traversal of all data sources for maximum accuracy.
+This version ensures thorough traversal of all data sources for maximum accuracy,
+starting with the lowest priority (theoretical methods) and always using the FULL 
+hierarchy, overwriting with higher priority sources as they become available.
 """
 function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::String, 
                                              temperature::Float64, config::Dict)
@@ -297,7 +299,7 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
         end
     end
     
-    # STEP 1: Start with multiple theoretical calculations
+    # STEP 1: Start with multiple theoretical calculations (lowest priority)
     @info "Starting with theoretical calculations for $species_name at $temperature K"
     
     # Try all enabled theoretical methods
@@ -556,8 +558,8 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
     # Store all theoretical sources for the record
     all_sources = all_theoretical_results
     
-    # STEP 2: Traverse the hierarchy of data sources
-    @info "Traversing hierarchy of data sources for $species_name at $temperature K"
+    # STEP 2: Traverse the FULL hierarchy of data sources in order of increasing priority
+    @info "Traversing FULL hierarchy of data sources for $species_name at $temperature K"
     
     # Get ALL data sources for this species, not just ones that perfectly match the temperature
     # We'll check each source to see if it can be used for this temperature
@@ -570,17 +572,18 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
         all_thermo_data_df = DataFrame()
     end
     
-    # Create a list of all data sources from the hierarchy
+    # Create a list of all data sources from the hierarchy (in correct order of priority)
     # This ensures we check for the presence of every source in the hierarchy
     hierarchy_sources = [
-        "GRI-MECH",         # Priority 1
-        "CHEMKIN",          # Priority 2
-        "NASA-CEA",         # Priority 3
-        "JANAF",            # Priority 4
-        "THERMOML",         # Priority 5
-        "TDE",              # Priority 6
-        "BURCAT",           # Priority 7
-        "ATCT"              # Priority 8
+        "GRI-MECH",         # Priority 5
+        "CHEMKIN",          # Priority 6
+        "NASA-CEA",         # Priority 7
+        "JANAF",            # Priority 8
+        "THERMOML",         # Priority 9
+        "TDE",              # Priority 10
+        "NIST-WEBBOOK",     # Priority 11
+        "BURCAT",           # Priority 12
+        "ATCT"              # Priority 13
     ]
     
     # Filter the data sources that are applicable for this temperature
@@ -589,8 +592,9 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
         all_thermo_data_df
     )
     
-    # Sort by priority (high to low)
-    sort!(applicable_data_df, :priority, rev=true)
+    # Sort by priority LOW to HIGH (not high to low) to ensure proper hierarchy traversal
+    # This is the key change for the FULL hierarchy implementation!
+    sort!(applicable_data_df, :priority)
     
     # Record sources found at each priority level
     sources_by_priority = Dict{Int, Vector{String}}()
@@ -606,7 +610,7 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
     end
     
     # Log the sources found at each priority level
-    for priority in sort(collect(keys(sources_by_priority)), rev=true)
+    for priority in sort(collect(keys(sources_by_priority)))
         sources = sources_by_priority[priority]
         @info "Found $(length(sources)) source(s) at priority level $priority: $(join(sources, ", "))"
     end
@@ -623,11 +627,11 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
     experimental_sources_used = false
     
     if size(applicable_data_df, 1) > 0
-        # Process each data source to progressively refine the data and uncertainty
+        # Process each data source from lowest to highest priority to ALWAYS traverse the FULL hierarchy
         for (i, row) in enumerate(eachrow(applicable_data_df))
             source_name = row.data_source
             priority = row.priority
-            @info "Processing data source: $source_name ($(i)/$(size(applicable_data_df, 1)))"
+            @info "Processing data source: $source_name (Priority $priority) ($(i)/$(size(applicable_data_df, 1)))"
             
             # Parse data from this source
             data_json = JSON.parse(row.data_json)
@@ -752,12 +756,12 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
                     reliability = row.reliability_score
                     
                     # Calculate uncertainty based on reliability score and priority
-                    # Higher priority sources (closer to 8) get lower uncertainty
-                    priority_factor = max(0.5, 1.0 - (priority / 10.0))  # 0.5 to 0.9 for priorities 1-8
+                    # Higher priority sources get lower uncertainty
+                    reliability_factor = reliability / 5.0  # 0.0 to 1.0 based on reliability
                     
-                    cp_unc = (5.0 - reliability) * 0.02 * cp * priority_factor  # 1-5% based on reliability and priority
-                    h_unc = (5.0 - reliability) * 0.02 * h * priority_factor    # 1-5% based on reliability and priority
-                    s_unc = (5.0 - reliability) * 0.02 * s * priority_factor    # 1-5% based on reliability and priority
+                    cp_unc = (1.0 - reliability_factor) * 0.10 * cp  # 0-10% based on reliability
+                    h_unc = (1.0 - reliability_factor) * 0.10 * h    # 0-10% based on reliability
+                    s_unc = (1.0 - reliability_factor) * 0.10 * s    # 0-10% based on reliability
                 end
                 
                 # Convert to standard units
@@ -934,15 +938,19 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
                 continue
             end
             
-            # Calculate weight factor for this source
-            # Weight increases with priority, so highest priority (ATcT, Priority 8) gets highest weight
-            weight_factor = 0.5 + 0.5 * (priority / 8.0)  # Increases from 0.5 to 1.0 based on priority
+            # For FULL hierarchical traversal, set weight factor to 1.0
+            # This ensures we COMPLETELY OVERWRITE with each higher priority source
+            weight_factor = 1.0
             
             # Store this source result
             push!(all_sources, source_result)
             
-            # Refine the result by combining with this source
-            result = refine_thermodynamic_data(result, source_result, weight_factor)
+            # COMPLETELY REPLACE the result with this higher priority source
+            # We're doing a full hierarchical traversal, not a weighted combination!
+            result = source_result
+            
+            # Log the overwrite
+            @info "Fully replaced data with higher priority source: $source_name (Priority $priority)"
         end
     end
     
