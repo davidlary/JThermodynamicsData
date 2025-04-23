@@ -182,20 +182,41 @@ function list_available_species()
 end
 
 """
-    list_available_sources(species_name)
+    list_available_sources(species_name, include_all_theoretical=false)
 
 List all available sources for a species.
+If include_all_theoretical is false (default), only include the highest priority theoretical source.
 """
-function list_available_sources(species_name)
+function list_available_sources(species_name, include_all_theoretical=false)
     species_data = load_species_data(species_name)
     
     if haskey(species_data, "sources")
-        # Get source names and priorities
-        sources = [(name, get(info, "priority", 0), get(info, "reliability_score", 0.0)) 
-                  for (name, info) in species_data["sources"]]
+        # Get all sources
+        all_sources = [(name, get(info, "priority", 0), get(info, "reliability_score", 0.0)) 
+                      for (name, info) in species_data["sources"]]
+        
         # Sort by priority (highest first)
-        sort!(sources, by=s->s[2], rev=true)
-        return sources
+        sort!(all_sources, by=s->s[2], rev=true)
+        
+        if include_all_theoretical
+            # Return all sources
+            return all_sources
+        else
+            # Separate theoretical and experimental sources
+            theoretical_sources = filter(s -> startswith(lowercase(s[1]), "theoretical") || lowercase(s[1]) == "theoretical", all_sources)
+            experimental_sources = filter(s -> !startswith(lowercase(s[1]), "theoretical") && lowercase(s[1]) != "theoretical", all_sources)
+            
+            # Get only the highest priority theoretical source
+            best_theoretical = isempty(theoretical_sources) ? [] : [theoretical_sources[1]]
+            
+            # Combine highest priority theoretical with all experimental sources
+            filtered_sources = vcat(best_theoretical, experimental_sources)
+            
+            # Sort again to ensure correct order
+            sort!(filtered_sources, by=s->s[2], rev=true)
+            
+            return filtered_sources
+        end
     else
         return []
     end

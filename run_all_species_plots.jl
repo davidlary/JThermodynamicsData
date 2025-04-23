@@ -33,10 +33,9 @@ function plot_species_with_all_sources(species_name)
         return false
     end
     
-    # Get sources and sort by priority
-    sources = [(name, get(info, "priority", 0), get(info, "reliability_score", 0.0)) 
-              for (name, info) in species_data["sources"]]
-    sort!(sources, by=s->s[2], rev=true)
+    # Get sources and sort by priority - ONLY include the best theoretical source
+    # This ensures we don't show redundant theoretical sources in plots
+    sources = JThermodynamicsData.list_available_sources(species_name, false)  # false = don't include all theoretical
     
     # Print available sources
     println("  Available sources:")
