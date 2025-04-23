@@ -202,11 +202,32 @@ function list_available_sources(species_name, include_all_theoretical=false)
             # Return all sources
             return all_sources
         else
-            # Separate theoretical and experimental sources
-            theoretical_sources = filter(s -> startswith(lowercase(s[1]), "theoretical") || lowercase(s[1]) == "theoretical", all_sources)
-            experimental_sources = filter(s -> !startswith(lowercase(s[1]), "theoretical") && lowercase(s[1]) != "theoretical", all_sources)
+            # IMPROVED: More precise detection of theoretical sources based on priority and source names
+            # All sources with priority <= 4 are theoretical (according to hierarchy in README)
+            theoretical_sources = filter(s -> s[2] <= 4 || 
+                                           startswith(lowercase(s[1]), "theoretical") || 
+                                           lowercase(s[1]) == "theoretical" ||
+                                           lowercase(s[1]) == "quantum" ||
+                                           lowercase(s[1]) == "statistical" ||
+                                           lowercase(s[1]) == "quantum-statistical" ||
+                                           lowercase(s[1]) == "stat-thermo" ||
+                                           lowercase(s[1]) == "benson-group" ||
+                                           lowercase(s[1]) == "group-contribution", 
+                                    all_sources)
             
-            # Get only the highest priority theoretical source
+            # All sources with priority > 4 are experimental
+            experimental_sources = filter(s -> s[2] > 4 && 
+                                           !startswith(lowercase(s[1]), "theoretical") && 
+                                           lowercase(s[1]) != "theoretical" &&
+                                           lowercase(s[1]) != "quantum" &&
+                                           lowercase(s[1]) != "statistical" &&
+                                           lowercase(s[1]) != "quantum-statistical" &&
+                                           lowercase(s[1]) != "stat-thermo" &&
+                                           lowercase(s[1]) != "benson-group" &&
+                                           lowercase(s[1]) != "group-contribution",
+                                    all_sources)
+            
+            # Get only the highest priority theoretical source (if any)
             best_theoretical = isempty(theoretical_sources) ? [] : [theoretical_sources[1]]
             
             # Combine highest priority theoretical with all experimental sources

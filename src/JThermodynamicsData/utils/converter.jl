@@ -13,6 +13,8 @@ using DataFrames
 using Plots
 using Dates
 using JSON
+using Printf
+using DocStringExtensions
 
 """
     generate_nasa7_polynomial(temps::Vector{Float64}, cp_values::Vector{Float64}, 

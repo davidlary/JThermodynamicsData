@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for CHO+ (CHO+):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-CHO+            CHO+             100.00  10000.00   5040.00
-  1.52972468e-06 2.75891566e-03-5.59290924e-07 4.97452578e-11-1.63655865e-15    2
-  1.88915566e+07 6.64354470e+01 2.30549617e-05 9.83277271e-03-6.35302993e-06    3
-  1.62428849e-09-1.42231923e-13 6.87633521e+06 3.20910587e+01                   4
+{
+    "coefficients": [
+        [
+            3.7,
+            0.001,
+            2.0e-6,
+            0.0,
+            0.0,
+            -16.0,
+            9.5
+        ],
+        [
+            3.9000000000000004,
+            0.0008,
+            1.0e-6,
+            0.0,
+            0.0,
+            -16.0,
+            9.5
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.16,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "CHO+"
+}

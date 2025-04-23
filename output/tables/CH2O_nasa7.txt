@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for CH2O (CH2O):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-CH2O            CH2O             100.00  10000.00   5040.00
-  1.96424432e-06 3.54258808e-03-7.14185059e-07 6.33033631e-11-2.07771155e-15    2
-  3.02903945e+07 6.72187157e+01 2.64754281e-05 1.12915769e-02-6.93433215e-06    3
-  1.72967734e-09-1.49380999e-13 1.12151295e+07 3.20405395e+01                   4
+{
+    "coefficients": [
+        [
+            4.1,
+            0.008,
+            2.0e-6,
+            0.0,
+            0.0,
+            -23.0,
+            7.0
+        ],
+        [
+            4.3,
+            0.0064,
+            1.0e-6,
+            0.0,
+            0.0,
+            -23.0,
+            7.0
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.22999999999999998,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "CH2O"
+}

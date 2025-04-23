@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for OH (OH):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-OH              OH               100.00  10000.00   5040.00
-  1.34630562e-06 2.42811252e-03-5.29382649e-07 5.53831408e-11-2.36065059e-15    2
-  5.49269762e+06 4.50126253e+01 1.91357156e-05 8.16124283e-03-5.35823007e-06    3
-  1.39424233e-09-1.23629471e-13 2.04534726e+06 2.65448890e+01                   4
+{
+    "coefficients": [
+        [
+            3.7,
+            0.001,
+            4.0e-6,
+            0.0,
+            0.0,
+            -11.0,
+            8.5
+        ],
+        [
+            3.9000000000000004,
+            0.0008,
+            2.0e-6,
+            0.0,
+            0.0,
+            -11.0,
+            8.5
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.16,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "OH"
+}

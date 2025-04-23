@@ -11,13 +11,16 @@ general:
   version_tracking: true               # Track data source versions
 
 # Data Sources (in hierarchical order - lowest to highest priority)
+# IMPORTANT: Priorities match the README.md documentation:
+# - Theoretical methods: priorities 0-4
+# - Experimental sources: priorities 5-13
 data_sources:
   - name: "GRI-MECH"
     url: "https://github.com/berkeleylab/gri-mech/raw/main/version30/files30/thermo30.dat"
     format: "chemkin"
     enabled: true
     refresh_interval_days: 90
-    priority: 1
+    priority: 5  # Experimental data (start at 5)
     reliability_score: 3.5
 
   - name: "CHEMKIN"
@@ -25,8 +28,8 @@ data_sources:
     format: "chemkin"
     enabled: true
     refresh_interval_days: 180
-    priority: 2
-    reliability_score: 3.0
+    priority: 6  # Higher than GRI-MECH
+    reliability_score: 3.8
 
   - name: "NASA-CEA"
     url: "https://ntrs.nasa.gov/api/citations/20020085330/downloads/20020085330.pdf"
@@ -34,7 +37,7 @@ data_sources:
     format: "nasa7-9"
     enabled: true
     refresh_interval_days: 180
-    priority: 3
+    priority: 7  # Higher than CHEMKIN
     reliability_score: 4.0
 
   - name: "JANAF"
@@ -43,59 +46,78 @@ data_sources:
     format: "tabular"
     enabled: true
     refresh_interval_days: 90
-    priority: 4
-    reliability_score: 4.2
+    priority: 8  # Higher than NASA-CEA
+    reliability_score: 4.5
 
   - name: "ThermoML"
     url: "https://trc.nist.gov/ThermoML/10.1021/jp953488o.xml"
     format: "thermoml"
     enabled: true
     refresh_interval_days: 30
-    priority: 5
-    reliability_score: 4.3
+    priority: 9  # Higher than JANAF
+    reliability_score: 4.5
 
   - name: "ThermoData-Engine"
     path: "data/external/tde"
     format: "tde"
     enabled: true
     refresh_interval_days: 60
-    priority: 6
-    reliability_score: 4.5
+    priority: 10  # Higher than ThermoML
+    reliability_score: 4.8
+
+  - name: "NIST-WEBBOOK"
+    url: "https://webbook.nist.gov/chemistry/"
+    format: "nist-webbook" 
+    enabled: true
+    refresh_interval_days: 90
+    priority: 11  # Higher than TDE
+    reliability_score: 4.95
 
   - name: "Burcat"
     url: "http://garfield.chem.elte.hu/Burcat/BURCAT.THR"
     format: "burcat"
     enabled: true
     refresh_interval_days: 30
-    priority: 7
-    reliability_score: 4.7
+    priority: 12  # Second highest priority
+    reliability_score: 4.9
 
   - name: "ATcT"
     url: "https://atct.anl.gov/Thermochemical%20Data/version%201.122h/ATcT_examples.txt"
     format: "atct"
     enabled: true
     refresh_interval_days: 30
-    priority: 8
+    priority: 13  # Highest priority experimental source
     reliability_score: 5.0
 
 # Theoretical Calculation Settings
+# IMPORTANT: Priorities match the README.md documentation:
+# - Theoretical methods: priorities 0-4
 theoretical_calculation:
   methods:
+    - name: "theoretical"  # Basic theoretical (lowest priority theoretical)
+      enabled: true
+      priority: 0  # Start at 0 for theoretical methods
     - name: "group_contribution"
       enabled: true
-      priority: 1
+      priority: 1  # Higher than basic theoretical
     - name: "statistical_thermodynamics"
       enabled: true
-      priority: 2
+      priority: 2  # Higher than group contribution
+    - name: "benson-group"
+      enabled: true
+      priority: 3  # Higher than statistical thermodynamics
+    - name: "quantum_statistical"
+      enabled: true
+      priority: 4  # Highest priority theoretical method
     - name: "machine_learning"
       enabled: true
       model_path: "models/ml_thermo_predictor.jld2"
-      priority: 3
+      priority: 3  # Same as benson-group (alternative method)
     - name: "quantum_chemistry"
       enabled: false  # Disabled by default due to computational cost
       program: "Psi4"
       theory_level: "B3LYP/6-31G*"
-      priority: 4
+      priority: 4  # Same as quantum_statistical (alternative method)
 
 # Database Settings
 database:

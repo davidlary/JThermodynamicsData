@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for Xe+ (Xe+):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-Xe+             Xe+              100.00  10000.00   5040.00
-  1.41546518e-06 2.55284445e-03-2.07998324e-07 1.85932074e-11-6.13743419e-16    2
-  8.77374717e+07 6.02769791e+01 1.36882346e-05 5.83793257e-03-2.96364114e-06    3
-  7.79913696e-10-6.93688537e-14 1.25904095e+07 2.51067006e+01                   4
+{
+    "coefficients": [
+        [
+            3.9,
+            0.002,
+            1.0e-6,
+            0.0,
+            0.0,
+            -17.0,
+            7.0
+        ],
+        [
+            4.1,
+            0.0016,
+            5.0e-7,
+            0.0,
+            0.0,
+            -17.0,
+            7.0
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.16999999999999998,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "Xe+"
+}

@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for NO (NO):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-NO              NO               100.00  10000.00   5040.00
-  1.46065197e-06 2.63434043e-03-6.34001796e-07 7.27196875e-11-3.29967926e-15    2
-  5.45731259e+06 4.72964875e+01 2.05981835e-05 8.78497470e-03-5.75819540e-06    3
-  1.48177251e-09-1.30140260e-13 1.92047905e+06 2.84447317e+01                   4
+{
+    "coefficients": [
+        [
+            3.9,
+            0.007,
+            3.0e-6,
+            0.0,
+            0.0,
+            -17.0,
+            5.5
+        ],
+        [
+            4.1,
+            0.005600000000000001,
+            1.5e-6,
+            0.0,
+            0.0,
+            -17.0,
+            5.5
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.22,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "NO"
+}

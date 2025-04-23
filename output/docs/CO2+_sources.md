@@ -1,33 +1,25 @@
-# Thermodynamic Data Sources for CO2+
+# Thermodynamic Data Source for CO2+
 
-## Species Information
-- **Species Name**: CO2+
-- **Formula**: CO2+
-- **Temperature Range**: 100-10000 K
+## Selected Source
+- **Source:** quantum-statistical
+- **Priority:** 4
+- **Reliability score:** 4.0
+- **Uncertainty:** 7.000000000000001%
+- **Temperature range:** 200.0 - 6000.0 K
+- **Polynomial type:** nasa7
 
-## Data Sources Used
-The following data sources were used in hierarchical refinement, listed in order of application:
+## Coefficients
+### Low temperature range (200.0 - 1000.0 K)
+```
+5.16000000e+00, 1.62000000e-02, 4.00000000e-07, 0.00000000e+00, 0.00000000e+00, -2.80000000e+01, 1.25000000e+01
+```
 
-| Priority | Source | Reliability Score | Weight Factor |
-|----------|--------|-------------------|---------------|
-| 0 | THEORETICAL | 2.5 | 1.0 |
+### High temperature range (1000.0 - 6000.0 K)
+```
+5.36000000e+00, 1.29600000e-02, 2.00000000e-07, 0.00000000e+00, 0.00000000e+00, -2.80000000e+01, 1.25000000e+01
+```
 
-## Hierarchical Refinement Process
-The thermodynamic properties for this species were calculated using a hierarchical approach:
-
-1. Started with theoretical estimates (statistical thermodynamics and group contribution methods)
-2. Progressively refined with experimental data sources in order of priority
-3. Applied weighted averaging based on reliability scores and priority levels
-4. Propagated uncertainties throughout the refinement process
-
-## Representative Values at 1000.0 K
-| Property | Value | Uncertainty | Units |
-|----------|-------|-------------|-------|
-| Cp | 38.5924 | ±10.2378 | J/mol/K |
-| H | 27162.4589 | ±38371.0914 | kJ/mol |
-| S | 266.1312 | ±30.7066 | J/mol/K |
-| G | 26896.3277 | ±38401.7979 | kJ/mol |
-
-## Metadata
-- **Generated**: 2025-04-18 13:05:06
-- **JThermodynamicsData Version**: 1.0.0
+## All Available Sources
+| Source | Priority | Reliability |
+|--------|----------|-------------|
+| Theoretical | 4 | 4.0 |

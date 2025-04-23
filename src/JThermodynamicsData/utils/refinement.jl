@@ -55,24 +55,16 @@ function refine_thermodynamic_data(previous_result::Dict, new_result::Dict, weig
                                                "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe"]) || 
                          endswith(formula, "+") || endswith(formula, "-")))
     
-    # For atomic species and ions with experimental data, use highest priority data directly
-    # if weight_factor is close to 1.0, it means this is a high-priority source
-    if is_atomic_or_ion && !startswith(new_result["data_source"], "THEORETICAL") && weight_factor > 0.9
-        @info "Using highest priority source $(new_result["data_source"]) directly for atomic/ionic species $formula"
-        # Take the new result values directly for all properties
-        for prop in ["Cp", "H", "S", "G"]
-            if haskey(new_result["properties"], prop) && haskey(refined_result["properties"], prop)
-                refined_result["properties"][prop]["value"] = new_result["properties"][prop]["value"]
-                refined_result["properties"][prop]["uncertainty"] = new_result["properties"][prop]["uncertainty"]
-            end
+    # ALWAYS use the higher priority source's values directly (complete replacement)
+    # This ensures proper hierarchical traversal for ALL species
+    @info "Using higher priority source $(new_result["data_source"]) for $(formula)"
+    
+    # Take the new result values directly for all properties
+    for prop in ["Cp", "H", "S", "G"]
+        if haskey(new_result["properties"], prop) && haskey(refined_result["properties"], prop)
+            refined_result["properties"][prop]["value"] = new_result["properties"][prop]["value"]
+            refined_result["properties"][prop]["uncertainty"] = new_result["properties"][prop]["uncertainty"]
         end
-        
-        # Remove theoretical method info if using experimental data
-        if haskey(refined_result, "theoretical_method")
-            delete!(refined_result, "theoretical_method")
-        end
-        
-        return refined_result
     end
     
     # Remove theoretical method info if using experimental data
@@ -80,28 +72,19 @@ function refine_thermodynamic_data(previous_result::Dict, new_result::Dict, weig
         delete!(refined_result, "theoretical_method")
     end
     
-    # Calculate weights - higher weight for new data from more reliable source
-    previous_weight = 1.0 - weight_factor  # Lower weight for previous data
-    new_weight = weight_factor  # Higher weight for new data
+    # Full replacement - no weighted averaging should be done
+    # The weight_factor parameter is ignored as we always do complete replacement
+    previous_weight = 0.0  # No weight for previous data
+    new_weight = 1.0  # Full weight for new data
     
-    # Update each primary property
+    # Property values were already directly updated above (lines 62-68)
+    # Skip any weighted averaging - we're doing complete replacement only
+    # This block is kept to maintain code structure but doesn't perform averaging
     for prop in ["Cp", "H", "S"]
         if haskey(new_result["properties"], prop) && haskey(previous_result["properties"], prop)
-            # Get current and new values
-            current_val = previous_result["properties"][prop]["value"]
-            current_unc = previous_result["properties"][prop]["uncertainty"]
-            
-            new_val = new_result["properties"][prop]["value"]
-            new_unc = new_result["properties"][prop]["uncertainty"]
-            
-            # Combine values and uncertainties using weighted averaging
-            combined_val, combined_unc = combine_weighted_values(
-                current_val, current_unc, new_val, new_unc, previous_weight, new_weight
-            )
-            
-            # Update refined result
-            refined_result["properties"][prop]["value"] = combined_val
-            refined_result["properties"][prop]["uncertainty"] = combined_unc
+            # Values already updated above - no weighted averaging needed
+            # This is intentionally empty as we've already set the values above
+            # Keeping the structure for code consistency
         end
     end
     
@@ -123,22 +106,11 @@ function refine_thermodynamic_data(previous_result::Dict, new_result::Dict, weig
         refined_result["properties"]["G"]["value"] = g_val
         refined_result["properties"]["G"]["uncertainty"] = g_unc
     else
-        # If H or S is missing, update G directly
+        # If H or S is missing, use G directly from the higher priority source
         if haskey(new_result["properties"], "G") && haskey(previous_result["properties"], "G")
-            current_val = previous_result["properties"]["G"]["value"]
-            current_unc = previous_result["properties"]["G"]["uncertainty"]
-            
-            new_val = new_result["properties"]["G"]["value"]
-            new_unc = new_result["properties"]["G"]["uncertainty"]
-            
-            # Combine values and uncertainties using weighted averaging
-            combined_val, combined_unc = combine_weighted_values(
-                current_val, current_unc, new_val, new_unc, previous_weight, new_weight
-            )
-            
-            # Update refined result
-            refined_result["properties"]["G"]["value"] = combined_val
-            refined_result["properties"]["G"]["uncertainty"] = combined_unc
+            # Direct replacement from new source - no weighted averaging
+            refined_result["properties"]["G"]["value"] = new_result["properties"]["G"]["value"]
+            refined_result["properties"]["G"]["uncertainty"] = new_result["properties"]["G"]["uncertainty"]
         end
     end
     
@@ -593,7 +565,9 @@ function progressively_refine_thermodynamic_data(conn::DuckDB.DB, species_name::
     )
     
     # Sort by priority LOW to HIGH (not high to low) to ensure proper hierarchy traversal
-    # This is the key change for the FULL hierarchy implementation!
+    # This allows us to start with theoretical sources and progressively apply higher priority sources,
+    # ensuring the final result is exactly equal to the highest priority source values
+    # This is the key implementation of the FULL hierarchical traversal
     sort!(applicable_data_df, :priority)
     
     # Record sources found at each priority level

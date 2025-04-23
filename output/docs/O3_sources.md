@@ -22,9 +22,5 @@
 ## All Available Sources
 | Source | Priority | Reliability |
 |--------|----------|-------------|
-| nist-webbook | 11 | 4.95 |
-| quantum-statistical | 4 | 4.0 |
-| benson-group | 3 | 3.0 |
-| stat-thermo | 2 | 3.5 |
-| group-contribution | 1 | 3.0 |
-| theoretical | 0 | 2.5 |
+| Nist-Webbook | 11 | 4.95 |
+| Theoretical | 4 | 4.0 |

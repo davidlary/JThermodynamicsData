@@ -1,34 +1,28 @@
-# Thermodynamic Data Sources for H2
+# Thermodynamic Data Source for H2
 
-## Species Information
-- **Species Name**: H2
-- **Formula**: H2
-- **Temperature Range**: 100-10000 K
+## Selected Source
+- **Source:** nasa-cea
+- **Priority:** 7
+- **Reliability score:** 4.0
+- **Uncertainty:** 5.6000000000000005%
+- **Temperature range:** 200.0 - 6000.0 K
+- **Polynomial type:** nasa7
 
-## Data Sources Used
-The following data sources were used in hierarchical refinement, listed in order of application:
+## Coefficients
+### Low temperature range (200.0 - 1000.0 K)
+```
+5.00000000e+00, 5.00000000e-03, 1.00000000e-05, 0.00000000e+00, 0.00000000e+00, -1.68000000e+01, 9.00000000e+00
+```
 
-| Priority | Source | Reliability Score | Weight Factor |
-|----------|--------|-------------------|---------------|
-| 0 | THEORETICAL | 2.5 | 1.0 |
-| 1 | GRI-MECH | 3.5 | 0.517 |
+### High temperature range (1000.0 - 6000.0 K)
+```
+5.15000000e+00, 4.50000000e-03, 7.00000000e-06, 0.00000000e+00, 0.00000000e+00, -1.68000000e+01, 9.00000000e+00
+```
 
-## Hierarchical Refinement Process
-The thermodynamic properties for this species were calculated using a hierarchical approach:
-
-1. Started with theoretical estimates (statistical thermodynamics and group contribution methods)
-2. Progressively refined with experimental data sources in order of priority
-3. Applied weighted averaging based on reliability scores and priority levels
-4. Propagated uncertainties throughout the refinement process
-
-## Representative Values at 1000.0 K
-| Property | Value | Uncertainty | Units |
-|----------|-------|-------------|-------|
-| Cp | 28.473 | ±3.6139 | J/mol/K |
-| H | 8482.1411 | ±14826.9943 | kJ/mol |
-| S | 195.1164 | ±36.7379 | J/mol/K |
-| G | 8287.0247 | ±14826.4774 | kJ/mol |
-
-## Metadata
-- **Generated**: 2025-04-18 13:04:34
-- **JThermodynamicsData Version**: 1.0.0
+## All Available Sources
+| Source | Priority | Reliability |
+|--------|----------|-------------|
+| Nasa-Cea | 7 | 4.0 |
+| Chemkin | 6 | 3.8 |
+| Gri-Mech | 5 | 3.5 |
+| Theoretical | 4 | 4.0 |

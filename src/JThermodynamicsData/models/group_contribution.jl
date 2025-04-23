@@ -657,7 +657,7 @@ function joback_method(formula::String, temperature::Float64)
                     # One nitrogen - could be amine, nitrile, etc.
                     if c_count >= 1 && h_count >= 2  # Likely amine
                         group_counts["-NH2"] = 1
-                    else if c_count >= 1  # Maybe nitrile
+                    elseif c_count >= 1  # Maybe nitrile
                         group_counts["-CN"] = 1
                     end
                 else

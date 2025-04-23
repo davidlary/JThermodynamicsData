@@ -98,3 +98,15 @@ output:
   plot_directory: "plots"
   log_level: "info"
   use_log_temperature: true  # Use logarithmic temperature scale
+  
+# Theoretical and plotting options
+theory:
+  # Control whether to plot theoretical approaches when experimental data is available
+  plot_theoretical_with_experimental: false
+  
+  # Enable/disable specific theoretical calculation methods
+  use_methods:
+    statistical_thermodynamics: false
+    group_contribution: false
+    quantum_statistical: true
+    benson_group: false  # Default is false as requested

@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for H+ (H+):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-H+              H+               100.00  10000.00   5040.00
-  1.38863993e-06 2.50446412e-03-1.60442208e-07 1.43421120e-11-4.73418957e-16    2
-  9.77898414e+07 5.89982075e+01 1.18137013e-05 5.03845793e-03-2.28604221e-06    3
-  6.01596358e-10-5.35085501e-14 1.39386933e+07 2.15377813e+01                   4
+{
+    "coefficients": [
+        [
+            3.5,
+            0.005,
+            3.0e-6,
+            0.0,
+            0.0,
+            -20.0,
+            8.5
+        ],
+        [
+            3.7,
+            0.004,
+            1.5e-6,
+            0.0,
+            0.0,
+            -20.0,
+            8.5
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.2,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "H+"
+}

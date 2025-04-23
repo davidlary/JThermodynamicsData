@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for HNO2+ (HNO2+):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-HNO2+           HNO2+            100.00  10000.00   5040.00
-  2.00077451e-06 3.60847164e-03-7.30679173e-07 6.49861947e-11-2.13871917e-15    2
-  3.02654463e+07 6.80228742e+01 2.74142597e-05 1.16919817e-02-7.23404002e-06    3
-  1.80957362e-09-1.56475056e-13 1.11144642e+07 3.27069018e+01                   4
+{
+    "coefficients": [
+        [
+            3.9,
+            0.002,
+            0.0,
+            0.0,
+            0.0,
+            -17.0,
+            10.0
+        ],
+        [
+            4.1,
+            0.0016,
+            0.0,
+            0.0,
+            0.0,
+            -17.0,
+            10.0
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.16999999999999998,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "HNO2+"
+}

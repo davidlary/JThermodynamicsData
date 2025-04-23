@@ -1,36 +1,33 @@
-# Thermodynamic Data Sources for H2O
+# Thermodynamic Data Source for H2O
 
-## Species Information
-- **Species Name**: H2O
-- **Formula**: H2O
-- **Temperature Range**: 100-10000 K
+## Selected Source
+- **Source:** atct
+- **Priority:** 13
+- **Reliability score:** 5.0
+- **Uncertainty:** 2.6%
+- **Temperature range:** 200.0 - 6000.0 K
+- **Polynomial type:** nasa7
 
-## Data Sources Used
-The following data sources were used in hierarchical refinement, listed in order of application:
+## Coefficients
+### Low temperature range (200.0 - 1000.0 K)
+```
+4.00000000e+00, 4.00000000e-03, 5.00000000e-06, 0.00000000e+00, 0.00000000e+00, -1.62000000e+01, 9.60000000e+00
+```
 
-| Priority | Source | Reliability Score | Weight Factor |
-|----------|--------|-------------------|---------------|
-| 0 | THEORETICAL | 2.5 | 1.0 |
-| 1 | GRI-MECH | 3.5 | 0.517 |
-| 3 | NASA-CEA | 4.0 | 0.624 |
-| 7 | Burcat | 4.7 | 0.8398 |
+### High temperature range (1000.0 - 6000.0 K)
+```
+4.15000000e+00, 3.60000000e-03, 3.50000000e-06, 0.00000000e+00, 0.00000000e+00, -1.62000000e+01, 9.60000000e+00
+```
 
-## Hierarchical Refinement Process
-The thermodynamic properties for this species were calculated using a hierarchical approach:
-
-1. Started with theoretical estimates (statistical thermodynamics and group contribution methods)
-2. Progressively refined with experimental data sources in order of priority
-3. Applied weighted averaging based on reliability scores and priority levels
-4. Propagated uncertainties throughout the refinement process
-
-## Representative Values at 1000.0 K
-| Property | Value | Uncertainty | Units |
-|----------|-------|-------------|-------|
-| Cp | 41.1122 | ±0.9935 | J/mol/K |
-| H | 688.9194 | ±2852.5473 | kJ/mol |
-| S | 233.1859 | ±4.8963 | J/mol/K |
-| G | 455.7335 | ±2851.98 | kJ/mol |
-
-## Metadata
-- **Generated**: 2025-04-18 13:04:35
-- **JThermodynamicsData Version**: 1.0.0
+## All Available Sources
+| Source | Priority | Reliability |
+|--------|----------|-------------|
+| Atct | 13 | 5.0 |
+| Burcat | 12 | 4.9 |
+| Nist-Webbook | 11 | 4.95 |
+| Tde | 10 | 4.8 |
+| Thermoml | 9 | 4.5 |
+| Janaf | 8 | 4.5 |
+| Nasa-Cea | 7 | 4.0 |
+| Gri-Mech | 5 | 3.5 |
+| Theoretical | 4 | 4.0 |

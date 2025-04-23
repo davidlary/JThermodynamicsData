@@ -19,18 +19,9 @@ using Printf
 using Dates
 using DuckDB
 
-# Add lowercase constant aliases to the JThermodynamicsData module if they don't exist
-println("Applying fixes for constants...")
-if !isdefined(JThermodynamicsData, :h)
-    @info "Adding lowercase constant aliases to JThermodynamicsData"
-    for (lowercase_name, uppercase_name) in [(:h, :H), (:kb, :KB), (:na, :NA), (:c, :C)]
-        if isdefined(JThermodynamicsData, uppercase_name)
-            uppercase_value = getfield(JThermodynamicsData, uppercase_name)
-            Core.eval(JThermodynamicsData, :(const $lowercase_name = $uppercase_value))
-            @info "  Added JThermodynamicsData.$(lowercase_name)"
-        end
-    end
-end
+# Lowercase constant aliases are now directly defined in constants.jl
+# No need to add them dynamically
+@info "Physical constants available in both uppercase (R, H, KB, NA, C) and lowercase (r, h, kb, na, c) forms"
 
 """
     calculate_properties_fixed(conn::DuckDB.DB, species_name::String, 
@@ -407,24 +398,92 @@ function plot_properties_log_temp(property_data::Dict, config::Dict)
 end
 
 function main()
-    println("JThermodynamicsData - Thermodynamic Data Processor")
-    println("=================================================")
-    println("Start time: $(now())")
-    println()
+    # Set up logging
+    log_dir = joinpath(@__DIR__, "logs")
+    mkpath(log_dir)
+    log_file = joinpath(log_dir, "thermodynamics_$(Dates.format(now(), "yyyymmdd_HHMMSS")).log")
+    
+    # Initialize logger with file output
+    JThermodynamicsData.init_logger("info", log_file)
+    
+    # Start pipeline logging
+    JThermodynamicsData.log_pipeline_start("ThermodynamicsDataProcessor", Dict(
+        "start_time" => now(),
+        "working_directory" => @__DIR__
+    ))
+    
+    @info "JThermodynamicsData - Thermodynamic Data Processor"
+    @info "================================================="
     
     # Load main configuration
+    JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "LoadConfiguration", Dict())
     config_path = joinpath(@__DIR__, "config", "settings.yaml")
-    config = JThermodynamicsData.load_config(config_path)
+    config = JThermodynamicsData.with_timing(
+        () -> JThermodynamicsData.load_config(config_path),
+        "Configuration", 
+        "LoadConfig"
+    )
+    JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "LoadConfiguration", Dict(
+        "config_path" => config_path,
+        "log_level" => config["general"]["log_level"]
+    ))
     
-    # Initialize database
-    println("Initializing database...")
+    # Set up logging again with the config-specified level
+    if haskey(config["general"], "log_level")
+        JThermodynamicsData.init_logger(config["general"]["log_level"], log_file)
+        @info "Updated log level to: $(config["general"]["log_level"])"
+    end
+    
+    # Connect to existing database or initialize if needed
+    JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "DatabaseConnection", Dict())
     db_path = config["general"]["database_path"]
     mkpath(dirname(db_path))
-    conn = JThermodynamicsData.init_database(config)
+    
+    # Check if database exists and try to connect first
+    conn = nothing
+    if isfile(db_path)
+        try
+            # Connect to existing database
+            conn = JThermodynamicsData.with_timing(
+                () -> JThermodynamicsData.connect_database(db_path),
+                "Database", 
+                "ConnectExisting"
+            )
+            @info "Connected to existing database" path=db_path
+        catch e
+            JThermodynamicsData.log_error("Could not connect to existing database", Dict(
+                "error" => e,
+                "path" => db_path
+            ))
+            @info "Will reinitialize database..." path=db_path
+            rm(db_path)
+            conn = JThermodynamicsData.with_timing(
+                () -> JThermodynamicsData.init_database(config),
+                "Database", 
+                "Initialize"
+            )
+        end
+    else
+        # Initialize new database
+        @info "No database found. Initializing new database..." path=db_path
+        conn = JThermodynamicsData.with_timing(
+            () -> JThermodynamicsData.init_database(config),
+            "Database", 
+            "Initialize"
+        )
+    end
+    JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "DatabaseConnection", Dict(
+        "db_path" => db_path,
+        "connection_status" => "connected"
+    ))
     
     # Load species list from YAML
+    JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "LoadSpeciesConfig", Dict())
     species_config_path = joinpath(@__DIR__, "config", "species.yaml")
     if !isfile(species_config_path)
+        JThermodynamicsData.log_error("Species configuration file not found", Dict(
+            "path" => species_config_path
+        ))
         error("Species configuration file not found: $species_config_path")
     end
     
@@ -435,89 +494,163 @@ function main()
     temp_step = get(species_config, "temperature_step", 10.0)
     species_list = species_config["species"]
     output_options = get(species_config, "output", Dict())
+    JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "LoadSpeciesConfig", Dict(
+        "species_count" => length(species_list),
+        "temperature_range" => temp_range,
+        "temperature_step" => temp_step
+    ))
     
     # Create plots directory if needed
     plot_dir = get(output_options, "plot_directory", "plots")
     mkpath(plot_dir)
     
-    # Process each species
-    total_species = length(species_list)
-    println("Processing $total_species species over temperature range $(temp_range[1])-$(temp_range[2]) K")
-    println()
-    
     # Create tables directory
     tables_dir = joinpath(@__DIR__, "output", "tables")
     mkpath(tables_dir)
+    
+    # Process each species
+    total_species = length(species_list)
+    @info "Processing species batch" count=total_species temp_range=temp_range
+    
+    JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "ProcessSpecies", Dict(
+        "total_species" => total_species
+    ))
+    
+    # Track statistics
+    stats = Dict(
+        "total_species" => total_species,
+        "successful_species" => 0,
+        "failed_species" => 0,
+        "species_with_plots" => 0,
+        "species_with_documentation" => 0
+    )
     
     for (i, species_entry) in enumerate(species_list)
         # Extract species name (handle both string and dict formats)
         species_name = isa(species_entry, Dict) ? species_entry["name"] : string(species_entry)
         
-        # Display progress
-        println("[$i/$total_species] Processing $species_name")
+        # Log species processing with context
+        species_context = JThermodynamicsData.create_log_context()
+        species_context["species_name"] = species_name
+        species_context["index"] = i
+        species_context["total"] = total_species
+        
+        @info "[$i/$total_species] Processing species" species=species_name
+        
+        JThermodynamicsData.log_species_processing(species_name, temp_range, temp_step)
+        JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "Species:$species_name", Dict(
+            "index" => i,
+            "temperature_range" => temp_range,
+            "temperature_step" => temp_step
+        ))
         
         try
             # Check if species exists in the database
+            database_check_start = now()
             species_id = JThermodynamicsData.get_species_id(conn, species_name)
+            JThermodynamicsData.log_timing_benchmark("Database", "CheckSpeciesExists", now() - database_check_start)
             
             if species_id === nothing
-                @warn "Species not found in database. Will use theoretical calculations only."
+                @warn "Species not found in database" species=species_name
+                @info "Will use theoretical calculations only" species=species_name
                 
                 # Try to add species to database if it's not there
                 try
                     # Run the initialize_minimal_database script to add the species
-                    @info "Attempting to add species to database via initialize_minimal_database.jl"
+                    @info "Attempting to add species to database" species=species_name script="initialize_minimal_database.jl"
+                    
+                    # Time the database initialization
+                    db_init_start = now()
                     include(joinpath(@__DIR__, "scripts", "initialize_minimal_database.jl"))
+                    JThermodynamicsData.log_timing_benchmark("Database", "InitializeSpecies", now() - db_init_start)
                     
                     # Check if it worked
                     species_id = JThermodynamicsData.get_species_id(conn, species_name)
                     if species_id !== nothing
-                        @info "Successfully added $species_name to database with ID: $species_id"
+                        @info "Successfully added species to database" species=species_name id=species_id
                     end
                 catch e
-                    @warn "Failed to add species to database: $e"
+                    JThermodynamicsData.log_error("Failed to add species to database", Dict(
+                        "species" => species_name,
+                        "error" => e
+                    ))
                 end
             end
             
             # Calculate properties for the species
+            JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "Calculate:$species_name", Dict(
+                "species" => species_name,
+                "temperature_range" => temp_range,
+                "step" => temp_step
+            ))
+            
             result = Dict()
             step_val = Float64(temp_step)
             
             # For N2, use direct calculator first
             if species_name == "N2"
-                @info "Using direct calculator for N2..."
+                @info "Using direct calculator" species=species_name
+                
+                calc_start = now()
                 result = calculate_n2_properties_range(temp_range, step_val)
+                JThermodynamicsData.log_timing_benchmark("Calculation", "DirectN2Calculator", now() - calc_start)
             else
                 # For other species, use the database method
+                calc_start = now()
                 result = calculate_properties_fixed(conn, species_name, temp_range, config, step_val)
+                JThermodynamicsData.log_timing_benchmark("Calculation", "DatabaseCalculator", now() - calc_start)
             end
+            
+            JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "Calculate:$species_name", Dict(
+                "species" => species_name,
+                "temperature_points" => length(result["temperatures"]),
+                "success" => !isempty(result["temperatures"])
+            ))
             
             # Check if we got any valid temperature points
             if isempty(result["temperatures"])
-                @warn "No valid temperature points calculated for $species_name"
+                JThermodynamicsData.log_error("No valid temperature points calculated", Dict(
+                    "species" => species_name
+                ))
+                stats["failed_species"] += 1
                 continue
             end
             
             # Save results to database if requested
             if get(output_options, "save_to_database", true)
-                @info "Saving results to database for $species_name"
+                JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "SaveToDatabase:$species_name", Dict(
+                    "species" => species_name
+                ))
+                
+                @info "Saving results to database" species=species_name
                 # The data is already stored in the database through the calculate_properties function
+                
+                JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "SaveToDatabase:$species_name", Dict(
+                    "species" => species_name,
+                    "success" => true
+                ))
             end
             
             # Generate plots if requested
             if get(output_options, "generate_plots", true)
+                JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "GeneratePlots:$species_name", Dict(
+                    "species" => species_name
+                ))
+                
                 use_log_temp = get(output_options, "use_log_temperature", true)  # Default to log temp scale
                 plot_format = get(output_options, "plot_format", "png")
                 
                 # Generate plots with uncertainty ribbons
-                @info "Generating plots for $species_name"
+                @info "Generating plots" species=species_name log_scale=use_log_temp
                 
                 # Create plots with appropriate temperature scale
+                plot_start = now()
                 if use_log_temp
                     p = plot_properties_log_temp(result, config)
                 else
                     p = JThermodynamicsData.plot_properties(result, config)
                 end
+                JThermodynamicsData.log_timing_benchmark("Visualization", "GeneratePlot", now() - plot_start)
                 
                 # Save the plot
                 plot_file = joinpath(plot_dir, "$(species_name)_properties.$plot_format")
@@ -527,57 +660,104 @@ function main()
                 if species_name != "N2"
                     try
                         # Create uncertainty analysis plot
+                        uncertainty_start = now()
                         p_uncertainty = JThermodynamicsData.plot_uncertainty_analysis(conn, species_name, "Cp", temp_range, config, step=temp_step)
+                        JThermodynamicsData.log_timing_benchmark("Visualization", "UncertaintyPlot", now() - uncertainty_start)
+                        
                         uncertainty_file = joinpath(plot_dir, "$(species_name)_uncertainty.$plot_format")
                         savefig(p_uncertainty, uncertainty_file)
                         
                         # Create data source comparison if available
+                        comparison_start = now()
                         p_comparison = JThermodynamicsData.plot_data_source_comparison(conn, species_name, "Cp", temp_range, config, step=temp_step)
+                        JThermodynamicsData.log_timing_benchmark("Visualization", "ComparisonPlot", now() - comparison_start)
+                        
                         comparison_file = joinpath(plot_dir, "$(species_name)_sources.$plot_format")
                         savefig(p_comparison, comparison_file)
                     catch e
-                        @warn "Could not create additional plots for $species_name: $e"
+                        JThermodynamicsData.log_error("Could not create additional plots", Dict(
+                            "species" => species_name,
+                            "error" => e
+                        ))
                     end
                 end
+                
+                JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "GeneratePlots:$species_name", Dict(
+                    "species" => species_name,
+                    "plot_file" => plot_file
+                ))
+                
+                stats["species_with_plots"] += 1
             end
             
             # Generate documentation if requested
             if get(output_options, "generate_documentation", true)
-                @info "Generating documentation for $species_name"
+                JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "GenerateDocs:$species_name", Dict(
+                    "species" => species_name
+                ))
+                
+                @info "Generating documentation" species=species_name
                 docs_dir = get(output_options, "documentation_directory", joinpath(@__DIR__, "output", "documentation"))
                 
                 # Get all data sources for a single temperature point
                 single_temp = (temp_range[1] + temp_range[2]) / 2
+                
+                refine_start = now()
                 sources_query_result, all_sources = JThermodynamicsData.progressively_refine_thermodynamic_data(
                     conn, species_name, single_temp, config
                 )
+                JThermodynamicsData.log_timing_benchmark("Documentation", "GatherSources", now() - refine_start)
                 
                 # Create Markdown documentation
                 try
+                    markdown_start = now()
                     markdown_file = JThermodynamicsData.create_markdown_documentation(
                         species_name, sources_query_result, all_sources, docs_dir
                     )
-                    @info "Created Markdown documentation at $markdown_file"
+                    JThermodynamicsData.log_timing_benchmark("Documentation", "CreateMarkdown", now() - markdown_start)
+                    
+                    @info "Created Markdown documentation" species=species_name file=markdown_file
                 catch e
-                    @warn "Failed to create Markdown documentation for $species_name: $e"
+                    JThermodynamicsData.log_error("Failed to create Markdown documentation", Dict(
+                        "species" => species_name,
+                        "error" => e
+                    ))
                 end
                 
                 # Create JSON documentation
                 try
+                    json_start = now()
                     json_file = JThermodynamicsData.create_json_documentation(
                         species_name, sources_query_result, all_sources, docs_dir
                     )
-                    @info "Created JSON documentation at $json_file"
+                    JThermodynamicsData.log_timing_benchmark("Documentation", "CreateJSON", now() - json_start)
+                    
+                    @info "Created JSON documentation" species=species_name file=json_file
                 catch e
-                    @warn "Failed to create JSON documentation for $species_name: $e"
+                    JThermodynamicsData.log_error("Failed to create JSON documentation", Dict(
+                        "species" => species_name,
+                        "error" => e
+                    ))
                 end
+                
+                JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "GenerateDocs:$species_name", Dict(
+                    "species" => species_name,
+                    "docs_dir" => docs_dir
+                ))
+                
+                stats["species_with_documentation"] += 1
             end
             
             # Create tabular output
-            @info "Creating tabular output for $species_name"
+            JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "CreateTable:$species_name", Dict(
+                "species" => species_name
+            ))
+            
+            @info "Creating tabular output" species=species_name
             table_file = joinpath(tables_dir, "$(species_name)_data.csv")
             
             # Open CSV file
+            csv_start = now()
             open(table_file, "w") do io
                 # Write header
                 println(io, "Temperature,Cp,Cp_uncertainty,H,H_uncertainty,S,S_uncertainty,G,G_uncertainty")
@@ -597,24 +777,66 @@ function main()
                     println(io, "$temp,$cp,$cp_unc,$h,$h_unc,$s,$s_unc,$g,$g_unc")
                 end
             end
+            JThermodynamicsData.log_timing_benchmark("Output", "CreateCSV", now() - csv_start)
+            
+            JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "CreateTable:$species_name", Dict(
+                "species" => species_name,
+                "csv_file" => table_file
+            ))
+            
+            # Update statistics
+            stats["successful_species"] += 1
+            
+            JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "Species:$species_name", Dict(
+                "success" => true,
+                "temperature_points" => length(result["temperatures"])
+            ))
             
         catch e
-            @error "Error processing $species_name: $e"
-            println(stacktrace(catch_backtrace()))
+            JThermodynamicsData.log_error("Error processing species", Dict(
+                "species" => species_name,
+                "error" => e,
+                "stacktrace" => stacktrace(catch_backtrace())
+            ))
+            
+            stats["failed_species"] += 1
+            
+            JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "Species:$species_name", Dict(
+                "success" => false,
+                "error" => string(e)
+            ))
         end
-        
-        println()
     end
     
-    # Close database connection
-    JThermodynamicsData.close_database(conn)
+    JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "ProcessSpecies", stats)
     
-    println("Processing complete!")
-    println("End time: $(now())")
-    println("Results saved in:")
-    println("  - Database: $db_path")
-    println("  - Plots: $plot_dir")
-    println("  - Tables: $tables_dir")
+    # Close database connection
+    JThermodynamicsData.log_stage_start("ThermodynamicsDataProcessor", "CloseDatabase", Dict())
+    JThermodynamicsData.close_database(conn)
+    JThermodynamicsData.log_stage_end("ThermodynamicsDataProcessor", "CloseDatabase", Dict(
+        "success" => true
+    ))
+    
+    # Log pipeline completion
+    JThermodynamicsData.log_pipeline_end("ThermodynamicsDataProcessor", Dict(
+        "successful_species" => stats["successful_species"],
+        "failed_species" => stats["failed_species"],
+        "species_with_plots" => stats["species_with_plots"],
+        "species_with_documentation" => stats["species_with_documentation"],
+        "output_locations" => Dict(
+            "database" => db_path,
+            "plots" => plot_dir,
+            "tables" => tables_dir,
+            "logs" => log_dir
+        )
+    ))
+    
+    @info "Processing complete!"
+    @info "Results saved in:"
+    @info "  - Database: $db_path"
+    @info "  - Plots: $plot_dir"
+    @info "  - Tables: $tables_dir"
+    @info "  - Logs: $log_dir"
 end
 
 # Run the main function

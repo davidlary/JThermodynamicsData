@@ -1,20 +1,4 @@
-<html>
-                        <head>
-                           <title>Request Rejected</title>
-                        </head>
-                        <body>
-                            <p>
-                            <img src='https://guyt.web.technion.ac.il/files/2018/01/F5_Logo_700x80.gif' border='1' alt='Technion'  width='700' height='80'>
-                            <p>
-
-                            The page was blocked for what seems to be a security issue.<br><br>
-                            Please click the following link to notify
-                            <a href='mailto:wp@technion.ac.il?subject=support ID is: 17459867671888256519&body=The%20page%20was%20blocked%20for%20what%20seems%20to%20be%20a%20technical%20issue%0A%0ASuspicious URL: https%3A%2F%2Fburcat.technion.ac.il%2Fdir%2FBURCAT.THR%0ASource IP: 129.110.242.147%0ASupport ID: 17459867671888256519'();>WordPress Support</a><br><br><br>
-
-                            <b>Your support ID :</b> 17459867671888256519<br><br>
-                            <b>Suspicious URL:</b> https://burcat.technion.ac.il/dir/BURCAT.THR<br><br>
-                            <b>Source IP :</b> 129.110.242.147<br><br><br>
-                            Thank you<br> WordPress Support
-
-                        </body>
-                    </html>
+N2 Nitrogen      N 2    0   0 G   200.000  6000.000  1000.00      1
+ 2.95257637E+00 1.39690040E-03-4.92631603E-07 7.86010195E-11-4.60755204E-15    2
+ 9.89224864E+02 5.87188762E+00 3.53100528E+00-1.23660988E-04-5.02999433E-07    3
+ 2.43530612E-09-1.40881235E-12 9.46834564E+02 2.96747038E+00                   4

@@ -1,0 +1,31 @@
+Our goal for a new project is to be able to collate all the available thermodynamic data and store it in in a DuckDB database. The idea is to periodically rerun this code to keep the database up to date.
+
+The list of databases we will start with are specified in the markdown file thermodynamic-database-comparison-hierarchy.md. 
+
+The database needs to accomodate the formats specified in thermodynamic-data-formats.md.
+
+Please prepare to autonomously create a julia code to:
+1. Read and locally cache each of these databases.
+2. Place the data in the database.
+3. Be able to query the database for any given species and traverse the hierarchy specified in the order specified in thermodynamic-database-comparison-hierarchy.md such that we can provide the thermodynamics over the temperature range 100 to 10,000 K using the most recent and accurate data available for that species.
+
+Before writing any code please verify that you understand, that this makes sense and provide any suggestions for improvement or enhancement of the plan.
+
+The bottom line will be we specify a species and are returned the thermodynamic data from 100 to 10,000 K using the most accurate and recent data
+
+
+if you think it a good idea please could you add to this optimized plan: 
+(1) a last resort fallback that if no data is available we calculate it theoretically. 
+(2) for each temperature provide both an estimate and an associated uncertainty using julias unique capabilities for uncertainty quantification.
+
+Please create a comprehensive readme file describing purpose, strategy, sources and how to use the package. 
+
+
+Please autonomously deal with the following Four issues and a question without requesting input from me as i will be away for some time: (1) For some species such as O3, S, SO, SO2, SO3, CN, HCN, H2, NO2, N2O at 1000 K there is a strange step discontinuity for Cp and Entropy this seems unrealistic please investigate and autonomously debug.
+(2) For some species such as HCNO, NCN, NCO, N2H4, CHOOH, CHO, CH2O, CH, CH2, CH3, HNO, HONO, HNO3, NH, NH2, N the Final refined value is very different from the theoretical values  please investigate and autonomously debug.         
+(3) The values for e-, Xe+, He+, HNO+, HNO2+, HNO3+, N2O+, C-, C+, CH+, CHO+, CO2-, CO-, CO2+, OH-, OH+, HO2-, H3O+, H2O-, H2O+, H2+, H-, H+, N2-, N-, N+, N2+, O3+, O+, O2+, O2-, O-, NO3-, NO2-, NO2+, NO-, NO2+, NO+, CN- are identical to each other please investigate and autonomously debug.   
+(4) Please drop from the plot titles source attribution, e.g. [Final from: Burcat] please investigate and autonomously debug.   
+(5) Are there obvious ways we can improve the code and its accuracy, if so  please investigate and autonomously debug. Please confirm you will autonomously debug without requesting input.
+
+
+Absolutely no data should be made up, and absolutely no data should be hard coded, all data values should come from real data retrieved from data files from respected attributable sources.

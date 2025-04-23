@@ -1,35 +1,25 @@
-# Thermodynamic Data Sources for S
+# Thermodynamic Data Source for S
 
-## Species Information
-- **Species Name**: S
-- **Formula**: S
-- **Temperature Range**: 100-10000 K
+## Selected Source
+- **Source:** quantum-statistical
+- **Priority:** 4
+- **Reliability score:** 4.0
+- **Uncertainty:** 7.000000000000001%
+- **Temperature range:** 200.0 - 6000.0 K
+- **Polynomial type:** nasa7
 
-## Data Sources Used
-The following data sources were used in hierarchical refinement, listed in order of application:
+## Coefficients
+### Low temperature range (200.0 - 1000.0 K)
+```
+4.92000000e+00, 5.40000000e-03, 2.40000000e-06, 0.00000000e+00, 0.00000000e+00, -2.20000000e+01, 1.25000000e+01
+```
 
-| Priority | Source | Reliability Score | Weight Factor |
-|----------|--------|-------------------|---------------|
-| 0 | THEORETICAL | 2.5 | 1.0 |
-| 3 | NASA-CEA | 4.0 | 0.624 |
-| 7 | Burcat | 4.7 | 0.8398 |
+### High temperature range (1000.0 - 6000.0 K)
+```
+5.12000000e+00, 4.32000000e-03, 1.20000000e-06, 0.00000000e+00, 0.00000000e+00, -2.20000000e+01, 1.25000000e+01
+```
 
-## Hierarchical Refinement Process
-The thermodynamic properties for this species were calculated using a hierarchical approach:
-
-1. Started with theoretical estimates (statistical thermodynamics and group contribution methods)
-2. Progressively refined with experimental data sources in order of priority
-3. Applied weighted averaging based on reliability scores and priority levels
-4. Propagated uncertainties throughout the refinement process
-
-## Representative Values at 1000.0 K
-| Property | Value | Uncertainty | Units |
-|----------|-------|-------------|-------|
-| Cp | 21.3297 | ±2.3681 | J/mol/K |
-| H | 1226.8947 | ±2651.0771 | kJ/mol |
-| S | 193.1784 | ±6.5159 | J/mol/K |
-| G | 1033.7163 | ±2655.4469 | kJ/mol |
-
-## Metadata
-- **Generated**: 2025-04-18 14:08:05
-- **JThermodynamicsData Version**: 1.0.0
+## All Available Sources
+| Source | Priority | Reliability |
+|--------|----------|-------------|
+| Theoretical | 4 | 4.0 |

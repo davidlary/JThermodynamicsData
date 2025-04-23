@@ -3,6 +3,22 @@ Database connection management functions.
 """
 
 """
+    connect_database(db_path::String)
+
+Connect to an existing database without reinitializing it.
+"""
+function connect_database(db_path::String)
+    if !isfile(db_path)
+        error("Database file not found: $db_path")
+    end
+    
+    # Connect to existing DuckDB database
+    conn = DuckDB.DB(db_path)
+    
+    return conn
+end
+
+"""
     init_database(config::Dict)
 
 Initialize the database connection and schema.
@@ -12,6 +28,11 @@ function init_database(config::Dict)
     
     # Create parent directory if it doesn't exist
     mkpath(dirname(db_path))
+    
+    # Remove existing database if it exists to avoid constraint errors
+    if isfile(db_path)
+        rm(db_path)
+    end
     
     # Connect to DuckDB database
     conn = DuckDB.DB(db_path)

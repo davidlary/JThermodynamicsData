@@ -1,5 +1,8 @@
 module JThermodynamicsData
 
+# Disable precompilation until method overwrite issues are fixed
+__precompile__(false)
+
 using YAML
 using DuckDB
 using DataFrames
@@ -16,11 +19,16 @@ using UnitfulMoles
 using LightXML
 using StaticArrays
 using SpecialFunctions
+using Logging
+using LoggingExtras
+using Dates
+using Printf
 
 # Core functionality
 include("JThermodynamicsData/core/config.jl")
 include("JThermodynamicsData/core/types.jl")
 include("JThermodynamicsData/core/constants.jl")
+include("JThermodynamicsData/core/calculator.jl")
 
 # Database functionality
 include("JThermodynamicsData/database/schema.jl")
@@ -49,6 +57,7 @@ include("JThermodynamicsData/utils/converter.jl")
 include("JThermodynamicsData/utils/uncertainty.jl")
 include("JThermodynamicsData/utils/logger.jl")
 include("JThermodynamicsData/utils/refinement.jl")
+include("JThermodynamicsData/utils/json_storage.jl")
 
 # API and interface
 include("JThermodynamicsData/api/query.jl")
@@ -81,6 +90,7 @@ export parse_janaf_file, parse_thermoml_file, parse_tde_file, parse_atct_file
 export estimate_properties_group_contribution, estimate_properties_statistical_thermodynamics
 export estimate_properties_quantum_chemistry, estimate_properties_machine_learning
 export benson_group_additivity, joback_method
+export ThermodynamicPolynomial, load_polynomial_data, convert_tabular_to_nasa7, convert_janaf_to_nasa7
 
 # Export refinement functions
 export progressively_refine_thermodynamic_data, get_all_thermodynamic_data_for_species
@@ -91,6 +101,18 @@ export create_markdown_documentation, create_json_documentation
 
 # Export utility functions
 export fetch_data_source
+export load_species_data, save_species_data, get_source_data, add_source_data
+export list_available_species, list_available_sources, create_nasa7_data
+export generate_theoretical_data, create_polynomial_struct, get_best_source_data
+
+# Export logging functions
+export init_logger, add_file_logger, close_file_logger
+export log_pipeline_start, log_pipeline_end
+export log_stage_start, log_stage_end
+export log_operation, log_database_query, log_error
+export log_species_processing, log_parser_operation
+export log_timing_benchmark, with_timing, format_time_duration
+export create_log_context
 
 # Main initialization function
 function __init__()

@@ -1,33 +1,25 @@
-# Thermodynamic Data Sources for HCNO
+# Thermodynamic Data Source for HCNO
 
-## Species Information
-- **Species Name**: HCNO
-- **Formula**: HCNO
-- **Temperature Range**: 100-10000 K
+## Selected Source
+- **Source:** theoretical
+- **Priority:** 0
+- **Reliability score:** 2.5
+- **Uncertainty:** 21.0%
+- **Temperature range:** 200.0 - 6000.0 K
+- **Polynomial type:** nasa7
 
-## Data Sources Used
-The following data sources were used in hierarchical refinement, listed in order of application:
+## Coefficients
+### Low temperature range (200.0 - 1000.0 K)
+```
+3.70000000e+00, 6.00000000e-03, 2.00000000e-06, 0.00000000e+00, 0.00000000e+00, -2.10000000e+01, 9.00000000e+00
+```
 
-| Priority | Source | Reliability Score | Weight Factor |
-|----------|--------|-------------------|---------------|
-| 0 | THEORETICAL | 2.5 | 1.0 |
+### High temperature range (1000.0 - 6000.0 K)
+```
+3.90000000e+00, 4.80000000e-03, 1.00000000e-06, 0.00000000e+00, 0.00000000e+00, -2.10000000e+01, 9.00000000e+00
+```
 
-## Hierarchical Refinement Process
-The thermodynamic properties for this species were calculated using a hierarchical approach:
-
-1. Started with theoretical estimates (statistical thermodynamics and group contribution methods)
-2. Progressively refined with experimental data sources in order of priority
-3. Applied weighted averaging based on reliability scores and priority levels
-4. Propagated uncertainties throughout the refinement process
-
-## Representative Values at 1000.0 K
-| Property | Value | Uncertainty | Units |
-|----------|-------|-------------|-------|
-| Cp | 47.9921 | ±23.6269 | J/mol/K |
-| H | 42783.3301 | ±60448.1972 | kJ/mol |
-| S | 273.7876 | ±25.9957 | J/mol/K |
-| G | 42509.5425 | ±60467.756 | kJ/mol |
-
-## Metadata
-- **Generated**: 2025-04-18 13:04:51
-- **JThermodynamicsData Version**: 1.0.0
+## All Available Sources
+| Source | Priority | Reliability |
+|--------|----------|-------------|
+| Theoretical | 0 | 2.5 |

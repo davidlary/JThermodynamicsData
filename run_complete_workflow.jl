@@ -11,6 +11,14 @@ This script runs the complete thermodynamic data workflow with enhanced validati
 5. Validate the hierarchy is respected
 
 This will ensure the most accurate source is used for each species, especially for O3.
+
+Key features:
+- Full hierarchical traversal logic, starting with the most accurate theoretical 
+  calculation and traversing the entire hierarchy
+- For each species, higher priority sources completely override lower priority ones  
+- Plot legends show only one theoretical source (the best one) instead of multiple 
+  redundant theoretical sources
+- Clean and consistent plots across all species (including ions like OH-, Zn, NO+, NO2+)
 """
 
 using Pkg

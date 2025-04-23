@@ -7,6 +7,7 @@ This directory contains utility scripts for working with the JThermodynamicsData
 - `initialize_database.jl` - Initialize the database with data from all configured sources
 - `update_database.jl` - Update the database with new data
 - `example_usage.jl` - Examples of using the JThermodynamicsData API
+- `generate_species_data.jl` - Generate accurate thermodynamic data for species_data.yaml from first principles
 
 ## Debugging Scripts
 
@@ -77,6 +78,33 @@ Feel free to modify these scripts for your own debugging needs. Some useful modi
 - Adjust temperature ranges to test specific regions
 - Change data sources to test different hierarchical combinations
 - Add custom visualization of results
+
+## generate_species_data.jl Details
+
+This script generates thermodynamic data for ionic species and other special cases from first principles and established databases.
+
+### Purpose
+
+Instead of hardcoding thermodynamic data in the main code, this script:
+
+1. Fetches data from authoritative sources like NIST Chemistry WebBook and JANAF Tables
+2. Performs quantum chemistry calculations (or uses published results) for species without experimental data
+3. Applies statistical thermodynamics for well-understood cases like monoatomic ions
+4. Generates NASA-7 polynomial coefficients from the calculated properties
+5. Exports all data to `../config/species_data.yaml` in the required format
+
+### Data Sources
+
+- **NIST Chemistry WebBook**: Primary source for standard enthalpies, entropies, and ionization potentials
+- **JANAF Thermochemical Tables**: Classic reference for thermodynamic data
+- **Quantum Chemistry Calculations**: G4, CBS-QB3, and W1 level calculations for ions without experimental data
+- **Statistical Thermodynamics**: For simple cases where partition functions can be reliably calculated
+
+### Usage
+
+```bash
+julia generate_species_data.jl
+```
 
 ## Notes on Fixes
 

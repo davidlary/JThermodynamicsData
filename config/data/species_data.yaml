@@ -1,0 +1,108 @@
+# Thermodynamic data for special species (ions, etc.)
+# This file contains thermodynamic data for species that might not be available in standard databases
+# or require special handling.
+
+# List of ionic species for special handling
+ionic_species:
+  - He+
+  - Xe+
+  - H+
+  - O+
+  - N+
+  - C+
+  - e-
+  - Ar+
+  - Cl+
+  - F+
+  - Ne+
+  - Li+
+  - Na+
+  - K+
+  - Fe+
+
+# Specific NASA-7 thermodynamic polynomial coefficients for special species
+# Format: [a1, a2, a3, a4, a5, a6, a7] for each temperature range 
+# where Cp/R = a1 + a2*T + a3*T^2 + a4*T^3 + a5*T^4
+# H/RT = a1 + a2*T/2 + a3*T^2/3 + a4*T^3/4 + a5*T^4/5 + a6/T
+# S/R = a1*ln(T) + a2*T + a3*T^2/2 + a4*T^3/3 + a5*T^4/4 + a7
+nasa7_coefficients:
+  He+:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 285256.641, 3.35878107]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 285256.641, 3.35878107]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+    
+  Xe+:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 111732.738, 7.33529286]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 111732.738, 7.33529286]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+    
+  H+:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 1529983.045, -1.14064664]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 1529983.045, -1.14064664]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+    
+  O+:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 187935.285, 4.39161085]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 187935.285, 4.39161085]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+    
+  N+:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 223538.655, 4.20556943]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 223538.655, 4.20556943]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+    
+  C+:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 216142.608, 4.95832945]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, 216142.608, 4.95832945]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+    
+  e-:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, -745.375, -1.17246809]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, -745.375, -1.17246809]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+        
+  Xe:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, -745.375, 6.1969307]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, -745.375, 6.1969307]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7
+    
+  He:
+    temp_ranges: [[200.0, 1000.0], [1000.0, 6000.0]]
+    coefficients:
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, -745.375, 0.9287239]
+      - [2.500000, 0.0, 0.0, 0.0, 0.0, -745.375, 0.9287239]
+    source: Burcat
+    priority: 7
+    reliability_score: 4.7

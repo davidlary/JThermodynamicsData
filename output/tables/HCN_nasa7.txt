@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for HCN (HCN):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-HCN             HCN              100.00  10000.00   5040.00
-  1.52669041e-06 2.75344324e-03-5.58532216e-07 4.97102390e-11-1.63646720e-15    2
-  1.88916532e+07 6.63067099e+01 2.29372376e-05 9.78256422e-03-6.31285201e-06    3
-  1.61296025e-09-1.41185069e-13 6.87898160e+06 3.19768177e+01                   4
+{
+    "coefficients": [
+        [
+            3.9,
+            0.007,
+            0.0,
+            0.0,
+            0.0,
+            -17.0,
+            5.5
+        ],
+        [
+            4.1,
+            0.005600000000000001,
+            0.0,
+            0.0,
+            0.0,
+            -17.0,
+            5.5
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.22,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "HCN"
+}

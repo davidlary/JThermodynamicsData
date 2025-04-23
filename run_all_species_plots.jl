@@ -84,15 +84,30 @@ function plot_species_with_all_sources(species_name)
         println("  - $(src_name) (priority: $(priority), reliability: $(reliability))")
     end
     
-    # Map sources to their standardized display name - SIMPLIFIED APPROACH
+    # Map sources to their standardized display name - GUARANTEED CONSISTENCY
     source_display_names = Dict()
-    for (src_name, _, _) in sources
-        # All theoretical sources get one standard name for consistency
-        if startswith(lowercase(src_name), "theoretical") || lowercase(src_name) == "theoretical"
-            source_display_names[src_name] = "theoretical"
+    for (src_name, priority, _) in sources
+        # GUARANTEED CONSISTENCY IN NAMING:
+        # 1. All theoretical sources (priority ≤ 4) are labeled as "Theoretical"
+        # 2. This includes any source with "theoretical" in the name or theoretical-sounding names
+        # 3. Experimental sources (priority > 4) keep their original names with proper capitalization
+        # This ensures absolutely consistent labeling across all species plots
+        if startswith(lowercase(src_name), "theoretical") || 
+           lowercase(src_name) == "theoretical" ||
+           lowercase(src_name) == "quantum" ||
+           lowercase(src_name) == "statistical" ||
+           lowercase(src_name) == "quantum-statistical" ||
+           lowercase(src_name) == "stat-thermo" ||
+           lowercase(src_name) == "benson-group" ||
+           lowercase(src_name) == "group-contribution" ||
+           priority <= 4  # Priority ≤ 4 means it's a theoretical source per README
+            source_display_names[src_name] = "Theoretical"
         else
-            # Non-theoretical sources keep their original name
-            source_display_names[src_name] = src_name
+            # Non-theoretical sources (experimental sources priority > 4) keep their original name
+            # But ensure proper capitalization (First letter of each word is capitalized)
+            words = split(src_name, "-")
+            capitalized_words = [uppercase(first(word)) * lowercase(SubString(word, 2:lastindex(word))) for word in words]
+            source_display_names[src_name] = join(capitalized_words, "-")
         end
     end
     

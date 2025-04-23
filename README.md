@@ -6,6 +6,8 @@ A comprehensive Julia package for accessing, processing, and visualizing thermod
 
 JThermodynamicsData provides a unified interface to thermodynamic data for chemical species, combining data from multiple sources with a hierarchical prioritization system. The package implements a rigorously structured hierarchy that automatically selects the most accurate source available for each species based on data quality and reliability.
 
+The system is designed to ensure **complete replacement** of data from lower priority sources with higher priority sources, guaranteeing that the final result exactly matches the highest priority source available for each species.
+
 ## Key Features
 
 - **Multi-source data access**: Access thermodynamic data from 14 different sources, including:
@@ -141,10 +143,12 @@ If you encounter any issues:
 
 JThermodynamicsData implements a comprehensive hierarchical approach to thermodynamic data processing. The system ensures that for each species, the most accurate available source is used, following these principles:
 
-1. **Most Accurate Source**: The final refined result is exactly the value from the most accurate source available (highest priority).
-2. **Uncertainty Calculation**: The uncertainty is calculated from the spread of values from all available sources, giving appropriate weight to more reliable sources.
-3. **Theory vs. Experiment**: All theoretical approaches are displayed in visualization, but for species with experimental data, only experimental values contribute to the final calculation.
-4. **Documentation**: All data sources used for each species are thoroughly documented, including which source was selected as the most accurate.
+1. **Full Hierarchical Traversal**: The system always processes all sources in order of increasing priority.
+2. **Complete Replacement**: Higher priority sources completely replace data from lower priority sources (no weighted averaging).
+3. **Most Accurate Source**: The final refined result is exactly the value from the most accurate source available (highest priority).
+4. **Theoretical Source Display**: Plots show only ONE theoretical source (best available) labeled consistently as "Theoretical".
+5. **Consistent Source Naming**: All sources in plots are displayed with proper capitalization.
+6. **Documentation**: All data sources used for each species are thoroughly documented, including which source was selected as the most accurate.
 
 ### Theoretical vs. Experimental Sources
 
@@ -168,7 +172,7 @@ The package provides both theoretical calculations and experimental data:
   - Burcat Database
   - Active Thermochemical Tables
 
-The hierarchical system automatically uses experimental data when available, falling back to theoretical calculations only when necessary.
+The hierarchical system automatically uses experimental data when available, falling back to theoretical calculations only when necessary. For ALL species (including ions like OH-, NO+, NO2+, Zn), the system ensures proper hierarchical traversal.
 
 ## Output
 

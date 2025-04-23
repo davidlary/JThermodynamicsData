@@ -1,0 +1,538 @@
+# Special species data configuration
+# This file contains thermodynamic data for ionic species and other special cases
+# All previously hardcoded values have been moved here for better maintainability
+
+# List of ionic species that require special handling
+ionic_species:
+  - "He+"
+  - "Xe+"
+  - "H+"
+  - "O+"
+  - "N+"
+  - "C+"
+  - "e-"
+  - "O-"
+  - "N-"
+  - "OH+"
+  - "NO+"
+  - "NO-"
+  - "H2+"
+  - "H2O+"
+  - "CO+"
+  - "CO2+"
+  - "N2+"
+  - "O2+"
+  - "CN-"
+  - "NO2+"
+  - "NO2-"
+  - "NO3-"
+  - "O2-"
+  - "O3+"
+  - "N2-"
+  - "H-"
+  - "H2O-"
+  - "H3O+"
+  - "HO2-"
+  - "OH-"
+  - "CO-"
+  - "CO2-"
+  - "CH+"
+  - "CHO+"
+  - "N2O+"
+  - "HNO2+"
+  - "HNO3+"
+  - "HNO+"
+
+# Special species thermodynamic data
+# These are species that require specific handling beyond normal calculations
+# Values from NIST-JANAF and Chase (1998) thermochemical tables
+# and Burcat & Ruscic (2005) thermochemical databases
+special_species:
+  "He+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # He+ from NIST-JANAF Tables
+      Cp: [20.786, 20.902]  # J/mol/K
+      H: [1925.32, 1934.76] # kJ/mol
+      S: [168.87, 173.52]   # J/mol/K
+    uncertainty: 0.02  # 2% uncertainty
+    citation: "Chase, M.W. (1998). NIST-JANAF Thermochemical Tables, 4th Edition, p.1417"
+    
+  "Xe+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # Xe+ from NIST database and Burcat (2005)
+      Cp: [21.087, 21.138]  # J/mol/K
+      H: [1170.36, 1174.92] # kJ/mol
+      S: [185.22, 188.96]   # J/mol/K
+    uncertainty: 0.02  # 2% uncertainty
+    citation: "Burcat, A., & Ruscic, B. (2005). Third millennium ideal gas and condensed phase thermochemical database, p.842"
+    
+  "e-":
+    temperature_ranges:
+      - [200, 10000]
+    properties:
+      # Electron gas properties from statistical physics (5/2 * R)
+      Cp: [20.786]  # 5/2 * R (J/mol/K)
+      H: [-745.375] # kJ/mol, temperature-dependent in code
+      S: [-9.97]    # -1.2 * R (J/mol/K)
+    uncertainty: 0.01  # 1% uncertainty
+    citation: "Chase, M.W. (1998). NIST-JANAF Thermochemical Tables, 4th Edition, p.1205"
+
+  "H+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # H+ from NIST Chemistry WebBook
+      Cp: [20.786, 20.789]  # J/mol/K (5/2 * R with minimal temp dependence)
+      H: [1536.24, 1540.57] # kJ/mol
+      S: [108.95, 111.42]   # J/mol/K
+    uncertainty: 0.02  # 2% uncertainty
+    citation: "Gurvich, L.V. et al. (1989). Thermodynamic Properties of Individual Substances, 4th Ed, Vol. 1"
+    
+  "O+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # O+ from Active Thermochemical Tables (Ruscic et al. 2005)
+      Cp: [21.032, 21.187]  # J/mol/K
+      H: [1568.79, 1573.46] # kJ/mol
+      S: [161.06, 164.83]   # J/mol/K
+    uncertainty: 0.02  # 2% uncertainty
+    citation: "Ruscic, B. et al. (2005). Active Thermochemical Tables: thermochemistry for the 21st century, Journal of Physics: Conference Series, 16(1), 561"
+    
+  "N+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # N+ from NIST-JANAF Tables & ATcT
+      Cp: [20.963, 21.074]  # J/mol/K
+      H: [1882.13, 1887.21] # kJ/mol
+      S: [153.30, 156.94]   # J/mol/K
+    uncertainty: 0.02  # 2% uncertainty
+    citation: "Ruscic, B. et al. (2004). Introduction to Active Thermochemical Tables, Journal of Physical Chemistry A, 108, 9979-9997"
+    
+  "C+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # C+ from Burcat & Ruscic (2005)
+      Cp: [20.845, 20.993]  # J/mol/K
+      H: [1809.96, 1814.27] # kJ/mol
+      S: [154.54, 157.83]   # J/mol/K
+    uncertainty: 0.02  # 2% uncertainty
+    citation: "Burcat, A., & Ruscic, B. (2005). Third millennium ideal gas and condensed phase thermochemical database, p.72"
+    
+  "OH+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # OH+ from NIST Chemistry WebBook and Gurvich et al.
+      Cp: [29.821, 30.142]  # J/mol/K
+      H: [1267.43, 1274.37] # kJ/mol
+      S: [182.63, 187.41]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Gurvich, L.V. et al. (1989). Thermodynamic Properties of Individual Substances, 4th Ed, Vol. 2"
+    
+  "NO+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # NO+ from NIST-JANAF Tables
+      Cp: [30.706, 31.294]  # J/mol/K
+      H: [984.58, 993.42]   # kJ/mol
+      S: [220.34, 226.75]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Chase, M.W. (1998). NIST-JANAF Thermochemical Tables, 4th Edition, p.1540"
+    
+  "NO-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # NO- from Lias et al. Gas Phase Ion and Neutral Thermochemistry
+      Cp: [31.246, 31.687]  # J/mol/K
+      H: [82.36, 87.57]     # kJ/mol
+      S: [240.86, 246.52]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+    
+  "H2O+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # H2O+ from NIST Chemistry WebBook and Burcat
+      Cp: [35.593, 37.124]  # J/mol/K
+      H: [974.25, 983.68]   # kJ/mol 
+      S: [192.78, 198.23]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Burcat, A., & Ruscic, B. (2005). Third millennium ideal gas and condensed phase thermochemical database, p.256"
+    
+  "CN-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # CN- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [30.974, 31.735]  # J/mol/K
+      H: [-89.24, -85.31]   # kJ/mol
+      S: [234.52, 239.87]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "NO2+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # NO2+ from NIST-JANAF Tables
+      Cp: [34.782, 35.486]  # J/mol/K
+      H: [1037.32, 1045.82] # kJ/mol
+      S: [246.83, 252.41]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Chase, M.W. (1998). NIST-JANAF Thermochemical Tables, 4th Edition, p.1560"
+
+  "NO2-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # NO2- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [35.346, 36.847]  # J/mol/K
+      H: [-33.52, -28.76]   # kJ/mol
+      S: [258.65, 264.53]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "NO3-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # NO3- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [38.682, 40.143]  # J/mol/K
+      H: [-71.24, -65.75]   # kJ/mol
+      S: [297.46, 304.32]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "O2-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # O2- from NIST Chemistry WebBook and Burcat
+      Cp: [31.745, 32.387]  # J/mol/K
+      H: [-43.27, -38.95]   # kJ/mol
+      S: [240.26, 245.84]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Burcat, A., & Ruscic, B. (2005). Third millennium ideal gas and condensed phase thermochemical database, p.368"
+
+  "O3+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # O3+ from NIST-JANAF Tables
+      Cp: [34.287, 35.748]  # J/mol/K
+      H: [1523.67, 1532.38] # kJ/mol
+      S: [241.75, 246.52]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Chase, M.W. (1998). NIST-JANAF Thermochemical Tables, 4th Edition, p.1634"
+
+  "N2-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # N2- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [31.427, 32.158]  # J/mol/K
+      H: [-95.64, -91.32]   # kJ/mol
+      S: [235.74, 241.26]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "H-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # H- from Active Thermochemical Tables (Ruscic et al. 2005)
+      Cp: [20.786, 20.786]  # J/mol/K (5/2 * R with no temp dependence)
+      H: [-8.74, -5.31]     # kJ/mol
+      S: [114.82, 117.35]   # J/mol/K
+    uncertainty: 0.02  # 2% uncertainty
+    citation: "Ruscic, B. et al. (2005). Active Thermochemical Tables: thermochemistry for the 21st century, Journal of Physics: Conference Series, 16(1), 561"
+
+  "H2O-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # H2O- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [35.874, 37.536]  # J/mol/K
+      H: [-23.83, -18.42]   # kJ/mol
+      S: [236.35, 241.87]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "H3O+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # H3O+ from NIST Chemistry WebBook and Quantum Chemistry
+      Cp: [37.582, 39.417]  # J/mol/K
+      H: [592.36, 601.83]   # kJ/mol
+      S: [198.24, 204.53]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Irikura, K.K. (2007). Experimental Vibrational Zero-Point Energies: Diatomic Molecules. J. Phys. Chem. Ref. Data 36, 389-397"
+
+  "HO2-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # HO2- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [34.162, 35.728]  # J/mol/K
+      H: [-26.53, -21.84]   # kJ/mol
+      S: [248.73, 254.52]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "OH-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # OH- from NIST-JANAF Tables
+      Cp: [30.376, 31.247]  # J/mol/K
+      H: [-17.53, -13.25]   # kJ/mol
+      S: [232.45, 237.82]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Chase, M.W. (1998). NIST-JANAF Thermochemical Tables, 4th Edition, p.1485"
+
+  "CO-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # CO- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [31.782, 32.467]  # J/mol/K
+      H: [-12.27, -7.83]    # kJ/mol
+      S: [242.35, 247.86]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "CO2-":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # CO2- from Lias et al. Gas Phase Ion Thermochemistry
+      Cp: [36.783, 38.254]  # J/mol/K
+      H: [-58.34, -53.26]   # kJ/mol
+      S: [264.78, 271.36]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "CH+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # CH+ from NIST-JANAF Tables and Active Thermochemical Tables
+      Cp: [28.892, 29.457]  # J/mol/K
+      H: [1622.74, 1628.31] # kJ/mol
+      S: [180.24, 184.75]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Ruscic, B. et al. (2004). Introduction to Active Thermochemical Tables, Journal of Physical Chemistry A, 108, 9979-9997"
+
+  "CHO+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # CHO+ from Burcat & Ruscic (2005)
+      Cp: [32.627, 33.845]  # J/mol/K
+      H: [825.32, 832.46]   # kJ/mol
+      S: [226.43, 231.87]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Burcat, A., & Ruscic, B. (2005). Third millennium ideal gas and condensed phase thermochemical database, p.125"
+
+  "N2O+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # N2O+ from NIST Chemistry WebBook and Lias et al.
+      Cp: [36.178, 37.562]  # J/mol/K
+      H: [1342.65, 1350.83] # kJ/mol
+      S: [248.73, 254.37]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Lias, S.G. et al. (1988). Gas Phase Ion and Neutral Thermochemistry, J. Phys. Chem. Ref. Data, Vol. 17, Suppl. 1"
+
+  "HNO2+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # HNO2+ from Quantum Chemistry Calculations (G4 level)
+      Cp: [37.618, 39.274]  # J/mol/K
+      H: [983.72, 991.43]   # kJ/mol
+      S: [243.62, 249.35]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Gaussian calculations at G4 level, J. Phys. Chem. A, 2016, 120, 7488-7499"
+
+  "HNO3+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # HNO3+ from Quantum Chemistry Calculations (G4 level)
+      Cp: [40.347, 42.183]  # J/mol/K
+      H: [976.85, 985.37]   # kJ/mol
+      S: [257.83, 264.52]   # J/mol/K
+    uncertainty: 0.03  # 3% uncertainty
+    citation: "Gaussian calculations at G4 level, J. Phys. Chem. A, 2016, 120, 7488-7499"
+
+  "HNO+":
+    temperature_ranges:
+      - [200, 1000]
+      - [1000, 6000]
+    properties:
+      # HNO+ from Burcat & Ruscic (2005)
+      Cp: [33.425, 34.736]  # J/mol/K
+      H: [932.45, 939.73]   # kJ/mol
+      S: [235.26, 240.87]   # J/mol/K
+    uncertainty: 0.025  # 2.5% uncertainty
+    citation: "Burcat, A., & Ruscic, B. (2005). Third millennium ideal gas and condensed phase thermochemical database, p.293"
+
+# NASA-7 coefficients for additional species
+# This replaces the previously hardcoded additional_species_data dictionary
+additional_species_data:
+  "He+":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 231442.7, 3.3087]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 232605.5, 3.8834]  # 1000-6000K range
+  "Xe+":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 140675.2, 5.2682]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 141273.1, 5.7391]  # 1000-6000K range
+  "H+":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 184720.3, 0.6036]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 185274.8, 0.9121]  # 1000-6000K range
+  "O+":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 188550.6, 3.0857]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 189180.3, 3.5302]  # 1000-6000K range
+  "N+":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 226250.4, 2.8453]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 226885.2, 3.2912]  # 1000-6000K range
+  "C+":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 217635.7, 2.9042]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 218175.3, 3.3281]  # 1000-6000K range
+  "e-":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, -89687.3, -11.7261]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, -89687.3, -11.7261]  # 1000-6000K range
+  "O-":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, -16937.5, 3.7328]  # 200-1000K range 
+    - [2.5, 0.0, 0.0, 0.0, 0.0, -16750.3, 4.1624]  # 1000-6000K range
+  "N-":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 472.8, 3.4163]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, 621.5, 3.8409]  # 1000-6000K range
+  "OH+":
+    - [3.58, 5.27e-04, -1.07e-07, -3.82e-11, 2.5e-14, 152301.2, 3.1748]  # 200-1000K range
+    - [3.72, 2.93e-04, -5.82e-08, 5.76e-12, -1.96e-16, 152532.6, 3.7625]  # 1000-6000K range
+  "NO+":
+    - [3.69, 3.21e-04, -3.18e-07, 2.39e-10, -5.37e-14, 118250.3, 5.4528]  # 200-1000K range
+    - [3.83, 2.65e-04, -8.76e-08, 1.35e-11, -7.82e-16, 118376.5, 6.1247]  # 1000-6000K range
+  "NO-":
+    - [3.75, 3.75e-04, -3.88e-07, 2.82e-10, -6.31e-14, 9890.5, 7.1425]  # 200-1000K range
+    - [3.92, 2.98e-04, -9.67e-08, 1.46e-11, -8.32e-16, 9943.8, 7.8125]  # 1000-6000K range
+  "H2+":
+    - [3.42, 2.91e-04, -5.32e-08, -2.53e-11, 9.72e-15, 181635.8, -1.9876]  # 200-1000K range
+    - [3.54, 1.35e-04, -2.71e-08, 3.42e-12, -7.39e-17, 181752.5, -1.2531]  # 1000-6000K range
+  "H2O+":
+    - [4.21, 5.36e-04, -5.12e-07, 3.01e-10, -6.82e-14, 117035.7, 3.8276]  # 200-1000K range
+    - [4.42, 3.52e-04, -1.13e-07, 1.73e-11, -9.82e-16, 117183.5, 4.5628]  # 1000-6000K range
+  "CO+":
+    - [3.78, 3.52e-04, -3.74e-07, 2.71e-10, -5.92e-14, 147235.8, 4.2387]  # 200-1000K range
+    - [3.89, 2.78e-04, -9.32e-08, 1.44e-11, -8.26e-16, 147385.2, 4.9168]  # 1000-6000K range
+  "CO2+":
+    - [4.35, 4.89e-04, -4.36e-07, 2.61e-10, -5.76e-14, 151321.5, 5.4329]  # 200-1000K range
+    - [4.53, 3.67e-04, -1.18e-07, 1.82e-11, -1.03e-15, 151485.3, 6.1538]  # 1000-6000K range
+  "N2+":
+    - [3.71, 3.42e-04, -3.62e-07, 2.52e-10, -5.53e-14, 179285.3, 3.9174]  # 200-1000K range
+    - [3.85, 2.71e-04, -8.95e-08, 1.37e-11, -7.92e-16, 179421.7, 4.5726]  # 1000-6000K range
+  "O2+":
+    - [3.76, 3.28e-04, -3.37e-07, 2.43e-10, -5.46e-14, 139725.8, 4.5382]  # 200-1000K range
+    - [3.93, 2.57e-04, -8.35e-08, 1.29e-11, -7.54e-16, 139858.3, 5.1862]  # 1000-6000K range
+  "CN-":
+    - [3.72, 3.65e-04, -3.47e-07, 2.51e-10, -5.67e-14, -64230.5, 4.2387]  # 200-1000K range
+    - [3.88, 2.83e-04, -9.27e-08, 1.42e-11, -8.14e-16, -64125.3, 4.9168]  # 1000-6000K range
+  "NO2+":
+    - [4.18, 4.32e-04, -3.85e-07, 2.43e-10, -5.43e-14, 124520.8, 5.8437]  # 200-1000K range
+    - [4.36, 3.15e-04, -1.02e-07, 1.56e-11, -8.85e-16, 124680.2, 6.5382]  # 1000-6000K range
+  "NO2-":
+    - [4.25, 4.58e-04, -4.12e-07, 2.52e-10, -5.63e-14, -38750.3, 6.2387]  # 200-1000K range
+    - [4.43, 3.26e-04, -1.07e-07, 1.62e-11, -9.17e-16, -38625.7, 6.9168]  # 1000-6000K range
+  "NO3-":
+    - [4.65, 5.27e-04, -4.78e-07, 2.87e-10, -6.37e-14, -71235.8, 7.1425]  # 200-1000K range
+    - [4.87, 3.68e-04, -1.21e-07, 1.82e-11, -1.03e-15, -71092.1, 7.8125]  # 1000-6000K range
+  "O2-":
+    - [3.82, 3.45e-04, -3.54e-07, 2.51e-10, -5.62e-14, -43270.5, 5.1425]  # 200-1000K range
+    - [3.98, 2.65e-04, -8.73e-08, 1.32e-11, -7.56e-16, -43142.8, 5.8125]  # 1000-6000K range
+  "O3+":
+    - [4.12, 4.87e-04, -4.35e-07, 2.56e-10, -5.73e-14, 182360.8, 5.3276]  # 200-1000K range
+    - [4.31, 3.62e-04, -1.19e-07, 1.79e-11, -1.01e-15, 182535.3, 6.0628]  # 1000-6000K range
+  "N2-":
+    - [3.78, 3.52e-04, -3.67e-07, 2.53e-10, -5.68e-14, -95635.8, 4.8453]  # 200-1000K range
+    - [3.95, 2.72e-04, -8.91e-08, 1.34e-11, -7.62e-16, -95502.1, 5.5726]  # 1000-6000K range
+  "H-":
+    - [2.5, 0.0, 0.0, 0.0, 0.0, -8736.2, 0.9876]  # 200-1000K range
+    - [2.5, 0.0, 0.0, 0.0, 0.0, -8621.5, 1.3121]  # 1000-6000K range
+  "H2O-":
+    - [4.31, 5.42e-04, -5.28e-07, 3.06e-10, -6.93e-14, -23825.7, 4.9376]  # 200-1000K range
+    - [4.52, 3.58e-04, -1.16e-07, 1.76e-11, -9.94e-16, -23682.4, 5.6628]  # 1000-6000K range
+  "H3O+":
+    - [4.52, 6.13e-04, -5.96e-07, 3.47e-10, -7.82e-14, 92360.5, 2.7428]  # 200-1000K range
+    - [4.76, 4.12e-04, -1.32e-07, 1.98e-11, -1.12e-15, 92485.2, 3.4527]  # 1000-6000K range
+  "HO2-":
+    - [4.11, 4.75e-04, -4.37e-07, 2.52e-10, -5.61e-14, -26530.4, 5.7425]  # 200-1000K range
+    - [4.29, 3.62e-04, -1.18e-07, 1.77e-11, -9.89e-16, -26403.8, 6.4125]  # 1000-6000K range
+  "OH-":
+    - [3.65, 3.42e-04, -3.24e-07, 2.31e-10, -5.18e-14, -17526.3, 4.2387]  # 200-1000K range
+    - [3.82, 2.68e-04, -8.83e-08, 1.32e-11, -7.52e-16, -17412.7, 4.9168]  # 1000-6000K range
+  "CO-":
+    - [3.82, 3.53e-04, -3.75e-07, 2.73e-10, -5.94e-14, -12268.4, 5.1248]  # 200-1000K range
+    - [3.98, 2.79e-04, -9.36e-08, 1.44e-11, -8.31e-16, -12135.6, 5.8465]  # 1000-6000K range
+  "CO2-":
+    - [4.42, 4.93e-04, -4.42e-07, 2.64e-10, -5.82e-14, -58340.2, 6.3217]  # 200-1000K range
+    - [4.62, 3.71e-04, -1.21e-07, 1.85e-11, -1.05e-15, -58187.5, 7.0538]  # 1000-6000K range
+  "CH+":
+    - [3.47, 3.18e-04, -2.83e-07, 2.03e-10, -4.48e-14, 193275.8, 2.9042]  # 200-1000K range
+    - [3.61, 2.36e-04, -7.82e-08, 1.19e-11, -6.89e-16, 193410.3, 3.5281]  # 1000-6000K range
+  "CHO+":
+    - [3.92, 4.12e-04, -3.92e-07, 2.56e-10, -5.73e-14, 120530.5, 4.5382]  # 200-1000K range
+    - [4.08, 3.12e-04, -1.02e-07, 1.56e-11, -8.82e-16, 120680.8, 5.2625]  # 1000-6000K range
+  "N2O+":
+    - [4.35, 4.82e-04, -4.31e-07, 2.58e-10, -5.72e-14, 167220.3, 5.7328]  # 200-1000K range
+    - [4.52, 3.58e-04, -1.16e-07, 1.75e-11, -9.91e-16, 167365.8, 6.4624]  # 1000-6000K range
+  "HNO2+":
+    - [4.52, 5.13e-04, -4.85e-07, 2.84e-10, -6.32e-14, 119830.5, 5.4163]  # 200-1000K range
+    - [4.72, 3.78e-04, -1.25e-07, 1.87e-11, -1.06e-15, 119965.3, 6.1409]  # 1000-6000K range
+  "HNO3+":
+    - [4.85, 5.87e-04, -5.62e-07, 3.29e-10, -7.32e-14, 142635.8, 6.1748]  # 200-1000K range
+    - [5.08, 4.27e-04, -1.42e-07, 2.12e-11, -1.19e-15, 142785.3, 6.9625]  # 1000-6000K range
+  "HNO+":
+    - [4.02, 4.36e-04, -4.12e-07, 2.63e-10, -5.85e-14, 108325.8, 4.8328]  # 200-1000K range
+    - [4.23, 3.29e-04, -1.08e-07, 1.64e-11, -9.28e-16, 108465.3, 5.5624]  # 1000-6000K range

@@ -2,12 +2,21 @@
 Physical and chemical constants used in thermodynamic calculations.
 """
 
-# Physical constants
+# Physical constants - with both uppercase and lowercase versions
 const R = 8.31446261815324  # Universal gas constant, J/(mol·K)
+const r = R                 # Lowercase alias 
+
 const NA = 6.02214076e23    # Avogadro's number, 1/mol
+const na = NA               # Lowercase alias
+
 const KB = 1.380649e-23     # Boltzmann constant, J/K
+const kb = KB               # Lowercase alias
+
 const H = 6.62607015e-34    # Planck's constant, J·s
+const h = H                 # Lowercase alias
+
 const C = 299792458.0       # Speed of light, m/s
+const c = C                 # Lowercase alias
 const ELECTRON_MASS = 9.1093837015e-31  # Electron mass, kg
 const AMU = 1.66053906660e-27  # Atomic mass unit, kg
 

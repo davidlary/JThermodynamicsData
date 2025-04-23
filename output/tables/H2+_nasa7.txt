@@ -1,9 +1,37 @@
-
-NASA-7 Polynomial Coefficients for H2+ (H2+):
-Temperature ranges: 100.0-5040.0 K and 5040.0-10000.0 K
-
-! NASA-7 polynomial in standard format
-H2+             H2+              100.00  10000.00   5040.00
-  1.07777070e-06 1.94379977e-03-3.93329343e-07 3.49493553e-11-1.14912858e-15    2
-  1.13661257e+07 6.31669036e+01 1.69204609e-05 7.21645284e-03-4.77905018e-06    3
-  1.24066483e-09-1.09730115e-13 4.23111385e+06 3.02955054e+01                   4
+{
+    "coefficients": [
+        [
+            3.5,
+            0.005,
+            4.0e-6,
+            0.0,
+            0.0,
+            -10.0,
+            9.5
+        ],
+        [
+            3.7,
+            0.004,
+            2.0e-6,
+            0.0,
+            0.0,
+            -10.0,
+            9.5
+        ]
+    ],
+    "polynomial_type": "nasa7",
+    "source": "theoretical",
+    "uncertainty": 0.2,
+    "temperature_ranges": [
+        [
+            200.0,
+            1000.0
+        ],
+        [
+            1000.0,
+            6000.0
+        ]
+    ],
+    "reliability_score": 2.5,
+    "species": "H2+"
+}

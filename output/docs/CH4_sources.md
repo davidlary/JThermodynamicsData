@@ -1,35 +1,30 @@
-# Thermodynamic Data Sources for CH4
+# Thermodynamic Data Source for CH4
 
-## Species Information
-- **Species Name**: CH4
-- **Formula**: CH4
-- **Temperature Range**: 100-10000 K
+## Selected Source
+- **Source:** nist-webbook
+- **Priority:** 11
+- **Reliability score:** 4.95
+- **Uncertainty:** 4.0%
+- **Temperature range:** 200.0 - 6000.0 K
+- **Polynomial type:** nasa7
 
-## Data Sources Used
-The following data sources were used in hierarchical refinement, listed in order of application:
+## Coefficients
+### Low temperature range (200.0 - 1000.0 K)
+```
+4.28638781e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, -9.00515487e+00, 1.67031365e+01
+```
 
-| Priority | Source | Reliability Score | Weight Factor |
-|----------|--------|-------------------|---------------|
-| 0 | THEORETICAL | 2.5 | 1.0 |
-| 1 | GRI-MECH | 3.5 | 0.517 |
-| 7 | Burcat | 4.7 | 0.8398 |
+### High temperature range (1000.0 - 6000.0 K)
+```
+4.50070720e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, -9.00515487e+00, 1.67031365e+01
+```
 
-## Hierarchical Refinement Process
-The thermodynamic properties for this species were calculated using a hierarchical approach:
-
-1. Started with theoretical estimates (statistical thermodynamics and group contribution methods)
-2. Progressively refined with experimental data sources in order of priority
-3. Applied weighted averaging based on reliability scores and priority levels
-4. Propagated uncertainties throughout the refinement process
-
-## Representative Values at 1000.0 K
-| Property | Value | Uncertainty | Units |
-|----------|-------|-------------|-------|
-| Cp | 72.2711 | ±4.7382 | J/mol/K |
-| H | 4950.5841 | ±14372.2495 | kJ/mol |
-| S | 249.8453 | ±6.5083 | J/mol/K |
-| G | 4700.7388 | ±14369.4537 | kJ/mol |
-
-## Metadata
-- **Generated**: 2025-04-18 13:04:45
-- **JThermodynamicsData Version**: 1.0.0
+## All Available Sources
+| Source | Priority | Reliability |
+|--------|----------|-------------|
+| Nist-Webbook | 11 | 4.95 |
+| Tde | 10 | 4.8 |
+| Nasa-Cea | 7 | 4.0 |
+| Chemkin | 6 | 3.8 |
+| Gri-Mech | 5 | 3.5 |
+| Theoretical | 4 | 4.0 |
