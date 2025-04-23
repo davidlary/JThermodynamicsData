@@ -66,37 +66,30 @@ function plot_species_with_all_sources(species_name)
         (4, "g", "G (kJ/mol)")
     ]
     
-    # Standardize theoretical sources group for consistent legend formatting
-    theoretical_sources = [
-        "theoretical", 
-        "THEORETICAL_GROUP_CONTRIBUTION", 
-        "THEORETICAL_STATISTICAL_THERMO",
-        "THEORETICAL_MACHINE_LEARNING", 
-        "THEORETICAL_QUANTUM_CHEMISTRY",
-        "THEORETICAL_ENSEMBLE",
-        "THEORETICAL_FALLBACK"
-    ]
+    # CRITICAL: Explicitly filter out all theoretical sources except the best one
+    # This ensures we don't show redundant theoretical sources in plots
+    theoretical_sources = filter(s -> startswith(lowercase(s[1]), "theoretical") || lowercase(s[1]) == "theoretical", sources)
+    experimental_sources = filter(s -> !startswith(lowercase(s[1]), "theoretical") && lowercase(s[1]) != "theoretical", sources)
     
-    # Map sources to their standardized display name
+    # Keep only the best theoretical source
+    best_theoretical = isempty(theoretical_sources) ? [] : [theoretical_sources[1]]
+    
+    # Replace the sources list with filtered version
+    sources = vcat(best_theoretical, experimental_sources)
+    sort!(sources, by=s->s[2], rev=true)
+    
+    # For debug - print filtered sources
+    println("  Filtered sources (showing only best theoretical):")
+    for (src_name, priority, reliability) in sources
+        println("  - $(src_name) (priority: $(priority), reliability: $(reliability))")
+    end
+    
+    # Map sources to their standardized display name - SIMPLIFIED APPROACH
     source_display_names = Dict()
     for (src_name, _, _) in sources
-        # Standardize theoretical source names for consistent legends
-        if startswith(lowercase(src_name), "theoretical")
-            if lowercase(src_name) == "theoretical"
-                source_display_names[src_name] = "theoretical"
-            elseif lowercase(src_name) == "theoretical_group_contribution"
-                source_display_names[src_name] = "group-contribution"
-            elseif lowercase(src_name) == "theoretical_statistical_thermo"
-                source_display_names[src_name] = "stat-thermo"
-            elseif lowercase(src_name) == "theoretical_machine_learning"
-                source_display_names[src_name] = "machine-learning"
-            elseif lowercase(src_name) == "theoretical_quantum_chemistry"
-                source_display_names[src_name] = "quantum-statistical"
-            elseif lowercase(src_name) == "theoretical_ensemble"
-                source_display_names[src_name] = "benson-group"
-            else
-                source_display_names[src_name] = "theoretical"
-            end
+        # All theoretical sources get one standard name for consistency
+        if startswith(lowercase(src_name), "theoretical") || lowercase(src_name) == "theoretical"
+            source_display_names[src_name] = "theoretical"
         else
             # Non-theoretical sources keep their original name
             source_display_names[src_name] = src_name
@@ -104,35 +97,19 @@ function plot_species_with_all_sources(species_name)
     end
     
     # Ensure all species use consistent color scheme
-    # Blue for best source, gray scale for others, consistent colors for theoretical sources
+    # Blue for best source, gray scale for others
     source_colors = Dict()
     line_styles = Dict()
     
-    # Define a consistent color palette for theoretical sources
-    theoretical_colors = Dict(
-        "theoretical" => RGB(0.7, 0.7, 0.7),
-        "group-contribution" => RGB(0.6, 0.6, 0.6),
-        "stat-thermo" => RGB(0.5, 0.5, 0.5),
-        "machine-learning" => RGB(0.45, 0.45, 0.45),
-        "quantum-statistical" => RGB(0.4, 0.4, 0.4),
-        "benson-group" => RGB(0.35, 0.35, 0.35)
-    )
-    
     # Assign colors and line styles
     for (i, (src_name, priority, _)) in enumerate(sources)
-        display_name = source_display_names[src_name]
-        
         if src_name == best_source
             source_colors[src_name] = :blue
             line_styles[src_name] = :solid
-        elseif haskey(theoretical_colors, display_name)
-            # Use predefined theoretical colors
-            source_colors[src_name] = theoretical_colors[display_name]
-            line_styles[src_name] = :dash
         else
-            # Non-theoretical sources get color by priority
+            # All other sources get a gray color based on their priority
             priority_level = max(1, min(priority, 13))
-            color_value = 0.8 - (priority_level / 20.0)  # Higher priority = darker color
+            color_value = 0.7 - (priority_level / 20.0)  # Higher priority = darker color
             source_colors[src_name] = RGB(color_value, color_value, color_value)
             line_styles[src_name] = :dash
         end
