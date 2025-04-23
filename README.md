@@ -1,17 +1,29 @@
 # JThermodynamicsData
 
-A comprehensive Julia package for handling, processing, and integrating thermodynamic data from multiple sources.
+A comprehensive Julia package for accessing, processing, and visualizing thermodynamic data from multiple sources with built-in hierarchical selection.
 
 ## Overview
 
-JThermodynamicsData provides a unified interface to thermodynamic data for chemical species, combining data from multiple sources with a hierarchical prioritization system. The package includes:
+JThermodynamicsData provides a unified interface to thermodynamic data for chemical species, combining data from multiple sources with a hierarchical prioritization system. The package implements a rigorously structured hierarchy that automatically selects the most accurate source available for each species based on data quality and reliability.
 
-- Parsers for common thermodynamic data formats (NASA-7/9, CHEMKIN, JANAF, ThermoML, Burcat, ATcT, TDE)
-- Database integration with DuckDB for efficient storage and retrieval
-- Theoretical calculation methods for missing data (group contribution, statistical thermodynamics, etc.)
-- Uncertainty quantification and propagation
-- Visualization tools for comparing data sources
-- CAS Registry Number integration for reliable species identification
+## Key Features
+
+- **Multi-source data access**: Access thermodynamic data from 14 different sources, including:
+  - Active Thermochemical Tables (ATcT)
+  - Burcat Database
+  - NIST Chemistry WebBook
+  - NIST ThermoData Engine (TDE)
+  - JANAF Thermochemical Tables
+  - NASA Chemical Equilibrium with Applications (CEA)
+  - And more...
+
+- **Hierarchical selection**: Automatically selects the highest quality data source available for each species.
+
+- **Data visualization**: Generate comparative plots of thermodynamic properties across multiple sources.
+
+- **Database integration**: Store and query thermodynamic data using DuckDB.
+
+- **Comprehensive validation**: Ensure proper hierarchy respect and data accuracy.
 
 ## Project Structure
 
@@ -32,12 +44,36 @@ JThermodynamicsData provides a unified interface to thermodynamic data for chemi
 - `data/` - Data storage
   - `cache/` - Cached data from web sources
   - `external/` - External data files (JANAF, NASA, etc.)
+  - `species/` - JSON storage for species data
   - `test_data/` - Sample data for testing
 
 - `scripts/` - Utility scripts
-  - `initialize_database.jl` - Populate the database
-  - `update_database.jl` - Update with new data
-  - `example_usage.jl` - Usage examples
+  - `download_all_sources.jl` - Download data from all sources
+  - `fetch_all_sources.jl` - Process and parse data
+  - `sync_json_to_database.jl` - Sync data to DuckDB
+
+## Data Hierarchy
+
+The package implements a strict hierarchy of data sources based on their accuracy and reliability:
+
+| Priority | Source | Reliability | Description |
+|---------|--------|-------------|-------------|
+| 13 | atct | 5.0 | Active Thermochemical Tables (highest accuracy) |
+| 12 | burcat | 4.9 | Burcat Database (very high accuracy) |
+| 11 | nist-webbook | 4.95 | NIST Chemistry WebBook (high accuracy) |
+| 10 | tde | 4.8 | NIST ThermoData Engine (high accuracy) |
+| 9 | thermoml | 4.5 | ThermoML Standard (good accuracy) |
+| 8 | janaf | 4.5 | JANAF Thermochemical Tables (good accuracy) |
+| 7 | nasa-cea | 4.0 | NASA CEA Database (decent accuracy) |
+| 6 | chemkin | 3.8 | CHEMKIN format data (decent accuracy) |
+| 5 | gri-mech | 3.5 | GRI-MECH 3.0 (decent accuracy) |
+| 4 | quantum-statistical | 4.0 | Quantum-Statistical calculations (best theoretical) |
+| 3 | benson-group | 3.0 | Benson Group Additivity (good theoretical) |
+| 2 | stat-thermo | 3.5 | Statistical thermodynamics (moderate theoretical) |
+| 1 | group-contribution | 3.0 | Group contribution methods (basic theoretical) |
+| 0 | theoretical | 2.5 | Basic theoretical calculations (lowest accuracy) |
+
+**IMPORTANT**: Experimental sources (ATcT through GRI-MECH) are prioritized over theoretical sources when available. The system ensures that the highest quality source is always used for each species.
 
 ## Setup and Installation
 
@@ -52,322 +88,127 @@ JThermodynamicsData provides a unified interface to thermodynamic data for chemi
    julia scripts/setup_packages.jl
    ```
 
-3. Delete existing cache and database to avoid errors:
+3. Run the complete workflow script:
+   ```bash
+   julia run_complete_workflow.jl
+   ```
+
+The complete workflow script handles:
+1. Downloading all data sources
+2. Processing data into JSON files
+3. Syncing data to DuckDB database
+4. Generating comparison plots
+5. Validating the hierarchy selection
+
+## Workflow
+
+The new consolidated workflow simplifies the thermodynamic data processing:
+
+```bash
+# Run the complete workflow (download, process, database, plots, validation)
+julia run_complete_workflow.jl
+```
+
+This single command replaces the previous multi-step process:
+```bash
+# Old workflow (no longer needed)
+# julia scripts/download_all_sources.jl
+# julia scripts/fetch_all_sources.jl
+# julia run_all_species_plots.jl
+# julia scripts/sync_json_to_database.jl
+```
+
+## Troubleshooting
+
+If you encounter any issues:
+
+1. Clear compiled code:
    ```bash
    rm -rf ~/.julia/compiled/v1.*/JThermodynamicsData
+   ```
+
+2. Reinitialize the database:
+   ```bash
    rm -f ~/Dropbox/Environments/Code/JThermodynamicsData/data/thermodynamics.duckdb
    ```
 
-4. Generate species data from scientific sources (for ionic species):
+3. Run the complete workflow again:
    ```bash
-   julia scripts/generate_species_data.jl
+   julia run_complete_workflow.jl
    ```
-
-5. Initialize the storage system (either database or JSON):
-   
-   **Option 1: Database Storage** (traditional approach)
-   ```bash
-   julia scripts/initialize_database.jl
-   ```
-   
-   If you encounter database errors, you can use the reinitialization script:
-   ```bash
-   julia scripts/reinitialize_database.jl
-   ```
-   
-   **Option 2: JSON Storage** (recommended)
-   ```bash
-   julia scripts/initialize_json_storage.jl
-   ```
-   
-   To import real data from all sources into the JSON storage system:
-   ```bash
-   julia scripts/import_data_from_sources.jl
-   ```
-
-6. Run the main calculations:
-   ```bash
-   julia run_thermodynamics.jl
-   ```
-
-**TROUBLESHOOTING**:
-
-If you encounter method overwrite or precompilation errors:
-```bash
-rm -rf ~/.julia/compiled/v1.*/JThermodynamicsData
-```
-
-If you encounter database errors:
-```bash
-rm -f ~/Dropbox/Environments/Code/JThermodynamicsData/data/thermodynamics.duckdb
-julia scripts/reinitialize_database.jl
-```
 
 ## Hierarchical Thermodynamic Data Sources
 
-JThermodynamicsData implements a comprehensive hierarchical approach to thermodynamic data processing. The system progressively refines property estimates by incorporating data from sources in order of increasing reliability. All theoretical approaches are used and displayed in visualization, but for species with experimental data, only experimental values are used in the final calculation.
-
-### Table of Data Sources
-
-| Priority | Source Type             | Source                  | Reliability (1-5) | Description                                          | Citation                                                                  |
-|----------|-------------------------|-------------------------|-------------------|------------------------------------------------------|---------------------------------------------------------------------------|
-| 0        | Theoretical (Level 1)   | Group Contribution      | 1.0               | Basic group contribution methods                     | Joback & Reid (1987) [DOI: 10.1002/ceat.270100209]                        |
-| 0        | Theoretical (Level 2)   | Statistical Thermodynamics | 2.0           | Basic statistical mechanics                          | McQuarrie (2000) Statistical Mechanics                                    |
-| 0        | Theoretical (Level 3)   | Benson Group Additivity | 3.0              | Advanced group contribution                          | Benson et al. (1969) [DOI: 10.1021/cr60259a002]                           |
-| 0        | Theoretical (Level 4)   | Quantum-Statistical     | 4.0              | Quantum-corrected statistical mechanics              | Barone (2004) [DOI: 10.1021/jp049822w]                                    |
-| 1        | Experimental (Level 1)  | GRI-MECH                | 3.0              | Gas Research Institute mechanism                     | Smith et al. (1999) [DOI: 10.1.1.16.309]                                  |
-| 2        | Experimental (Level 2)  | CHEMKIN                 | 3.5              | Combustion chemistry mechanism                       | Kee et al. (1996) CHEMKIN-III                                             |
-| 3        | Experimental (Level 3)  | NASA-CEA                | 4.0              | NASA Chemical Equilibrium with Applications          | Gordon & McBride (1994) NASA RP-1311                                      |
-| 4        | Experimental (Level 4)  | JANAF                   | 4.5              | NIST-JANAF Thermochemical Tables                     | Chase (1998) [DOI: 10.18434/T42S31]                                       |
-| 5        | Experimental (Level 5)  | ThermoML                | 4.5              | IUPAC standard for thermodynamic data                | Frenkel et al. (2011) [DOI: 10.1063/1.3525836]                            |
-| 6        | Experimental (Level 6)  | ThermoData Engine (TDE) | 4.8              | NIST TDE with critically evaluated data              | Diky et al. (2012) [DOI: 10.1021/je300128w]                               |
-| 7        | Experimental (Level 7)  | NIST Chemistry WebBook  | 4.95             | NIST Standard Reference Data                         | Linstrom & Mallard (2023) [DOI: 10.18434/T4D303]                          |
-| 8        | Experimental (Level 8)  | Burcat Database         | 4.9              | Burcat & Ruscic thermochemical database              | Burcat & Ruscic (2005) [DOI: 10.2172/925269]                              |
-| 9        | Experimental (Level 9)  | Active Thermo Tables (ATcT) | 5.0         | Active Thermochemical Tables with network approach   | Ruscic et al. (2005) [DOI: 10.1063/1.1804602]                             |
-
-### Data Source Hierarchy and Reliability
-
-The hierarchical approach ensures that:
+JThermodynamicsData implements a comprehensive hierarchical approach to thermodynamic data processing. The system ensures that for each species, the most accurate available source is used, following these principles:
 
 1. **Most Accurate Source**: The final refined result is exactly the value from the most accurate source available (highest priority).
 2. **Uncertainty Calculation**: The uncertainty is calculated from the spread of values from all available sources, giving appropriate weight to more reliable sources.
 3. **Theory vs. Experiment**: All theoretical approaches are displayed in visualization, but for species with experimental data, only experimental values contribute to the final calculation.
 4. **Documentation**: All data sources used for each species are thoroughly documented, including which source was selected as the most accurate.
 
-#### Theoretical Methods (In Order of Increasing Accuracy)
+### Theoretical vs. Experimental Sources
 
-1. **Group Contribution Methods** (Reliability: Low)
-   - Simple additive models based on molecular fragments
-   - Uses Joback & Reid method for small organic molecules
-   - Fastest but least accurate approach
-   - Typical uncertainty: 10-30%
+The package provides both theoretical calculations and experimental data:
 
-2. **Statistical Thermodynamics** (Reliability: Medium-Low)
-   - Basic statistical mechanical approach with rigid-rotor and harmonic oscillator approximations
-   - Requires molecular parameters (geometries, vibrational frequencies)
-   - More accurate than group contribution but with significant approximations
-   - Typical uncertainty: 5-15%
+- **Theoretical Methods** (Priority 0-4)
+  - Basic theoretical calculations
+  - Group contribution methods
+  - Statistical thermodynamics
+  - Benson Group Additivity
+  - Quantum-Statistical Thermodynamics
 
-3. **Benson Group Additivity** (Reliability: Medium)
-   - Advanced group contribution method with next-nearest neighbor corrections
-   - Accounts for ring corrections and other non-additive effects
-   - More accurate than basic statistical thermodynamics for many species
-   - Typical uncertainty: 5-10%
+- **Experimental Databases** (Priority 5-13)
+  - GRI-MECH 3.0
+  - CHEMKIN format data
+  - NASA CEA Database
+  - JANAF Thermochemical Tables
+  - ThermoML Standard
+  - NIST ThermoData Engine
+  - NIST Chemistry WebBook
+  - Burcat Database
+  - Active Thermochemical Tables
 
-4. **Quantum-Statistical Thermodynamics** (Reliability: Medium-High)
-   - Quantum-corrected statistical mechanics with anharmonicity effects
-   - Includes internal rotation treatments, anharmonic corrections
-   - Most accurate theoretical approach implemented in the package
-   - Typical uncertainty: 3-8%
+The hierarchical system automatically uses experimental data when available, falling back to theoretical calculations only when necessary.
 
-#### Experimental Databases (In Order of Increasing Reliability)
+## Output
 
-Experimental sources are assigned priority levels from 1 (lowest) to 8 (highest), determining the order in which they are consulted:
+The package produces several outputs:
 
-1. **GRI-MECH 3.0** (Priority: 1)
-   - Focused on combustion chemistry for natural gas
-   - Limited set of species (~50) but well-validated
-   - Used primarily for combustion modeling
+- **Plots**: Saved in `plots/` directory - Shows all available sources with the best one highlighted
+- **Data tables**: Saved in `output/tables/` directory - Contains numerical data for all properties
+- **Source documentation**: Saved in `output/docs/` directory - Documents sources used for each species
+- **Summary report**: Saved to `output/summary_report.md` - Overview of all processed species
+- **Database**: Saved to `data/thermodynamics.duckdb` - For efficient querying
 
-2. **CHEMKIN Mechanisms** (Priority: 2)
-   - Various reaction mechanisms in CHEMKIN format
-   - Coverage depends on the specific mechanism
-   - Often based on older NASA polynomial fits
-
-3. **NASA Chemical Equilibrium with Applications (CEA)** (Priority: 3)
-   - NASA's thermodynamic database
-   - Covers ~2000 species
-   - Good for high-temperature applications
-
-4. **NIST-JANAF Thermochemical Tables** (Priority: 4)
-   - Gold standard for many years
-   - Well-documented uncertainty estimates
-   - Updated periodically by NIST
-
-5. **ThermoML** (Priority: 5)
-   - IUPAC standard for thermodynamic data exchange
-   - Includes experimental metadata
-   - Covers many complex organic compounds
-
-6. **NIST ThermoData Engine (TDE)** (Priority: 6)
-   - Critically evaluated thermodynamic data
-   - Includes uncertainty quantification
-   - Covers thousands of organic compounds
-
-7. **Burcat Database** (Priority: 7)
-   - Comprehensive database maintained by Burcat & Ruscic
-   - Regular updates with new species
-   - Focus on species relevant to combustion and atmospheric chemistry
-
-8. **Active Thermochemical Tables (ATcT)** (Priority: 8)
-   - Most accurate source, using thermochemical network approach
-   - Self-consistent thermodynamics across all species
-   - Rigorous uncertainty quantification
-   - Limited species coverage but growing
-
-### Output Formats
-
-JThermodynamicsData generates comprehensive output for each species:
-
-1. **NASA-7 and NASA-9 Polynomials**
-   - Coefficients for both formats
-   - Uncertainty polynomials
-   - Temperature-specific uncertainty estimates
-
-2. **CAS Registry Numbers**
-   - Included in all outputs for reliable species identification
-   - Cross-referenced across all data sources
-
-3. **Comprehensive Documentation**
-   - Markdown and JSON formats
-   - Source attribution
-   - Uncertainty documentation
-   - Calculation methodology
-
-4. **Data Tables**
-   - CSV spreadsheets with data across temperature range
-   - Property values and uncertainties
-   - Units explicitly specified
-
-## Usage
-
-### Basic Usage
+## Basic Usage
 
 ```julia
 using JThermodynamicsData
 
-# Initialize configuration and database connection
-config, conn = initialize()
+# Run the complete workflow
+include("run_complete_workflow.jl")
 
-# Query properties for a species at a specific temperature
-properties = query_properties(conn, "N2", 298.15, config)
-println("Heat capacity of N2: $(properties["properties"]["Cp"]["value"]) J/mol/K")
+# Calculate thermodynamic properties for a species
+properties = JThermodynamicsData.calculate_properties("H2O", 298.15)
+println("Cp of H2O at 298.15 K: $(properties.cp) J/mol·K")
+println("Source used: $(properties.source)")
 
-# Clean up
-close_database(conn)
-```
-
-### Processing Multiple Species
-
-```julia
-using JThermodynamicsData
-
-# Process thermodynamic data for all species in the configuration
-include("run_thermodynamics.jl")
-```
-
-### Generating Comprehensive Documentation
-
-The package can automatically generate detailed documentation for each species showing all data sources used in the calculation:
-
-```julia
-using JThermodynamicsData
-
-# Initialize configuration and database connection
-config, conn = initialize()
-
-# Get a species with all its data sources
-result, all_sources = progressively_refine_thermodynamic_data(conn, "H2O", 298.15, config)
-
-# Generate Markdown documentation
-markdown_file = create_markdown_documentation("H2O", result, all_sources, "docs")
-println("Markdown documentation created at: $markdown_file")
-
-# Generate JSON documentation
-json_file = create_json_documentation("H2O", result, all_sources, "docs")
-println("JSON documentation created at: $json_file")
-
-# Close connection
-close_database(conn)
-```
-
-## Working with Direct Calculator
-
-For debugging purposes, you can use the direct calculator:
-
-```julia
-include("hierarchical_calculator.jl")
-result = calculate_properties("N2", 298.15)
-println("Heat capacity of N2: $(result["properties"]["Cp"]["value"]) J/mol/K")
+# See all available sources for a species
+sources = JThermodynamicsData.list_available_sources("O3")
+println("Available sources for O3:")
+for (source, priority, reliability) in sources
+    println("  $source (priority: $priority, reliability: $reliability)")
+end
 ```
 
 ## Storage Systems
 
-JThermodynamicsData offers two storage options for thermodynamic data:
+JThermodynamicsData now uses a combined approach:
 
-### Database Storage (Traditional)
+1. **JSON Storage**: Each species has a JSON file in `data/species/` containing data from all sources
+2. **Database Storage**: Data is synced to DuckDB for efficient querying
 
-The database approach uses DuckDB to store thermodynamic data with the following tables:
-- `species` - Information about chemical species
-- `data_sources` - Prioritized thermodynamic data sources
-- `thermodynamic_data` - Polynomials and properties for each species from each source
-
-The database approach provides efficient querying but requires more setup.
-
-### JSON Storage (Recommended)
-
-The JSON storage system provides a simple, robust alternative to the database:
-
-- **One JSON file per species** in the `data/species/` directory
-- Each file contains data from all available sources for that species
-- Hierarchical source selection based on priority
-- Automatic fallback to theoretical calculations when needed
-- Simple, human-readable format for easy debugging
-
-**Benefits of JSON Storage:**
-- No database errors or connection issues
-- Easily view and edit data files
-- Direct access to all available sources for each species
-- Visual representation in plots showing all sources
-- More robust to errors in data processing
-
-To use JSON storage, run:
-```bash
-julia scripts/initialize_json_storage.jl
-julia scripts/import_data_from_sources.jl  # Import real data from all sources
-```
-
-## Data Processing Workflow
-
-The data processing workflow follows these steps:
-
-1. **Data Source Retrieval**
-   - Retrieve data from original sources
-   - Implement local caching with version checking
-   - Check for newer versions when cached files exist
-   - Store data in JSON per-species files
-
-2. **Theoretical Calculations**
-   - Apply theoretical methods in order of increasing accuracy
-   - Store uncertainties for each method
-   - Display all methods in visualizations
-
-3. **Experimental Data Processing**
-   - Collect values from all available experimental data sources in order of priority
-   - Select the value from the highest priority source as the final result
-   - Record the source used for the final value
-   - Calculate uncertainty based on the spread of values from all sources
-
-4. **Uncertainty Quantification**
-   - For properties with multiple source values, calculate weighted standard deviation
-   - For properties with only one source, use the source's reported uncertainty
-   - For calculated properties, propagate uncertainties appropriately
-   - Ensure all final values include quantified uncertainty
-
-5. **Output Generation**
-   - Generate NASA-7 and NASA-9 polynomial fits from the final values
-   - Create uncertainty polynomials based on the calculated uncertainties
-   - Produce documentation in multiple formats with source attribution
-   - Generate CSV data tables with values and uncertainties
-   - Display plots with all available sources shown
-
-## Debugging
-
-If you encounter issues, check the `DEBUG_REPORT.md` file for common problems and their solutions. Several debugging scripts are provided:
-
-- `scripts/debug_single_species.jl` - Test processing of a single species
-- `scripts/direct_n2_calculator.jl` - Direct calculation of N2 properties
-- `scripts/robust_debug.jl` - Comprehensive debugging with all fixes applied
+This combined approach provides both human-readable storage and efficient query capabilities.
 
 ## Contributing
 

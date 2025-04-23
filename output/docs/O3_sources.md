@@ -1,33 +1,30 @@
-# Thermodynamic Data Sources for O3
+# Thermodynamic Data Source for O3
 
-## Species Information
-- **Species Name**: O3
-- **Formula**: O3
-- **Temperature Range**: 100-10000 K
+## Selected Source
+- **Source:** nist-webbook
+- **Priority:** 11
+- **Reliability score:** 4.95
+- **Uncertainty:** 4.0%
+- **Temperature range:** 200.0 - 6000.0 K
+- **Polynomial type:** nasa7
 
-## Data Sources Used
-The following data sources were used in hierarchical refinement, listed in order of application:
+## Coefficients
+### Low temperature range (200.0 - 1000.0 K)
+```
+4.71455753e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.71628705e+01, 2.30390861e+01
+```
 
-| Priority | Source | Reliability Score | Weight Factor |
-|----------|--------|-------------------|---------------|
-| 0 | THEORETICAL | 2.5 | 1.0 |
+### High temperature range (1000.0 - 6000.0 K)
+```
+4.95028541e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.71628705e+01, 2.30390861e+01
+```
 
-## Hierarchical Refinement Process
-The thermodynamic properties for this species were calculated using a hierarchical approach:
-
-1. Started with theoretical estimates (statistical thermodynamics and group contribution methods)
-2. Progressively refined with experimental data sources in order of priority
-3. Applied weighted averaging based on reliability scores and priority levels
-4. Propagated uncertainties throughout the refinement process
-
-## Representative Values at 1000.0 K
-| Property | Value | Uncertainty | Units |
-|----------|-------|-------------|-------|
-| Cp | 40.1735 | ±12.1056 | J/mol/K |
-| H | 23804.5597 | ±33622.3048 | kJ/mol |
-| S | 267.6361 | ±29.8053 | J/mol/K |
-| G | 23536.9236 | ±33652.1101 | kJ/mol |
-
-## Metadata
-- **Generated**: 2025-04-18 13:04:38
-- **JThermodynamicsData Version**: 1.0.0
+## All Available Sources
+| Source | Priority | Reliability |
+|--------|----------|-------------|
+| nist-webbook | 11 | 4.95 |
+| quantum-statistical | 4 | 4.0 |
+| benson-group | 3 | 3.0 |
+| stat-thermo | 2 | 3.5 |
+| group-contribution | 1 | 3.0 |
+| theoretical | 0 | 2.5 |

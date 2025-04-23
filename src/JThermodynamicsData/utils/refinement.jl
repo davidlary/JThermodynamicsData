@@ -44,6 +44,37 @@ function refine_thermodynamic_data(previous_result::Dict, new_result::Dict, weig
     refined_result["data_source"] = new_result["data_source"]
     refined_result["polynomial_type"] = new_result["polynomial_type"]
     
+    # Check if this is an atomic or ionic species
+    formula = get(new_result, "formula", "")
+    is_atomic_or_ion = (!isempty(formula) && 
+                        (any(f -> f == formula, ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", 
+                                               "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", 
+                                               "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", 
+                                               "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", 
+                                               "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", 
+                                               "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe"]) || 
+                         endswith(formula, "+") || endswith(formula, "-")))
+    
+    # For atomic species and ions with experimental data, use highest priority data directly
+    # if weight_factor is close to 1.0, it means this is a high-priority source
+    if is_atomic_or_ion && !startswith(new_result["data_source"], "THEORETICAL") && weight_factor > 0.9
+        @info "Using highest priority source $(new_result["data_source"]) directly for atomic/ionic species $formula"
+        # Take the new result values directly for all properties
+        for prop in ["Cp", "H", "S", "G"]
+            if haskey(new_result["properties"], prop) && haskey(refined_result["properties"], prop)
+                refined_result["properties"][prop]["value"] = new_result["properties"][prop]["value"]
+                refined_result["properties"][prop]["uncertainty"] = new_result["properties"][prop]["uncertainty"]
+            end
+        end
+        
+        # Remove theoretical method info if using experimental data
+        if haskey(refined_result, "theoretical_method")
+            delete!(refined_result, "theoretical_method")
+        end
+        
+        return refined_result
+    end
+    
     # Remove theoretical method info if using experimental data
     if haskey(refined_result, "theoretical_method")
         delete!(refined_result, "theoretical_method")
@@ -53,8 +84,8 @@ function refine_thermodynamic_data(previous_result::Dict, new_result::Dict, weig
     previous_weight = 1.0 - weight_factor  # Lower weight for previous data
     new_weight = weight_factor  # Higher weight for new data
     
-    # Update each property
-    for prop in ["Cp", "H", "S", "G"]
+    # Update each primary property
+    for prop in ["Cp", "H", "S"]
         if haskey(new_result["properties"], prop) && haskey(previous_result["properties"], prop)
             # Get current and new values
             current_val = previous_result["properties"][prop]["value"]
@@ -71,6 +102,43 @@ function refine_thermodynamic_data(previous_result::Dict, new_result::Dict, weig
             # Update refined result
             refined_result["properties"][prop]["value"] = combined_val
             refined_result["properties"][prop]["uncertainty"] = combined_unc
+        end
+    end
+    
+    # Get temperature for recalculating G
+    temperature = get(new_result, "temperature", get(previous_result, "temperature", 298.15))
+    
+    # Calculate G from H and S consistently to maintain thermodynamic relationship
+    if haskey(refined_result["properties"], "H") && haskey(refined_result["properties"], "S")
+        h_val = refined_result["properties"]["H"]["value"]
+        h_unc = refined_result["properties"]["H"]["uncertainty"]
+        s_val = refined_result["properties"]["S"]["value"]
+        s_unc = refined_result["properties"]["S"]["uncertainty"]
+        
+        # Calculate G = H - T*S consistently
+        g_val = h_val - temperature * s_val / 1000
+        g_unc = sqrt(h_unc^2 + (temperature * s_unc / 1000)^2)
+        
+        # Update G in the refined result
+        refined_result["properties"]["G"]["value"] = g_val
+        refined_result["properties"]["G"]["uncertainty"] = g_unc
+    else
+        # If H or S is missing, update G directly
+        if haskey(new_result["properties"], "G") && haskey(previous_result["properties"], "G")
+            current_val = previous_result["properties"]["G"]["value"]
+            current_unc = previous_result["properties"]["G"]["uncertainty"]
+            
+            new_val = new_result["properties"]["G"]["value"]
+            new_unc = new_result["properties"]["G"]["uncertainty"]
+            
+            # Combine values and uncertainties using weighted averaging
+            combined_val, combined_unc = combine_weighted_values(
+                current_val, current_unc, new_val, new_unc, previous_weight, new_weight
+            )
+            
+            # Update refined result
+            refined_result["properties"]["G"]["value"] = combined_val
+            refined_result["properties"]["G"]["uncertainty"] = combined_unc
         end
     end
     

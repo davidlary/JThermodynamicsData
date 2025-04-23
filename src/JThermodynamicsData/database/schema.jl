@@ -8,6 +8,13 @@ Database schema definitions and initialization functions.
 Create the database schema for thermodynamic data.
 """
 function create_schema(conn::DuckDB.DB)
+    # Create sequences for auto-increment IDs
+    DuckDB.execute(conn, "CREATE SEQUENCE IF NOT EXISTS species_id_seq")
+    DuckDB.execute(conn, "CREATE SEQUENCE IF NOT EXISTS thermodynamic_data_id_seq")
+    DuckDB.execute(conn, "CREATE SEQUENCE IF NOT EXISTS data_sources_id_seq")
+    DuckDB.execute(conn, "CREATE SEQUENCE IF NOT EXISTS data_cache_id_seq")
+    DuckDB.execute(conn, "CREATE SEQUENCE IF NOT EXISTS database_version_id_seq")
+    
     # Species table
     DuckDB.execute(conn, """
     CREATE TABLE IF NOT EXISTS species (
@@ -86,8 +93,8 @@ function create_schema(conn::DuckDB.DB)
     if size(df, 1) == 0 || df[1, :count] == 0
         # Insert initial version record
         DuckDB.execute(conn, """
-        INSERT INTO database_version (version, schema_version, description)
-        VALUES (1, 1, 'Initial database creation')
+        INSERT INTO database_version (id, version, schema_version, description)
+        VALUES (nextval('database_version_id_seq'), 1, 1, 'Initial database creation')
         """)
     end
     
@@ -217,8 +224,8 @@ function upgrade_schema(conn::DuckDB.DB, target_version::Int)
     
     # Update version record
     DuckDB.execute(conn, """
-    INSERT INTO database_version (version, schema_version, description)
-    VALUES (?, ?, ?)
+    INSERT INTO database_version (id, version, schema_version, description)
+    VALUES (nextval('database_version_id_seq'), ?, ?, ?)
     """, [current_version + 1, target_version, "Upgraded schema to version $target_version"])
     
     return true

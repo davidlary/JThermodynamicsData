@@ -1,43 +1,11 @@
 {
     "temperature_range": [
-        100,
-        10000
+        200.0,
+        6000.0
     ],
-    "formula": "O3",
-    "sources_used": [
-        {
-            "priority": 0,
-            "weight_factor": 1.0,
-            "source_name": "THEORETICAL",
-            "reliability_score": 2.5
-        }
-    ],
-    "representative_values": {
-        "H": {
-            "units": "kJ/mol",
-            "uncertainty": 33622.30476866284,
-            "value": 23804.55970104229
-        },
-        "S": {
-            "units": "J/mol/K",
-            "uncertainty": 29.805298740991383,
-            "value": 267.6361062470016
-        },
-        "G": {
-            "units": "kJ/mol",
-            "uncertainty": 33652.11006740384,
-            "value": 23536.92359479529
-        },
-        "temperature": 1000.0,
-        "Cp": {
-            "units": "J/mol/K",
-            "uncertainty": 12.105640237755456,
-            "value": 40.173470833335855
-        }
-    },
-    "metadata": {
-        "generated": "2025-04-18T13:04:38.710",
-        "version": "1.0.0"
-    },
-    "species_name": "O3"
+    "polynomial_type": "nasa7",
+    "uncertainty": 0.15,
+    "selected_source": "atct",
+    "reliability_score": 5.0,
+    "species": "O3"
 }
