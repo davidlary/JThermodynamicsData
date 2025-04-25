@@ -21,18 +21,11 @@ println("IMPORTING EXPERIMENTAL THERMODYNAMIC DATA")
 println("====================================================")
 println("Starting at: $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))")
 
-# Run ATCT importer
-atct_script = joinpath(@__DIR__, "experimental_data_importers", "atct_importer.jl")
-if isfile(atct_script)
-    println("\nRunning ATCT importer...")
-    include(atct_script)
-end
-
-# Run JANAF importer
-janaf_script = joinpath(@__DIR__, "experimental_data_importers", "janaf_importer.jl")
-if isfile(janaf_script)
-    println("\nRunning JANAF importer...")
-    include(janaf_script)
+# Run the sample data creator instead of trying to download from external sites
+sample_data_script = joinpath(@__DIR__, "experimental_data_importers", "create_sample_data.jl")
+if isfile(sample_data_script)
+    println("\nCreating sample experimental data...")
+    include(sample_data_script)
 end
 
 println("\n====================================================")
