@@ -1,0 +1,92 @@
+# JThermodynamics Advanced Settings
+# This file contains advanced configuration settings used throughout the code
+
+# Hierarchical data source configuration
+hierarchy:
+  # Order of data sources to check (from lowest to highest priority)
+  sources:
+    # Theoretical methods (priorities 0-4)
+    - "theoretical"             # Priority 0 (lowest accuracy theoretical)
+    - "group_contribution"      # Priority 1 (basic theoretical)
+    - "statistical_thermodynamics" # Priority 2 (moderate theoretical)
+    - "benson-group"            # Priority 3 (good theoretical)
+    - "quantum_statistical"     # Priority 4 (best theoretical)
+    
+    # Experimental data sources (priorities 5-13)
+    - "GRI-MECH"                # Priority 5
+    - "CHEMKIN"                 # Priority 6
+    - "NASA-CEA"                # Priority 7
+    - "JANAF"                   # Priority 8
+    - "THERMOML"                # Priority 9
+    - "TDE"                     # Priority 10
+    - "NIST-WEBBOOK"            # Priority 11
+    - "BURCAT"                  # Priority 12
+    - "ATCT"                    # Priority 13 (highest accuracy)
+  
+  # Fallback settings for when methods fail
+  fallback:
+    default_uncertainty: 1000.0  # High uncertainty for fallback values
+    use_empty_values: true       # Use zero values with high uncertainty
+
+# Uncertainty configuration
+uncertainty:
+  # Monte Carlo settings
+  monte_carlo:
+    samples: 1000         # Number of Monte Carlo samples
+  
+  # Default uncertainties when not available in data
+  defaults:
+    experimental: 0.05    # 5% for experimental data
+    theoretical: 0.10     # 10% for theoretical data
+    
+  # How to combine sources
+  combining:
+    method: "replacement"  # "replacement" or "weighted_average"
+    weight_factor: 1.0     # Weight factor for replacement
+
+# Logger configuration
+logging:
+  # Log message formatting
+  formatting:
+    pipeline_separator: "========"
+    show_timestamps: true
+    time_format: "yyyy-mm-dd HH:MM:SS"
+  
+  # Performance benchmarking settings
+  benchmarking:
+    enabled: true
+    log_database_queries: false
+    log_api_calls: false
+
+# File paths and directories
+paths:
+  documentation:
+    markdown_dir: "output/docs"
+    json_dir: "output/json"
+  
+  cache:
+    enabled: true
+    directory: "data/cache"
+    expiration_seconds: 86400  # 24 hours
+
+# Computation settings
+computation:
+  # Standard reference conditions
+  reference:
+    temperature: 298.15     # Standard temperature in K
+    pressure: 101325.0      # Standard pressure in Pa
+  
+  # Numerical computation parameters
+  numerical:
+    tolerance: 1.0e-6       # Numerical tolerance for calculations
+    max_iterations: 100     # Maximum iterations for iterative methods
+
+# Database settings
+database:
+  cache_size: 1000          # Number of results to cache in memory
+  vacuum_interval: 3600     # Seconds between automatic vacuuming
+  connection_timeout: 30    # Seconds before connection timeout
+  
+  # Query templates - these improve readability in the code
+  queries:
+    get_species: "SELECT s.id, s.formula, s.molecular_weight, s.metadata_json FROM species s WHERE s.name = ?"

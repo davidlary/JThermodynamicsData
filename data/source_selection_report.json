@@ -1,0 +1,2437 @@
+{
+    "summary": {
+        "using_theoretical": 121,
+        "total_species": 140,
+        "theoretical_percentage": 86.4,
+        "using_experimental": 19,
+        "experimental_percentage": 13.6,
+        "timestamp": "2025-04-24T15:18:50.820"
+    },
+    "species_data": {
+        "Si": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H2S": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "P": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O2-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "e-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N2O5": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CO2+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NH": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NH3": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O3+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C6H6": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "SO3": {
+            "priority": 8,
+            "reliability": 4.5,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "janaf",
+            "available_sources": [
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NCO": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "He+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C7H8": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CO2": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3O+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH4": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C2H6": {
+            "priority": 10,
+            "reliability": 4.8,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "tde",
+            "available_sources": [
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Kr": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C2H2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NH4+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Ca": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "K": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H2O-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O2+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C6H12": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CN-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C8H18": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C2H5OH": {
+            "priority": 9,
+            "reliability": 4.5,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "thermoml",
+            "available_sources": [
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CN": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NCN": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Br": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C2H4": {
+            "priority": 6,
+            "reliability": 3.8,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "chemkin",
+            "available_sources": [
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CN+": {
+            "priority": 0,
+            "reliability": 2.5,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "theoretical",
+            "available_sources": [
+                {
+                    "name": "theoretical",
+                    "priority": 0,
+                    "reliability": 2.5
+                }
+            ]
+        },
+        "Zn": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "He": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N2-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Xe+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "SO": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C4H8": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C2H5COOH": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N2O+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HO2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H2+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO3-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "OH": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Al": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CHO+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C3H8": {
+            "priority": 10,
+            "reliability": 4.8,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "tde",
+            "available_sources": [
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "S": {
+            "priority": 8,
+            "reliability": 4.5,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "janaf",
+            "available_sources": [
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Ar": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HCN": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Fe": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CO-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H2O2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C5H5N": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH2O": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C7H16": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "F": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HONO": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Mg": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "I2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HCNO": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HNO2+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HNO3+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Br2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N2+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CHOOH": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Cl2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Cl": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C3H6": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "OH+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HNO2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N2O": {
+            "priority": 8,
+            "reliability": 4.5,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "janaf",
+            "available_sources": [
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C6H5NH2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CHO": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C5H12": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HF": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HNO+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CO2-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H2O": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3NH2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HNO": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3O2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H2": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3OH": {
+            "priority": 9,
+            "reliability": 4.5,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "thermoml",
+            "available_sources": [
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Cu": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3CHO": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HNO3": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H3O+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Ne": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "OH-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "SO2": {
+            "priority": 8,
+            "reliability": 4.5,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "janaf",
+            "available_sources": [
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CO+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "H2O+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N2": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O3": {
+            "priority": 11,
+            "reliability": 4.95,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "nist-webbook",
+            "available_sources": [
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "O2": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Na": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3COCH3": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CO": {
+            "priority": 13,
+            "reliability": 5.0,
+            "using_experimental": true,
+            "has_experimental": true,
+            "best_source": "atct",
+            "available_sources": [
+                {
+                    "name": "atct",
+                    "priority": 13,
+                    "reliability": 5.0
+                },
+                {
+                    "name": "burcat",
+                    "priority": 12,
+                    "reliability": 4.9
+                },
+                {
+                    "name": "nist-webbook",
+                    "priority": 11,
+                    "reliability": 4.95
+                },
+                {
+                    "name": "tde",
+                    "priority": 10,
+                    "reliability": 4.8
+                },
+                {
+                    "name": "thermoml",
+                    "priority": 9,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "janaf",
+                    "priority": 8,
+                    "reliability": 4.5
+                },
+                {
+                    "name": "nasa-cea",
+                    "priority": 7,
+                    "reliability": 4.0
+                },
+                {
+                    "name": "chemkin",
+                    "priority": 6,
+                    "reliability": 3.8
+                },
+                {
+                    "name": "gri-mech",
+                    "priority": 5,
+                    "reliability": 3.5
+                },
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3COOH": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HCl": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NH2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "N2H4": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO2-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "Xe": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C4H10": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "I": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C3H4": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HO2-": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO3": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "CH3O": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "F2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "HCOOH": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "C2H5NH2": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "NO2+": {
+            "priority": 4,
+            "reliability": 4.0,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "quantum-statistical",
+            "available_sources": [
+                {
+                    "name": "quantum-statistical",
+                    "priority": 4,
+                    "reliability": 4.0
+                }
+            ]
+        },
+        "S+": {
+            "priority": 0,
+            "reliability": 2.5,
+            "using_experimental": false,
+            "has_experimental": false,
+            "best_source": "theoretical",
+            "available_sources": [
+                {
+                    "name": "theoretical",
+                    "priority": 0,
+                    "reliability": 2.5
+                }
+            ]
+        }
+    }
+}

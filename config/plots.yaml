@@ -1,0 +1,57 @@
+# JThermodynamics Plot Configuration
+# This file contains all settings for plots to avoid hardcoded values
+
+# General plot settings
+general:
+  size: [1200, 900]  # Width and height in pixels
+  dpi: 300           # Resolution
+  margin: 10         # Margin in mm
+  right_margin: 20   # Right margin in mm (for legends)
+  title_font_size: 12
+  temperature_points: 100  # Number of temperature points to plot
+  use_log_scale: true      # Use logarithmic temperature scale
+  
+# Line and color settings  
+line_styles:
+  best_source:
+    line_width: 2.5
+    alpha: 1.0
+    style: "solid"
+    color: "blue"
+  other_sources:
+    line_width: 1.5
+    alpha: 0.7
+    style: "dash"
+    color_strategy: "priority_based"  # Options: priority_based, distinct_colors
+    
+# Uncertainty visualization
+uncertainty:
+  ribbon_alpha: 0.2  # Transparency of uncertainty ribbons
+  
+# Color maps for priority-based coloring
+priority_colors:
+  # Darker gray for higher priority sources
+  color_value_base: 0.7
+  color_value_step: 0.05   # Higher priority = darker by this amount
+  
+# Output format options
+output:
+  file_format: "png"  # png, svg, pdf
+  save_plots: true
+  plots_directory: "plots"
+  documentation_directory: "output/docs"
+  
+# Property plot settings
+properties:
+  cp:
+    label: "Cp (J/mol/K)"
+    position: 1
+  h:
+    label: "H (kJ/mol)"
+    position: 2
+  s:
+    label: "S (J/mol/K)"
+    position: 3
+  g:
+    label: "G (kJ/mol)"
+    position: 4

@@ -1,0 +1,52 @@
+{
+    "source_counts": {
+        "nasa-cea": 0,
+        "nist-webbook": 7,
+        "chemkin": 1,
+        "gri-mech": 5,
+        "thermoml": 0,
+        "janaf": 0,
+        "burcat": 0,
+        "atct": 0,
+        "tde": 0
+    },
+    "total_species": 82,
+    "coverage": {
+        "nasa-cea": 0.0,
+        "nist-webbook": 8.5,
+        "chemkin": 1.2,
+        "gri-mech": 6.1,
+        "thermoml": 0.0,
+        "janaf": 0.0,
+        "burcat": 0.0,
+        "atct": 0.0,
+        "tde": 0.0
+    },
+    "species_by_source": {
+        "nasa-cea": [],
+        "nist-webbook": [
+            "N2",
+            "O2",
+            "H2O",
+            "CO2",
+            "CO",
+            "O3",
+            "CH4"
+        ],
+        "chemkin": [
+            "N2"
+        ],
+        "gri-mech": [
+            "N2O",
+            "O3",
+            "HNO3",
+            "H2O2",
+            "SO2"
+        ],
+        "thermoml": [],
+        "janaf": [],
+        "burcat": [],
+        "atct": [],
+        "tde": []
+    }
+}
