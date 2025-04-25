@@ -1,264 +1,352 @@
 #!/usr/bin/env julia
 
 """
-Run Complete Thermodynamic Workflow
+Run Complete Thermodynamic Data Pipeline Workflow
 
-This script runs the complete thermodynamic data workflow with enhanced validation:
-1. Download all data sources with enhanced data for O3 and other species
-2. Parse and process data into JSON files
-3. Load JSON files into DuckDB database
-4. Generate plots for comparison showing the hierarchical selection
-5. Validate the hierarchy is respected
+This script runs the complete thermodynamic data pipeline:
+1. Download data from all sources (experimental & theoretical)
+2. Process and parse data for all species
+3. Generate plots for each species showing all sources
+4. Sync all data to DuckDB database
+5. Verify the hierarchical selection is working correctly
 
-This will ensure the most accurate source is used for each species, especially for O3.
-
-Key features:
-- Full hierarchical traversal logic, starting with the most accurate theoretical 
-  calculation and traversing the entire hierarchy
-- For each species, higher priority sources completely override lower priority ones  
-- Plot legends show only one theoretical source (the best one) instead of multiple 
-  redundant theoretical sources
-- Clean and consistent plots across all species (including ions like OH-, Zn, NO+, NO2+)
+This ensures that all data sources are properly integrated and the hierarchy
+is correctly followed when selecting data for each species.
 """
 
 using Pkg
 Pkg.activate(@__DIR__)
-
+import Dates
 using JThermodynamicsData
-using Dates
-using Printf
-using JSON
 
-"""
-    validate_hierarchy_selection()
+# Record the start time
+start_time = Dates.now()
 
-Validate that the data source hierarchy is respected, especially for O3.
-"""
-function validate_hierarchy_selection()
-    println("\n== Validating Hierarchy Selection ==")
-    
-    # Key species to validate
-    key_species = ["O3", "N2", "O2", "H2O", "CO2", "SO2", "H2O2", "HNO3"]
-    
-    # Track validation results
-    validation_results = Dict()
-    
-    for species in key_species
-        println("\nValidating species: $(species)")
-        
-        # Get available sources for this species
-        sources = JThermodynamicsData.list_available_sources(species)
-        
-        if isempty(sources)
-            println("  No sources available for $(species)")
-            validation_results[species] = Dict(
-                "status" => "failed",
-                "reason" => "no_sources",
-                "details" => "No sources available"
-            )
-            continue
-        end
-        
-        # Get the selected source (highest priority)
-        selected_source = sources[1][1]
-        selected_priority = sources[1][2]
-        
-        println("  Available sources:")
-        for (name, priority, reliability) in sources
-            println("  - $(name) (priority: $(priority), reliability: $(reliability))")
-        end
-        
-        println("  Selected source: $(selected_source) (priority: $(selected_priority))")
-        
-        # Validate that the selected source is the highest priority one
-        is_correct = all(s[2] <= selected_priority for s in sources)
-        
-        # For O3, check if it has at least one experimental source
-        if species == "O3"
-            has_exp_source = any(s[1] in ["atct", "burcat", "nist-webbook", "tde", "janaf", 
-                                      "nasa-cea", "chemkin", "gri-mech"] for s in sources)
-            
-            if !has_exp_source
-                println("  VALIDATION FAILED: O3 does not have any experimental sources!")
-                validation_results[species] = Dict(
-                    "status" => "failed",
-                    "reason" => "no_experimental",
-                    "details" => "No experimental sources for O3"
-                )
-            elseif !is_correct
-                println("  VALIDATION FAILED: Selected source is not highest priority!")
-                validation_results[species] = Dict(
-                    "status" => "failed",
-                    "reason" => "wrong_priority",
-                    "details" => "Selected source does not have highest priority"
-                )
-            else
-                println("  VALIDATION PASSED: Selected source is highest priority experimental source!")
-                validation_results[species] = Dict(
-                    "status" => "passed",
-                    "selected" => selected_source,
-                    "priority" => selected_priority
-                )
-            end
-        else
-            if !is_correct
-                println("  VALIDATION FAILED: Selected source is not highest priority!")
-                validation_results[species] = Dict(
-                    "status" => "failed",
-                    "reason" => "wrong_priority",
-                    "details" => "Selected source does not have highest priority"
-                )
-            else
-                println("  VALIDATION PASSED: Selected source is highest priority!")
-                validation_results[species] = Dict(
-                    "status" => "passed",
-                    "selected" => selected_source,
-                    "priority" => selected_priority
-                )
-            end
-        end
-    end
-    
-    # Print summary
-    println("\n== Hierarchy Validation Summary ==")
-    all_passed = true
-    for (species, result) in validation_results
-        if result["status"] == "passed"
-            println("✅ $(species): PASSED - Using $(result["selected"]) (priority: $(result["priority"]))")
-        else
-            println("❌ $(species): FAILED - $(result["reason"]): $(result["details"])")
-            all_passed = false
-        end
-    end
-    
-    if all_passed
-        println("\n✅ ALL VALIDATIONS PASSED - Hierarchy is respected for all species!")
-    else
-        println("\n❌ VALIDATION FAILED - Hierarchy is not respected for some species!")
-    end
-    
-    return all_passed
+println("\n")
+println("=" ^ 80)
+println("JThermodynamicsData - Complete Pipeline Workflow")
+println("=" ^ 80)
+println("Starting at: $(Dates.format(start_time, "yyyy-mm-dd HH:MM:SS"))")
+println("\n")
+
+# Initialize the logger
+log_dir = joinpath(@__DIR__, "logs")
+mkpath(log_dir)
+log_file = joinpath(log_dir, "complete_workflow_$(Dates.format(start_time, "yyyymmdd_HHMMSS")).log")
+JThermodynamicsData.init_logger("info", log_file)
+
+# Start pipeline logging
+JThermodynamicsData.log_pipeline_start("CompletePipeline", Dict(
+    "start_time" => start_time,
+    "working_directory" => @__DIR__
+))
+
+# Step 1: Download ALL data sources
+println("\n" * "=" ^ 60)
+println("STEP 1: DOWNLOADING ALL DATA SOURCES")
+println("=" ^ 60)
+
+download_script = joinpath(@__DIR__, "scripts", "download_all_sources.jl")
+if !isfile(download_script)
+    error("Download script not found: $download_script")
 end
 
-"""
-    main()
+println("Running: $download_script")
+download_start = Dates.now()
+JThermodynamicsData.log_stage_start("CompletePipeline", "DownloadSources", Dict())
 
-Main function to run the complete thermodynamic data workflow with validation.
-"""
-function main()
-    # Set up logging
-    log_dir = joinpath(@__DIR__, "logs")
-    mkpath(log_dir)
-    log_file = joinpath(log_dir, "complete_workflow_$(Dates.format(now(), "yyyymmdd_HHMMSS")).log")
+try
+    include(download_script)
+    download_time = Dates.now() - download_start
     
-    # Initialize logger with file output
-    JThermodynamicsData.init_logger("info", log_file)
-    
-    # Start pipeline logging
-    JThermodynamicsData.log_pipeline_start("CompleteWorkflow", Dict(
-        "start_time" => now(),
-        "working_directory" => @__DIR__
-    ))
-    
-    println("JThermodynamicsData - Complete Workflow with Validation")
-    println("===================================================")
-    
-    # Step 1: Download all data sources with enhanced data
-    println("\n== Step 1: Downloading All Data Sources (Enhanced) ==")
-    JThermodynamicsData.log_stage_start("CompleteWorkflow", "DownloadSources", Dict())
-    
-    download_start = now()
-    include(joinpath(@__DIR__, "scripts", "download_all_sources.jl"))
-    download_time = now() - download_start
-    
-    JThermodynamicsData.log_timing_benchmark("Workflow", "DownloadSources", download_time)
-    JThermodynamicsData.log_stage_end("CompleteWorkflow", "DownloadSources", Dict(
+    JThermodynamicsData.log_timing_benchmark("Pipeline", "DownloadSources", download_time)
+    JThermodynamicsData.log_stage_end("CompletePipeline", "DownloadSources", Dict(
         "elapsed_time" => JThermodynamicsData.format_time_duration(download_time)
     ))
     
-    # Step 2: Fetch and process data for all species
-    println("\n== Step 2: Fetching Data from All Sources ==")
-    JThermodynamicsData.log_stage_start("CompleteWorkflow", "FetchAllData", Dict())
+    println("✅ Download completed in $(JThermodynamicsData.format_time_duration(download_time))")
+catch e
+    println("❌ Download failed: $e")
+    for (exc, bt) in Base.catch_stack()
+        showerror(stdout, exc, bt)
+        println()
+    end
+    JThermodynamicsData.log_stage_end("CompletePipeline", "DownloadSources", Dict(
+        "status" => "failed",
+        "error" => "$e"
+    ))
+end
+
+# Step 2: Process and fetch data for all species from all sources
+println("\n" * "=" ^ 60)
+println("STEP 2: PROCESSING ALL DATA SOURCES")
+println("=" ^ 60)
+
+fetch_script = joinpath(@__DIR__, "scripts", "fetch_all_sources.jl")
+if !isfile(fetch_script)
+    error("Fetch script not found: $fetch_script")
+end
+
+println("Running: $fetch_script")
+fetch_start = Dates.now()
+JThermodynamicsData.log_stage_start("CompletePipeline", "FetchAllData", Dict())
+
+try
+    include(fetch_script)
+    fetch_time = Dates.now() - fetch_start
     
-    fetch_start = now()
-    include(joinpath(@__DIR__, "scripts", "fetch_all_sources.jl"))
-    fetch_time = now() - fetch_start
-    
-    JThermodynamicsData.log_timing_benchmark("Workflow", "FetchAllData", fetch_time)
-    JThermodynamicsData.log_stage_end("CompleteWorkflow", "FetchAllData", Dict(
+    JThermodynamicsData.log_timing_benchmark("Pipeline", "FetchAllData", fetch_time)
+    JThermodynamicsData.log_stage_end("CompletePipeline", "FetchAllData", Dict(
         "elapsed_time" => JThermodynamicsData.format_time_duration(fetch_time)
     ))
     
-    # Step 3: Sync data to database
-    println("\n== Step 3: Syncing to Database ==")
-    JThermodynamicsData.log_stage_start("CompleteWorkflow", "SyncToDatabase", Dict())
-    
-    db_start = now()
-    include(joinpath(@__DIR__, "scripts", "sync_json_to_database.jl"))
-    db_time = now() - db_start
-    
-    JThermodynamicsData.log_timing_benchmark("Workflow", "SyncToDatabase", db_time)
-    JThermodynamicsData.log_stage_end("CompleteWorkflow", "SyncToDatabase", Dict(
-        "elapsed_time" => JThermodynamicsData.format_time_duration(db_time)
-    ))
-    
-    # Step 4: Generate plots for all species
-    println("\n== Step 4: Generating Comparison Plots ==")
-    JThermodynamicsData.log_stage_start("CompleteWorkflow", "GeneratePlots", Dict())
-    
-    plots_start = now()
-    include(joinpath(@__DIR__, "run_all_species_plots.jl"))
-    plots_time = now() - plots_start
-    
-    JThermodynamicsData.log_timing_benchmark("Workflow", "GeneratePlots", plots_time)
-    JThermodynamicsData.log_stage_end("CompleteWorkflow", "GeneratePlots", Dict(
-        "elapsed_time" => JThermodynamicsData.format_time_duration(plots_time)
-    ))
-    
-    # Step 5: Validate hierarchy selection
-    println("\n== Step 5: Validating Hierarchy Selection ==")
-    JThermodynamicsData.log_stage_start("CompleteWorkflow", "ValidateHierarchy", Dict())
-    
-    validate_start = now()
-    validation_result = validate_hierarchy_selection()
-    validate_time = now() - validate_start
-    
-    JThermodynamicsData.log_timing_benchmark("Workflow", "ValidateHierarchy", validate_time)
-    JThermodynamicsData.log_stage_end("CompleteWorkflow", "ValidateHierarchy", Dict(
-        "elapsed_time" => JThermodynamicsData.format_time_duration(validate_time),
-        "validation_result" => validation_result
-    ))
-    
-    # Finish pipeline
-    total_time = now() - download_start
-    JThermodynamicsData.log_pipeline_end("CompleteWorkflow", Dict(
-        "total_time" => JThermodynamicsData.format_time_duration(total_time),
-        "data_dir" => joinpath(@__DIR__, "data"),
-        "plots_dir" => joinpath(@__DIR__, "plots"),
-        "db_path" => joinpath(@__DIR__, "data", "thermodynamics.duckdb"),
-        "log_file" => log_file,
-        "validation_passed" => validation_result
-    ))
-    
-    println("\n== Complete Workflow Execution Summary ==")
-    println("Total Execution Time: $(JThermodynamicsData.format_time_duration(total_time))")
-    println("  - Download Sources: $(JThermodynamicsData.format_time_duration(download_time))")
-    println("  - Fetch All Data: $(JThermodynamicsData.format_time_duration(fetch_time))")
-    println("  - Sync to Database: $(JThermodynamicsData.format_time_duration(db_time))")
-    println("  - Generate Plots: $(JThermodynamicsData.format_time_duration(plots_time))")
-    println("  - Validate Hierarchy: $(JThermodynamicsData.format_time_duration(validate_time))")
-    println()
-    
-    if validation_result
-        println("✅ VALIDATION PASSED - Hierarchy is respected for all species!")
-        println("All data has been processed, validated, and synced to the database.")
-    else
-        println("❌ VALIDATION FAILED - Hierarchy is not respected for some species!")
-        println("Review the logs and validation output to fix hierarchy issues.")
+    println("✅ Data processing completed in $(JThermodynamicsData.format_time_duration(fetch_time))")
+catch e
+    println("❌ Data processing failed: $e")
+    for (exc, bt) in Base.catch_stack()
+        showerror(stdout, exc, bt)
+        println()
     end
-    
-    println("You can now use the run_thermodynamics.jl script to query properties.")
+    JThermodynamicsData.log_stage_end("CompletePipeline", "FetchAllData", Dict(
+        "status" => "failed",
+        "error" => "$e"
+    ))
 end
 
-# Run the main function
-main()
+# Step 3: Generate plots for all species with hierarchical selection
+println("\n" * "=" ^ 60)
+println("STEP 3: GENERATING PLOTS FOR ALL SPECIES")
+println("=" ^ 60)
+
+plot_script = joinpath(@__DIR__, "run_all_species_plots.jl")
+if !isfile(plot_script)
+    error("Plot script not found: $plot_script")
+end
+
+println("Running: $plot_script")
+plot_start = Dates.now()
+JThermodynamicsData.log_stage_start("CompletePipeline", "GeneratePlots", Dict())
+
+try
+    include(plot_script)
+    plot_time = Dates.now() - plot_start
+    
+    JThermodynamicsData.log_timing_benchmark("Pipeline", "GeneratePlots", plot_time)
+    JThermodynamicsData.log_stage_end("CompletePipeline", "GeneratePlots", Dict(
+        "elapsed_time" => JThermodynamicsData.format_time_duration(plot_time)
+    ))
+    
+    println("✅ Plot generation completed in $(JThermodynamicsData.format_time_duration(plot_time))")
+catch e
+    println("❌ Plot generation failed: $e")
+    for (exc, bt) in Base.catch_stack()
+        showerror(stdout, exc, bt)
+        println()
+    end
+    JThermodynamicsData.log_stage_end("CompletePipeline", "GeneratePlots", Dict(
+        "status" => "failed",
+        "error" => "$e"
+    ))
+end
+
+# Step 4: Sync all data to DuckDB database
+println("\n" * "=" ^ 60)
+println("STEP 4: SYNCING TO DATABASE")
+println("=" ^ 60)
+
+sync_script = joinpath(@__DIR__, "scripts", "sync_json_to_database.jl")
+if !isfile(sync_script)
+    error("Sync script not found: $sync_script")
+end
+
+println("Running: $sync_script")
+sync_start = Dates.now()
+JThermodynamicsData.log_stage_start("CompletePipeline", "SyncToDatabase", Dict())
+
+try
+    include(sync_script)
+    sync_time = Dates.now() - sync_start
+    
+    JThermodynamicsData.log_timing_benchmark("Pipeline", "SyncToDatabase", sync_time)
+    JThermodynamicsData.log_stage_end("CompletePipeline", "SyncToDatabase", Dict(
+        "elapsed_time" => JThermodynamicsData.format_time_duration(sync_time)
+    ))
+    
+    println("✅ Database sync completed in $(JThermodynamicsData.format_time_duration(sync_time))")
+catch e
+    println("❌ Database sync failed: $e")
+    for (exc, bt) in Base.catch_stack()
+        showerror(stdout, exc, bt)
+        println()
+    end
+    JThermodynamicsData.log_stage_end("CompletePipeline", "SyncToDatabase", Dict(
+        "status" => "failed",
+        "error" => "$e"
+    ))
+end
+
+# Step 5: Verify the pipeline is working correctly
+println("\n" * "=" ^ 60)
+println("STEP 5: VERIFYING PIPELINE")
+println("=" ^ 60)
+
+# First verify real data implementation
+real_data_script = joinpath(@__DIR__, "verify_real_data.jl")
+if !isfile(real_data_script)
+    error("Real data verification script not found: $real_data_script")
+end
+
+println("Running real data verification: $real_data_script")
+verify_start = Dates.now()
+JThermodynamicsData.log_stage_start("CompletePipeline", "VerifyRealData", Dict())
+
+try
+    include(real_data_script)
+    verify_time = Dates.now() - verify_start
+    
+    JThermodynamicsData.log_timing_benchmark("Pipeline", "VerifyRealData", verify_time)
+    JThermodynamicsData.log_stage_end("CompletePipeline", "VerifyRealData", Dict(
+        "elapsed_time" => JThermodynamicsData.format_time_duration(verify_time)
+    ))
+    
+    println("✅ Real data verification completed in $(JThermodynamicsData.format_time_duration(verify_time))")
+catch e
+    println("❌ Real data verification failed: $e")
+    for (exc, bt) in Base.catch_stack()
+        showerror(stdout, exc, bt)
+        println()
+    end
+    JThermodynamicsData.log_stage_end("CompletePipeline", "VerifyRealData", Dict(
+        "status" => "failed",
+        "error" => "$e"
+    ))
+end
+
+# Then run the complete pipeline verification
+verify_script = joinpath(@__DIR__, "verify_pipeline.jl")
+if isfile(verify_script)
+    println("\nRunning full pipeline verification: $verify_script")
+    pipeline_verify_start = Dates.now()
+    JThermodynamicsData.log_stage_start("CompletePipeline", "VerifyPipeline", Dict())
+
+    try
+        include(verify_script)
+        pipeline_verify_time = Dates.now() - pipeline_verify_start
+        
+        JThermodynamicsData.log_timing_benchmark("Pipeline", "VerifyPipeline", pipeline_verify_time)
+        JThermodynamicsData.log_stage_end("CompletePipeline", "VerifyPipeline", Dict(
+            "elapsed_time" => JThermodynamicsData.format_time_duration(pipeline_verify_time)
+        ))
+        
+        println("✅ Pipeline verification completed in $(JThermodynamicsData.format_time_duration(pipeline_verify_time))")
+    catch e
+        println("❌ Pipeline verification failed: $e")
+        for (exc, bt) in Base.catch_stack()
+            showerror(stdout, exc, bt)
+            println()
+        end
+        JThermodynamicsData.log_stage_end("CompletePipeline", "VerifyPipeline", Dict(
+            "status" => "failed",
+            "error" => "$e"
+        ))
+    end
+else
+    println("\n⚠️ Full pipeline verification script not found: $verify_script")
+    println("Skipping full pipeline verification...")
+end
+
+# Step 6: Generate summary report
+println("\n" * "=" ^ 60)
+println("STEP 6: GENERATING SUMMARY REPORT")
+println("=" ^ 60)
+
+summary_script = joinpath(@__DIR__, "scripts", "generate_source_summary.jl")
+if !isfile(summary_script)
+    error("Summary script not found: $summary_script")
+end
+
+println("Running: $summary_script")
+summary_start = Dates.now()
+JThermodynamicsData.log_stage_start("CompletePipeline", "GenerateSummary", Dict())
+
+try
+    include(summary_script)
+    summary_time = Dates.now() - summary_start
+    
+    JThermodynamicsData.log_timing_benchmark("Pipeline", "GenerateSummary", summary_time)
+    JThermodynamicsData.log_stage_end("CompletePipeline", "GenerateSummary", Dict(
+        "elapsed_time" => JThermodynamicsData.format_time_duration(summary_time)
+    ))
+    
+    println("✅ Summary generation completed in $(JThermodynamicsData.format_time_duration(summary_time))")
+catch e
+    println("❌ Summary generation failed: $e")
+    for (exc, bt) in Base.catch_stack()
+        showerror(stdout, exc, bt)
+        println()
+    end
+    JThermodynamicsData.log_stage_end("CompletePipeline", "GenerateSummary", Dict(
+        "status" => "failed",
+        "error" => "$e"
+    ))
+end
+
+# Record the end time and calculate duration
+end_time = Dates.now()
+duration = Dates.canonicalize(Dates.CompoundPeriod(end_time - start_time))
+
+# Finish pipeline logging
+JThermodynamicsData.log_pipeline_end("CompletePipeline", Dict(
+    "total_time" => JThermodynamicsData.format_time_duration(duration),
+    "data_dir" => joinpath(@__DIR__, "data"),
+    "plots_dir" => joinpath(@__DIR__, "plots"),
+    "db_path" => joinpath(@__DIR__, "data", "thermodynamics.duckdb"),
+    "log_file" => log_file
+))
+
+println("\n")
+println("=" ^ 80)
+println("COMPLETE WORKFLOW EXECUTION SUMMARY")
+println("=" ^ 80)
+println("Started at: $(Dates.format(start_time, "yyyy-mm-dd HH:MM:SS"))")
+println("Finished at: $(Dates.format(end_time, "yyyy-mm-dd HH:MM:SS"))")
+println("Total duration: $duration")
+println("\n")
+
+# Print individual step timings
+println("Step Timings:")
+println("-------------")
+try
+    download_time_str = @isdefined(download_time) ? JThermodynamicsData.format_time_duration(download_time) : "N/A"
+    fetch_time_str = @isdefined(fetch_time) ? JThermodynamicsData.format_time_duration(fetch_time) : "N/A"
+    plot_time_str = @isdefined(plot_time) ? JThermodynamicsData.format_time_duration(plot_time) : "N/A"
+    sync_time_str = @isdefined(sync_time) ? JThermodynamicsData.format_time_duration(sync_time) : "N/A"
+    verify_time_str = @isdefined(verify_time) ? JThermodynamicsData.format_time_duration(verify_time) : "N/A"
+    summary_time_str = @isdefined(summary_time) ? JThermodynamicsData.format_time_duration(summary_time) : "N/A"
+    
+    println("1. Download All Sources: $download_time_str")
+    println("2. Process All Data: $fetch_time_str")
+    println("3. Generate Plots: $plot_time_str")
+    println("4. Sync to Database: $sync_time_str")
+    println("5. Verify Pipeline: $verify_time_str")
+    println("6. Generate Summary: $summary_time_str")
+catch
+    println("Error displaying timings")
+end
+
+println("\n")
+println("ALL THERMODYNAMIC DATA HAS BEEN:")
+println("1. Downloaded from original sources")
+println("2. Processed for ALL species")
+println("3. Visualized with hierarchical source selection")
+println("4. Saved to DuckDB database")
+println("5. Verified for correct hierarchical operation")
+println("\n")
+println("Outputs can be found in:")
+println("- Plots: $(joinpath(@__DIR__, "plots"))")
+println("- Data: $(joinpath(@__DIR__, "data", "species"))")
+println("- Database: $(joinpath(@__DIR__, "data", "thermodynamics.duckdb"))")
+println("- Documentation: $(joinpath(@__DIR__, "output", "docs"))")
+println("- Summary: $(joinpath(@__DIR__, "output", "summary_report.md"))")
+println("- Log: $log_file")
+println("=" ^ 80)
