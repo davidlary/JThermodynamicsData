@@ -31,9 +31,9 @@ log_file = joinpath(log_dir, "pipeline_verification_$(Dates.format(now(), "yyyym
 JThermodynamicsData.init_logger("info", log_file)
 
 # Start logging
-println("\n" * "=" * 80)
+println("\n" * repeat("=", 80))
 println("THERMODYNAMIC DATA PIPELINE VERIFICATION")
-println("=" * 80)
+println(repeat("=", 80))
 
 # Create report directory
 report_dir = joinpath(@__DIR__, "output")
@@ -682,7 +682,7 @@ function main()
     # Final summary
     all_success = all(r -> r.success, values(verification_results))
     
-    println("\n" * "=" * 80)
+    println("\n" * repeat("=", 80))
     if all_success
         println("✅ VERIFICATION PASSED: All pipeline components are working correctly")
     else
@@ -690,7 +690,7 @@ function main()
         failed_steps = [step for (step, result) in verification_results if !result.success]
         println("   Failed steps: $(join(failed_steps, ", "))")
     end
-    println("=" * 80)
+    println(repeat("=", 80))
     
     println("\nDetailed verification report: $report_path")
     

@@ -23,9 +23,9 @@ log_file = joinpath(log_dir, "real_data_verification_$(Dates.format(now(), "yyyy
 JThermodynamicsData.init_logger("info", log_file)
 
 # Start logging
-println("\n" * "=" * 80)
+println("\n" * repeat("=", 80))
 println("REAL DATA SOURCES VERIFICATION")
-println("=" * 80)
+println(repeat("=", 80))
 
 # Verify real data sources
 function verify_real_data_sources()
@@ -178,13 +178,13 @@ function verify_real_data_sources()
     
     validation_passed = has_experimental && some_real_data
     
-    println("\n" * "=" * 80)
+    println("\n" * repeat("=", 80))
     if validation_passed
         println("✅ VALIDATION PASSED: Database includes experimental data sources!")
     else
         println("❌ VALIDATION FAILED: Not enough experimental data sources or real data")
     end
-    println("=" * 80)
+    println(repeat("=", 80))
     
     return validation_passed, (
         source_results = source_results,
