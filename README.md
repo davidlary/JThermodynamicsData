@@ -27,33 +27,6 @@ The system is designed to ensure **complete replacement** of data from lower pri
 
 - **Comprehensive validation**: Ensure proper hierarchy respect and data accuracy.
 
-## Project Structure
-
-- `src/` - Source code for the package
-  - `JThermodynamicsData.jl` - Main module definition
-  - `core/` - Core functionality (config, constants, types)
-  - `database/` - Database interface (connection, schema, queries)
-  - `parsers/` - Data format parsers for different sources
-  - `models/` - Theoretical calculation models
-  - `utils/` - Utility functions (caching, conversion, etc.)
-  - `visualization/` - Plotting and comparison tools
-  - `api/` - Query interfaces
-
-- `config/` - Configuration files
-  - `settings.yaml` - General settings and data source priorities
-  - `Species.yaml` - Species list and processing options
-
-- `data/` - Data storage
-  - `cache/` - Cached data from web sources
-  - `external/` - External data files (JANAF, NASA, etc.)
-  - `species/` - JSON storage for species data
-  - `test_data/` - Sample data for testing
-
-- `scripts/` - Utility scripts
-  - `download_all_sources.jl` - Download data from all sources
-  - `fetch_all_sources.jl` - Process and parse data
-  - `sync_json_to_database.jl` - Sync data to DuckDB
-
 ## Data Hierarchy
 
 The package implements a strict hierarchy of data sources based on their accuracy and reliability:
@@ -75,104 +48,108 @@ The package implements a strict hierarchy of data sources based on their accurac
 | 1 | group-contribution | 3.0 | Group contribution methods (basic theoretical) |
 | 0 | theoretical | 2.5 | Basic theoretical calculations (lowest accuracy) |
 
-**IMPORTANT**: Experimental sources (ATcT through GRI-MECH) are prioritized over theoretical sources when available. The system ensures that the highest quality source is always used for each species.
+**IMPORTANT**: Experimental sources (ATcT through GRI-MECH) with priorities 5-13 are prioritized over theoretical sources (priorities 0-4) when available. The system ensures that the highest quality source is always used for each species.
 
-## Setup and Installation
+## Hierarchical Source Selection Details
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/your-username/JThermodynamicsData.git
-   cd JThermodynamicsData
-   ```
+The hierarchical source selection system follows these key principles:
 
-2. Set up the environment and install all required packages:
-   ```bash
-   julia scripts/setup_packages.jl
-   ```
+1. **Experimental Over Theoretical**: Sources with priority 5-13 (experimental) are always preferred over sources with priority 0-4 (theoretical).
 
-3. Run the complete workflow script:
-   ```bash
-   julia run_complete_workflow.jl
-   ```
+2. **Complete Replacement**: Higher priority sources completely replace data from lower priority sources.
 
-The complete workflow script handles:
-1. Downloading all data sources
-2. Processing data into JSON files
-3. Syncing data to DuckDB database
-4. Generating comparison plots
-5. Validating the hierarchy selection
+3. **Traversal Order**: Sources are traversed in order of decreasing priority, starting with ATCT (13) and ending with basic theoretical methods (0).
 
-## Workflow
+4. **Case-Insensitive Matching**: Source names are matched case-insensitively to ensure consistent selection.
 
-The new consolidated workflow simplifies the thermodynamic data processing:
+5. **Temperature Range Handling**: The system selects the best source that covers the requested temperature range.
+
+6. **Fallback Mechanism**: If no source covers the entire temperature range, the system falls back to the highest priority source available.
+
+The implementation in `src/JThermodynamicsData/utils/json_storage.jl` ensures rigorous adherence to these principles, providing consistent and reliable results.
+
+## Complete Data Pipeline
+
+The package includes a comprehensive pipeline to download and process real-world thermodynamic data from all sources:
+
+### Running the Complete Workflow
 
 ```bash
-# Run the complete workflow (download, process, database, plots, validation)
 julia run_complete_workflow.jl
 ```
 
-This single command replaces the previous multi-step process:
-```bash
-# Old workflow (no longer needed)
-# julia scripts/download_all_sources.jl
-# julia scripts/fetch_all_sources.jl
-# julia run_all_species_plots.jl
-# julia scripts/sync_json_to_database.jl
-```
+This single command will:
+1. Download data from all original sources (ATcT, Burcat, NIST, JANAF, TDE, ThermoML, etc.)
+2. Process all species data following the hierarchical priority
+3. Generate plots with uncertainty visualization for all sources
+4. Create specialized plots showing only the best source for each species
+5. Create the database with all thermodynamic data
+6. Verify the hierarchical selection is working correctly
+7. Generate comprehensive summary reports
 
-## Troubleshooting
+### Individual Pipeline Components
 
-If you encounter any issues:
+If you need to run only specific parts of the pipeline:
 
-1. Clear compiled code:
+1. **Data Download**: 
    ```bash
-   rm -rf ~/.julia/compiled/v1.*/JThermodynamicsData
+   julia scripts/download_all_sources.jl
    ```
+   Downloads data from all original sources.
 
-2. Reinitialize the database:
+2. **Fetch All Sources**:
    ```bash
-   rm -f ~/Dropbox/Environments/Code/JThermodynamicsData/data/thermodynamics.duckdb
+   julia scripts/fetch_all_sources.jl
    ```
+   Processes data for all species from all sources.
 
-3. Run the complete workflow again:
+3. **Generate All Plots**:
    ```bash
-   julia run_complete_workflow.jl
+   julia run_all_species_plots.jl
    ```
+   Creates comparison plots for each species showing all sources.
 
-## Hierarchical Thermodynamic Data Sources
+4. **Best Source Plots**:
+   ```bash
+   julia run_best_source_plots.jl
+   ```
+   Creates plots showing only the best source for each species with uncertainty.
 
-JThermodynamicsData implements a comprehensive hierarchical approach to thermodynamic data processing. The system ensures that for each species, the most accurate available source is used, following these principles:
+5. **Hierarchical Verification**:
+   ```bash
+   julia verify_pipeline.jl
+   ```
+   Verifies that the hierarchical selection system is working correctly.
 
-1. **Full Hierarchical Traversal**: The system always processes all sources in order of increasing priority.
-2. **Complete Replacement**: Higher priority sources completely replace data from lower priority sources (no weighted averaging).
-3. **Most Accurate Source**: The final refined result is exactly the value from the most accurate source available (highest priority).
-4. **Theoretical Source Display**: Plots show only ONE theoretical source (best available) labeled consistently as "Theoretical".
-5. **Consistent Source Naming**: All sources in plots are displayed with proper capitalization.
-6. **Documentation**: All data sources used for each species are thoroughly documented, including which source was selected as the most accurate.
+6. **Generate Source Summary**:
+   ```bash
+   julia scripts/generate_source_summary.jl
+   ```
+   Creates detailed reports on which source was used for each species.
 
-### Theoretical vs. Experimental Sources
+## Real Data Implementation
 
-The package provides both theoretical calculations and experimental data:
+All data sources now fetch actual experimental data:
 
-- **Theoretical Methods** (Priority 0-4)
-  - Basic theoretical calculations
-  - Group contribution methods
-  - Statistical thermodynamics
-  - Benson Group Additivity
-  - Quantum-Statistical Thermodynamics
+1. **Authentic Data**: The system uses data downloaded directly from original sources (ATcT, Burcat, NIST, JANAF, etc.)
 
-- **Experimental Databases** (Priority 5-13)
-  - GRI-MECH 3.0
-  - CHEMKIN format data
-  - NASA CEA Database
-  - JANAF Thermochemical Tables
-  - ThermoML Standard
-  - NIST ThermoData Engine
-  - NIST Chemistry WebBook
-  - Burcat Database
-  - Active Thermochemical Tables
+2. **Source Metadata**: Each data point includes source attribution, timestamp, and uncertainty estimates
 
-The hierarchical system automatically uses experimental data when available, falling back to theoretical calculations only when necessary. For ALL species (including ions like OH-, NO+, NO2+, Zn), the system ensures proper hierarchical traversal.
+3. **Proper Fallback**: The system falls back to progressively lower priority sources only when necessary
+
+4. **Hierarchical Selection**: Always selects the most accurate source available for each species
+
+5. **Uncertainty Visualization**: Plots show uncertainty bands around property curves
+
+## Key Scripts
+
+- `run_complete_workflow.jl`: Complete data pipeline with all steps
+- `run_all_species_plots.jl`: Generate plots showing all sources for each species
+- `run_best_source_plots.jl`: Generate plots showing only the best source for each species
+- `scripts/download_all_sources.jl`: Download data from all sources
+- `scripts/fetch_all_sources.jl`: Process data from all sources for all species
+- `scripts/generate_source_summary.jl`: Generate detailed source usage reports
+- `verify_pipeline.jl`: Verify the hierarchical selection system
 
 ## Output
 
@@ -189,8 +166,8 @@ The package produces several outputs:
 ```julia
 using JThermodynamicsData
 
-# Run the complete workflow
-include("run_complete_workflow.jl")
+# Initialize the package (loads all config files and connects to database)
+config, db = JThermodynamicsData.initialize()
 
 # Calculate thermodynamic properties for a species
 properties = JThermodynamicsData.calculate_properties("H2O", 298.15)
@@ -203,35 +180,14 @@ println("Available sources for O3:")
 for (source, priority, reliability) in sources
     println("  $source (priority: $priority, reliability: $reliability)")
 end
+
+# Get the best source for a species
+best_source = JThermodynamicsData.get_best_source_data("O3")
+println("Best source for O3: $(best_source["source"]) (priority: $(best_source["priority"]))")
+
+# Run the full pipeline
+include("run_full_pipeline.jl")
 ```
-
-## Storage Systems
-
-JThermodynamicsData now uses a combined approach:
-
-1. **JSON Storage**: Each species has a JSON file in `data/species/` containing data from all sources
-2. **Database Storage**: Data is synced to DuckDB for efficient querying
-
-This combined approach provides both human-readable storage and efficient query capabilities.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- The thermodynamic data used in this package comes from various public databases maintained by NIST, NASA, and other organizations.
-- Thanks to the Julia community for providing excellent libraries for scientific computing.
 
 ## References
 
